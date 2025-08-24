@@ -4,10 +4,138 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>🌱 Cultivo Pro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f7f6;
+      color: #333;
+    }
+    header {
+      background: #2e7d32;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      justify-content: space-around;
+      background: #388e3c;
+      flex-wrap: wrap;
+    }
+    nav button {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      background: #388e3c;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    nav button:hover {
+      background: #2e7d32;
+    }
+    .content {
+      padding: 1.5rem;
+    }
+    .hidden {
+      display: none;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    footer {
+      background: #2e7d32;
+      color: white;
+      text-align: center;
+      padding: 0.5rem;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    .image-preview {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .image-preview img {
+      width: 120px;
+      height: auto;
+      border-radius: 8px;
+      border: 2px solid #ccc;
+    }
+  </style>
 </head>
 <body>
-  <h1>🌱 Bienvenido a Cultivo Pro</h1>
-  <p>Tu app de control de <b>Cannabis</b>, <b>Limoneros</b> y <b>Exterior</b> está lista.</p>
-  <p>Pronto añadiremos el menú y las funciones pro 🚀</p>
+  <header>
+    <h1>🌱 Cultivo Pro</h1>
+    <p>Gestión de Cannabis, Limoneros y Jardín Exterior</p>
+  </header>
+
+  <nav>
+    <button onclick="showTab('gelato')">Gelato (Interior)</button>
+    <button onclick="showTab('acai')">Açai (Interior)</button>
+    <button onclick="showTab('exterior')">Exterior</button>
+    <button onclick="showTab('limoneros')">Limoneros</button>
+  </nav>
+
+  <div class="content">
+    <section id="gelato">
+      <h2>🌿 Cultivo Interior - Gelato</h2>
+      <p>Añade aquí fotos de tus plantas Gelato.</p>
+      <input type="file" accept="image/*" multiple onchange="previewImages(event, 'gelato-preview')">
+      <div id="gelato-preview" class="image-preview"></div>
+    </section>
+
+    <section id="acai" class="hidden">
+      <h2>🍇 Cultivo Interior - Açai</h2>
+      <p>Añade aquí fotos de tus plantas Açai.</p>
+      <input type="file" accept="image/*" multiple onchange="previewImages(event, 'acai-preview')">
+      <div id="acai-preview" class="image-preview"></div>
+    </section>
+
+    <section id="exterior" class="hidden">
+      <h2>☀️ Cultivo Exterior</h2>
+      <p>Sube fotos para controlar posibles hongos (ej. Fusarium) y su evolución.</p>
+      <input type="file" accept="image/*" multiple onchange="previewImages(event, 'exterior-preview')">
+      <div id="exterior-preview" class="image-preview"></div>
+    </section>
+
+    <section id="limoneros" class="hidden">
+      <h2>🍋 Limoneros</h2>
+      <p>Sube fotos para hacer seguimiento del minador y los tratamientos aplicados.</p>
+      <input type="file" accept="image/*" multiple onchange="previewImages(event, 'limoneros-preview')">
+      <div id="limoneros-preview" class="image-preview"></div>
+    </section>
+  </div>
+
+  <footer>
+    🌱 Cultivo Pro - Tu asistente de jardín
+  </footer>
+
+  <script>
+    function showTab(tabId) {
+      document.querySelectorAll('.content section').forEach(sec => sec.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+    }
+
+    function previewImages(event, previewId) {
+      const preview = document.getElementById(previewId);
+      preview.innerHTML = ""; // limpia antes de mostrar
+      const files = event.target.files;
+
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  </script>
 </body>
 </html>
