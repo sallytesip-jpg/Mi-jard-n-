@@ -1,141 +1,321 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🌱 Cultivo Pro</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f4f7f6;
-      color: #333;
-    }
-    header {
-      background: #2e7d32;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-    }
-    nav {
-      display: flex;
-      justify-content: space-around;
-      background: #388e3c;
-      flex-wrap: wrap;
-    }
-    nav button {
-      flex: 1;
-      padding: 1rem;
-      border: none;
-      background: #388e3c;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    nav button:hover {
-      background: #2e7d32;
-    }
-    .content {
-      padding: 1.5rem;
-    }
-    .hidden {
-      display: none;
-    }
-    h2 {
-      margin-top: 0;
-    }
-    footer {
-      background: #2e7d32;
-      color: white;
-      text-align: center;
-      padding: 0.5rem;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-    }
-    .image-preview {
-      margin-top: 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .image-preview img {
-      width: 120px;
-      height: auto;
-      border-radius: 8px;
-      border: 2px solid #ccc;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>🌱 Cultivo Pro</title>
+<style>
+  :root{--bg:#f6f7fb;--card:#ffffff;--pri:#0ea5a4;--pri2:#0c8c8c;--text:#0f172a;--muted:#64748b;}
+  *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif;background:var(--bg);color:var(--text)}
+  header{padding:16px 20px;background:linear-gradient(90deg,#10b981,#0ea5a4);color:#fff;position:sticky;top:0;z-index:5}
+  header h1{margin:0;font-size:22px} header small{opacity:.95}
+  nav{display:flex;gap:6px;flex-wrap:wrap;padding:10px;background:#eaf4f4;position:sticky;top:64px;z-index:4}
+  nav button{flex:1 1 120px;border:0;padding:10px 12px;border-radius:10px;background:#fff;color:#0f172a;
+    box-shadow:0 2px 10px rgba(2,12,27,.06);cursor:pointer;font-weight:600}
+  nav button.active{background:var(--pri);color:#fff}
+  .wrap{max-width:1000px;margin:12px auto;padding:0 12px 80px}
+  .grid{display:grid;gap:12px}
+  @media(min-width:780px){.grid{grid-template-columns:1fr 1fr}}
+  .card{background:var(--card);border-radius:16px;padding:14px 14px;box-shadow:0 6px 24px rgba(2,12,27,.06)}
+  .card h3{margin:0 0 10px}
+  .muted{color:var(--muted)}
+  input[type="text"],input[type="date"],input[type="number"],textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #e2e8f0;background:#fff}
+  textarea{min-height:110px;resize:vertical}
+  .row{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{background:var(--pri);color:#fff;border:0;border-radius:10px;padding:10px 12px;font-weight:700;cursor:pointer}
+  .btn.secondary{background:#e2e8f0;color:#0f172a}
+  .list{display:flex;flex-direction:column;gap:8px}
+  .task{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border:1px solid #e5e7eb;border-radius:10px;background:#fff}
+  .task small{color:var(--muted)}
+  .task.done{opacity:.6;text-decoration:line-through}
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+  .thumb{position:relative;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;background:#fff}
+  .thumb img{display:block;width:100%;height:100%;object-fit:cover}
+  .thumb button{position:absolute;top:6px;right:6px;background:#ef4444;color:#fff;border:0;border-radius:8px;padding:4px 6px;font-size:12px;cursor:pointer}
+  table{width:100%;border-collapse:collapse}
+  th,td{border-bottom:1px solid #e5e7eb;padding:8px;text-align:left;font-size:14px}
+  footer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e7eb;padding:10px 12px;color:var(--muted);text-align:center}
+  .pill{display:inline-block;background:#def7f6;color:#066; padding:4px 8px;border-radius:999px;font-size:12px}
+</style>
 </head>
 <body>
-  <header>
-    <h1>🌱 Cultivo Pro</h1>
-    <p>Gestión de Cannabis, Limoneros y Jardín Exterior</p>
-  </header>
+<header>
+  <h1>🌱 Cultivo Pro</h1>
+  <small>Gestión de <b>Gelato</b>, <b>Açaí</b>, <b>Exterior</b> y <b>Limoneros</b> · guarda todo en tu dispositivo</small>
+</header>
 
-  <nav>
-    <button onclick="showTab('gelato')">Gelato (Interior)</button>
-    <button onclick="showTab('acai')">Açai (Interior)</button>
-    <button onclick="showTab('exterior')">Exterior</button>
-    <button onclick="showTab('limoneros')">Limoneros</button>
-  </nav>
+<nav id="tabs"></nav>
 
-  <div class="content">
-    <section id="gelato">
-      <h2>🌿 Cultivo Interior - Gelato</h2>
-      <p>Añade aquí fotos de tus plantas Gelato.</p>
-      <input type="file" accept="image/*" multiple onchange="previewImages(event, 'gelato-preview')">
-      <div id="gelato-preview" class="image-preview"></div>
-    </section>
+<div class="wrap">
+  <!-- DASHBOARD -->
+  <section id="view-dashboard" class="view">
+    <div class="grid">
+      <div class="card">
+        <h3>📅 Próximas tareas</h3>
+        <div id="proxTareas" class="list"></div>
+        <p class="muted">Tip: crea tareas en cada cultivo con fecha; aparecerán aquí ordenadas.</p>
+      </div>
+      <div class="card">
+        <h3>📈 Últimos registros EC/pH</h3>
+        <div id="ultimosReg"></div>
+      </div>
+    </div>
+  </section>
 
-    <section id="acai" class="hidden">
-      <h2>🍇 Cultivo Interior - Açai</h2>
-      <p>Añade aquí fotos de tus plantas Açai.</p>
-      <input type="file" accept="image/*" multiple onchange="previewImages(event, 'acai-preview')">
-      <div id="acai-preview" class="image-preview"></div>
-    </section>
+  <!-- TEMPLATE de cultivo se genera por JS -->
+  <div id="cultivos"></div>
 
-    <section id="exterior" class="hidden">
-      <h2>☀️ Cultivo Exterior</h2>
-      <p>Sube fotos para controlar posibles hongos (ej. Fusarium) y su evolución.</p>
-      <input type="file" accept="image/*" multiple onchange="previewImages(event, 'exterior-preview')">
-      <div id="exterior-preview" class="image-preview"></div>
-    </section>
+  <!-- NOTAS GLOBALES -->
+  <section id="view-notas" class="view" style="display:none">
+    <div class="card">
+      <h3>📝 Notas generales</h3>
+      <textarea id="notas-global" placeholder="Escribe ideas, compras, recordatorios..."></textarea>
+      <div class="row" style="margin-top:8px">
+        <button class="btn secondary" onclick="limpiarNotasGlobal()">Limpiar</button>
+        <span class="muted">Se guarda solo en este dispositivo.</span>
+      </div>
+    </div>
+  </section>
+</div>
 
-    <section id="limoneros" class="hidden">
-      <h2>🍋 Limoneros</h2>
-      <p>Sube fotos para hacer seguimiento del minador y los tratamientos aplicados.</p>
-      <input type="file" accept="image/*" multiple onchange="previewImages(event, 'limoneros-preview')">
-      <div id="limoneros-preview" class="image-preview"></div>
-    </section>
-  </div>
+<footer>🌿 Consejito: mantén 25–26 °C, VPD 1.2–1.4 kPa en flora, y riega con 10–20% de drenaje.</footer>
 
-  <footer>
-    🌱 Cultivo Pro - Tu asistente de jardín
-  </footer>
+<script>
+/* ========= CONFIG ========= */
+const CULTIVOS = [
+  { id:'gelato',    titulo:'Gelato (Interior)', emoji:'🌿'},
+  { id:'acai',      titulo:'Açaí (Interior)',   emoji:'🍇'},
+  { id:'exterior',  titulo:'Exterior',          emoji:'☀️'},
+  { id:'limoneros', titulo:'Limoneros',         emoji:'🍋'},
+];
+const VIEWS = [
+  { id:'dashboard', titulo:'Dashboard', emoji:'🏠'},
+  ...CULTIVOS,
+  { id:'notas',     titulo:'Notas', emoji:'📝'}
+];
 
-  <script>
-    function showTab(tabId) {
-      document.querySelectorAll('.content section').forEach(sec => sec.classList.add('hidden'));
-      document.getElementById(tabId).classList.remove('hidden');
-    }
+/* ========= UI ========= */
+const tabs = document.getElementById('tabs');
+VIEWS.forEach(v=>{
+  const b = document.createElement('button');
+  b.textContent = `${v.emoji} ${v.titulo}`;
+  b.id = `tab-${v.id}`;
+  b.onclick = ()=>showView(v.id);
+  tabs.appendChild(b);
+});
 
-    function previewImages(event, previewId) {
-      const preview = document.getElementById(previewId);
-      preview.innerHTML = ""; // limpia antes de mostrar
-      const files = event.target.files;
+function tarjetaCultivo(c){
+  return `
+  <section id="view-${c.id}" class="view" style="display:none">
+    <div class="grid">
+      <div class="card">
+        <h3>${c.emoji} ${c.titulo} · Tareas</h3>
+        <div class="row">
+          <input id="${c.id}-task-text" type="text" placeholder="Ej: Aplicar micorrizas 1 g/4 L, pH 6.4">
+          <input id="${c.id}-task-date" type="date">
+          <button class="btn" onclick="addTask('${c.id}')">Añadir</button>
+        </div>
+        <div id="${c.id}-tasks" class="list" style="margin-top:10px"></div>
+      </div>
 
-      Array.from(files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = e => {
-          const img = document.createElement("img");
-          img.src = e.target.result;
-          preview.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-  </script>
+      <div class="card">
+        <h3>📷 Galería</h3>
+        <input type="file" accept="image/*" multiple onchange="addImages(event,'${c.id}')">
+        <div id="${c.id}-gal" class="gallery" style="margin-top:10px"></div>
+        <p class="muted">Las imágenes se guardan en este dispositivo (puede ocupar espacio).</p>
+      </div>
+
+      <div class="card">
+        <h3>🧪 Registro EC / pH</h3>
+        <div class="row">
+          <input id="${c.id}-ec" type="number" step="0.01" placeholder="EC (mS/cm)">
+          <input id="${c.id}-ph" type="number" step="0.01" placeholder="pH">
+          <button class="btn" onclick="addRegistro('${c.id}')">Guardar</button>
+          <button class="btn secondary" onclick="borrarRegistros('${c.id}')">Borrar</button>
+        </div>
+        <table style="margin-top:10px">
+          <thead><tr><th>Fecha</th><th>EC</th><th>pH</th></tr></thead>
+          <tbody id="${c.id}-tabla"></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>🗒️ Notas</h3>
+        <textarea id="${c.id}-notas" placeholder="Observaciones, dosis, problemas..."></textarea>
+        <div class="row" style="margin-top:8px">
+          <span class="pill">Auto-guardado</span>
+          <button class="btn secondary" onclick="limpiarNotas('${c.id}')">Limpiar</button>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+document.getElementById('cultivos').innerHTML = CULTIVOS.map(tarjetaCultivo).join('');
+
+/* ========= STATE (localStorage) ========= */
+const KEY = (k)=>`cultivoPro:${k}`;
+function load(k,def){try{const v=localStorage.getItem(KEY(k));return v?JSON.parse(v):def}catch(e){return def}}
+function save(k,v){localStorage.setItem(KEY(k),JSON.stringify(v))}
+
+/* init estructuras */
+CULTIVOS.forEach(c=>{
+  if(!load(`${c.id}:tasks`)) save(`${c.id}:tasks`,[]);
+  if(!load(`${c.id}:gal`))   save(`${c.id}:gal`,[]);
+  if(!load(`${c.id}:regs`))  save(`${c.id}:regs`,[]);
+  if(!load(`${c.id}:notas`)) save(`${c.id}:notas`,'');
+});
+
+/* ========= TAREAS ========= */
+function addTask(id){
+  const text = document.getElementById(`${id}-task-text`).value.trim();
+  const date = document.getElementById(`${id}-task-date`).value;
+  if(!text) return alert('Escribe la tarea');
+  const list = load(`${id}:tasks`,[]);
+  list.push({text, date, done:false, ts:Date.now()});
+  save(`${id}:tasks`,list);
+  document.getElementById(`${id}-task-text`).value='';
+  document.getElementById(`${id}-task-date`).value='';
+  renderTasks(id); renderDashboard();
+}
+function toggleTask(id,idx){
+  const list = load(`${id}:tasks`,[]);
+  list[idx].done = !list[idx].done;
+  save(`${id}:tasks`,list);
+  renderTasks(id); renderDashboard();
+}
+function delTask(id,idx){
+  const list = load(`${id}:tasks`,[]);
+  list.splice(idx,1); save(`${id}:tasks`,list);
+  renderTasks(id); renderDashboard();
+}
+function renderTasks(id){
+  const cont = document.getElementById(`${id}-tasks`);
+  const list = load(`${id}:tasks`,[]);
+  if(!cont) return;
+  if(!list.length){ cont.innerHTML = '<p class="muted">Sin tareas.</p>'; return;}
+  cont.innerHTML = list.sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999'))
+    .map((t,i)=>`
+      <div class="task ${t.done?'done':''}">
+        <div><b>${t.text}</b><br><small>${t.date?`📅 ${t.date}`:'Sin fecha'}</small></div>
+        <div class="row">
+          <button class="btn secondary" onclick="toggleTask('${id}',${i})">${t.done?'Desmarcar':'Hecho'}</button>
+          <button class="btn" style="background:#ef4444" onclick="delTask('${id}',${i})">Borrar</button>
+        </div>
+      </div>`).join('');
+}
+
+/* ========= GALERÍA ========= */
+function addImages(ev,id){
+  const files = Array.from(ev.target.files||[]);
+  const gal = load(`${id}:gal`,[]);
+  const readerJobs = files.map(f=>new Promise(res=>{
+    const r = new FileReader();
+    r.onload = e=>res(e.target.result);
+    r.readAsDataURL(f);
+  }));
+  Promise.all(readerJobs).then(imgs=>{
+    const all=[...imgs,...gal]; // nuevas primero
+    save(`${id}:gal`,all.slice(0,120)); // límite simple
+    renderGal(id);
+  });
+  ev.target.value='';
+}
+function delImg(id,idx){
+  const gal = load(`${id}:gal`,[]);
+  gal.splice(idx,1); save(`${id}:gal`,gal); renderGal(id);
+}
+function renderGal(id){
+  const cont = document.getElementById(`${id}-gal`);
+  if(!cont) return;
+  const gal = load(`${id}:gal`,[]);
+  if(!gal.length){ cont.innerHTML = '<p class="muted">Sin fotos aún.</p>'; return;}
+  cont.innerHTML = gal.map((src,i)=>`
+    <div class="thumb">
+      <img src="${src}" alt="foto">
+      <button onclick="delImg('${id}',${i})">×</button>
+    </div>`).join('');
+}
+
+/* ========= REGISTROS ========= */
+function addRegistro(id){
+  const ec = parseFloat(document.getElementById(`${id}-ec`).value);
+  const ph = parseFloat(document.getElementById(`${id}-ph`).value);
+  if(isNaN(ec)||isNaN(ph)) return alert('Completa EC y pH');
+  const regs = load(`${id}:regs`,[]);
+  regs.unshift({ec,ph,fecha:new Date().toISOString().slice(0,10)});
+  save(`${id}:regs`,regs.slice(0,50));
+  document.getElementById(`${id}-ec`).value='';
+  document.getElementById(`${id}-ph`).value='';
+  renderRegs(id); renderDashboard();
+}
+function renderRegs(id){
+  const tbody = document.getElementById(`${id}-tabla`);
+  if(!tbody) return;
+  const regs = load(`${id}:regs`,[]);
+  tbody.innerHTML = regs.map(r=>`<tr><td>${r.fecha}</td><td>${r.ec}</td><td>${r.ph}</td></tr>`).join('');
+}
+
+/* ========= NOTAS ========= */
+function bindNotas(id){
+  const ta = document.getElementById(`${id}-notas`);
+  if(!ta) return;
+  ta.value = load(`${id}:notas`,'');
+  ta.oninput = ()=>save(`${id}:notas`,ta.value);
+}
+function limpiarNotas(id){ if(confirm('¿Vaciar notas?')){ save(`${id}:notas`,''); bindNotas(id);} }
+function limpiarNotasGlobal(){ if(confirm('¿Vaciar notas globales?')){ save('notasGlobal',''); bindNotasGlobal(); } }
+function bindNotasGlobal(){ const ta=document.getElementById('notas-global'); if(!ta) return; ta.value=load('notasGlobal',''); ta.oninput=()=>save('notasGlobal',ta.value); }
+
+/* ========= DASHBOARD ========= */
+function renderDashboard(){
+  // próximas tareas (todas)
+  const all = CULTIVOS.flatMap(c=>load(`${c.id}:tasks`,[]).map(t=>({...t,cultivo:c.titulo})));
+  const prox = all
+    .filter(t=>!t.done)
+    .sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999'))
+    .slice(0,6);
+  document.getElementById('proxTareas').innerHTML = prox.length
+    ? prox.map(t=>`<div class="task"><div><b>${t.text}</b><br><small>${t.cultivo} · ${t.date||'Sin fecha'}</small></div></div>`).join('')
+    : '<p class="muted">No hay tareas próximas.</p>';
+
+  // últimos registros
+  const ul = CULTIVOS.flatMap(c=> (load(`${c.id}:regs`,[])[0] ? [{cultivo:c.titulo, ...load(`${c.id}:regs`,[])[0]}] : []));
+  document.getElementById('ultimosReg').innerHTML = ul.length
+    ? '<table><thead><tr><th>Cultivo</th><th>Fecha</th><th>EC</th><th>pH</th></tr></thead><tbody>'
+        + ul.map(r=>`<tr><td>${r.cultivo}</td><td>${r.fecha}</td><td>${r.ec}</td><td>${r.ph}</td></tr>`).join('')
+        + '</tbody></table>'
+    : '<p class="muted">Aún no hay registros.</p>';
+}
+
+/* ========= NAV ========= */
+function showView(id){
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  const btn=document.getElementById(`tab-${id}`); if(btn) btn.classList.add('active');
+  document.querySelectorAll('.view').forEach(v=>v.style.display='none');
+  const v = document.getElementById(`view-${id}`); if(v) v.style.display='block';
+  // cuando entras a un cultivo, renderizas su estado
+  const c = CULTIVOS.find(x=>x.id===id);
+  if(c){ renderTasks(id); renderGal(id); renderRegs(id); bindNotas(id); }
+  if(id==='notas') bindNotasGlobal();
+}
+window.addEventListener('load',()=>{
+  // activar dashboard inicial
+  showView('dashboard'); 
+  renderDashboard();
+  // auto-ejemplos iniciales si quieres:
+  // seed de ejemplo para limoneros (se crea solo si no hay nada)
+  const ejemplo = load('seeded',false);
+  if(!ejemplo){
+    const t = load('limoneros:tasks',[]);
+    t.push({text:'Neem 3 ml/L + jabón potásico 1 ml/L (tarde)', date:new Date(Date.now()+4*864e5).toISOString().slice(0,10), done:false});
+    save('limoneros:tasks',t);
+    const t2 = load('exterior:tasks',[]);
+    t2.push({text:'Micorrizas + Trichoderma 1 g/4 L · pH 6.4', date:new Date(Date.now()+3*864e5).toISOString().slice(0,10), done:false});
+    save('exterior:tasks',t2);
+    save('seeded',true);
+    renderDashboard();
+  }
+});
+</script>
 </body>
 </html>
