@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>App Cultivo Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  </head>
+  <body class="bg-slate-50">
+    <div id="root"></div>
+    <script>
+      const { useState, useMemo } = React;
+      function AppCultivoPro(){ const [tab,setTab]=useState('dashboard'); return (
+        React.createElement('div',{className:'min-h-screen bg-slate-50 text-slate-900'},
+          React.createElement(Header,{onNav:setTab,tab}), 
+          React.createElement('main',{className:'mx-auto max-w-6xl p-4 sm:p-6'},
+            tab==='dashboard'&&React.createElement(Dashboard,{onNav:setTab}),
+            tab==='cannabis'&&React.createElement(CannabisFusarium,null),
+            tab==='limonero'&&React.createElement(LimoneroMinador,null),
+            tab==='luz'&&React.createElement(LuzUVBLED,null),
+            tab==='vpd'&&React.createElement(VPDTool,null),
+            tab==='notas'&&React.createElement(Notas,null)
+          ),
+          React.createElement(Footer,null)
+        )
+      );}
+      function Header({onNav,tab}){ const items=[
+        {id:'dashboard',label:'Panel'},{id:'cannabis',label:'Cannabis (Fusarium)'},{id:'limonero',label:'Limonero (Minador)'},
+        {id:'luz',label:'Luz & UV-B'},{id:'vpd',label:'VPD'},{id:'notas',label:'Notas'}];
+        return React.createElement('header',{className:'sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur'},
+          React.createElement('div',{className:'mx-auto flex max-w-6xl items-center justify-between p-4'},
+            React.createElement('div',{className:'text-xl font-bold'},'App Cultivo Pro'),
+            React.createElement('nav',{className:'flex gap-2'},
+              items.map(i=>React.createElement('button',{key:i.id,onClick:()=>onNav(i.id),
+                className:'rounded-xl px-3 py-2 text-sm font-medium transition '+(tab===i.id?'bg-slate-900 text-white shadow':'hover:bg-slate-100')},i.label))
+            )
+          )
+        );
+      }
+      function Card({title,children,footer}){ return React.createElement('div',{className:'rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200'},
+        React.createElement('div',{className:'mb-3 flex items-center justify-between'},React.createElement('h2',{className:'text-lg font-semibold'},title)),
+        children, footer?React.createElement('div',{className:'mt-4 border-t pt-3 text-sm text-slate-500'},footer):null);}
+      function Dashboard({onNav}){ return React.createElement('div',{className:'grid gap-4 md:grid-cols-2 lg:grid-cols-3'},
+        React.createElement(Card,{title:'Empezar hoy'},
+          React.createElement('ol',{className:'list-decimal space-y-2 pl-5 text-sm'},
+            React.createElement('li',null,React.createElement('span',{className:'font-semibold'},'Riego H₂O₂ (suelo):'),' 3 ml/L (agua oxigenada 3%).'),
+            React.createElement('li',null,'En ',React.createElement('span',{className:'font-semibold'},'3–4 días'),': micorrizas + Trichoderma (1 g/4 L) con pH 6.3–6.5.'),
+            React.createElement('li',null,'Foliar semanal: cola de caballo 5 ml/L o propóleo 2–3 ml/L al atardecer.')
+          ),
+          React.createElement('div',{className:'mt-4 flex gap-2'},
+            React.createElement('button',{className:'rounded-xl bg-slate-900 px-3 py-2 text-sm text-white',onClick:()=>onNav('cannabis')},'Ver protocolo Cannabis'),
+            React.createElement('button',{className:'rounded-xl bg-slate-100 px-3 py-2 text-sm',onClick:()=>onNav('limonero')},'Ver control Minador')
+          )
+        ),
+        React.createElement(Card,{title:'Calculadora rápida'},React.createElement(QuickCalc,null)),
+        React.createElement(Card,{title:'Checklist de cierre (indoor)'},
+          React.createElement('ul',{className:'list-disc pl-5 text-sm space-y-1'},
+            React.createElement('li',null,'Humedad 40–45% (flora final); 35–40% en flush.'),
+            React.createElement('li',null,'LED 100% hasta flush; en flush 80–85%.'),
+            React.createElement('li',null,'UV‑B 1–2 h/día (últimas 2–3 semanas).'),
+            React.createElement('li',null,'Secado: 18–20 °C, 55–60% HR, 10–14 días, oscuridad.'),
+            React.createElement('li',null,'Curado: 4–8 semanas, abrir botes según pauta.')
+          )
+        )
+      );}
+      function QuickCalc(){ const [litros,setLitros]=useState(12);
+        const h2o2=useMemo(()=> (litros*3).toFixed(1),[litros]);
+        const mic=useMemo(()=> (litros/4).toFixed(2),[litros]);
+        return React.createElement('div',{className:'space-y-3'},
+          React.createElement('label',{className:'text-sm'},'Litros de agua en el cubo'),
+          React.createElement('input',{type:'range',min:4,max:40,value:litros,onChange:e=>setLitros(parseInt(e.target.value)),className:'w-full'}),
+          React.createElement('div',{className:'grid grid-cols-2 gap-3 text-sm'},
+            React.createElement('div',{className:'rounded-xl bg-slate-100 p-3'},
+              React.createElement('div',{className:'font-semibold'},'H₂O₂ (3%)'),React.createElement('div',null,h2o2,' ml'),
+              React.createElement('div',{className:'text-xs text-slate-500'},'Dosis: 3 ml/L')
+            ),
+            React.createElement('div',{className:'rounded-xl bg-slate-100 p-3'},
+              React.createElement('div',{className:'font-semibold'},'Micorrizas'),React.createElement('div',null,mic,' g'),
+              React.createElement('div',{className:'text-xs text-slate-500'},'Dosis: 1 g/4 L')
+            )
+          )
+        );}
+      function CannabisFusarium(){ return React.createElement('div',{className:'space-y-6'},
+        React.createElement(Card,{title:'Protocolo de rescate (suelo)'},
+          React.createElement('div',{className:'prose prose-sm max-w-none'},
+            React.createElement('h4',null,'Hoy (Día 0) – Desinfección'),
+            React.createElement('ul',null,React.createElement('li',null,'Riego con ',React.createElement('strong',null,'H₂O₂ al 3%'),' a 3 ml/L. Evitar hojas.'),
+              React.createElement('li',null,'5–12 L de solución por planta según tamaño (en suelo).')),
+            React.createElement('h4',null,'Día 3–4 – Recolonización'),
+            React.createElement('ul',null,React.createElement('li',null,'Riego con ',React.createElement('strong',null,'micorrizas + Trichoderma'),' (1 g/4 L) con pH 6.3–6.5.'),
+              React.createElement('li',null,'Repetir a los 10–14 días; opcional melaza 1 ml/L.')),
+            React.createElement('h4',null,'Semanal – Preventivo foliar'),
+            React.createElement('ul',null,React.createElement('li',null,'Cola de caballo 5 ml/L ',React.createElement('em',null,'o'),' Propóleo 2–3 ml/L (al atardecer).')),
+            React.createElement('h4',null,'Extra'),
+            React.createElement('ul',null,React.createElement('li',null,'Retirar ramas secas y sellar con canela.'),
+              React.createElement('li',null,'Acolchado (paja/corteza) para estabilidad hídrica.'))
+          )
+        ),
+        React.createElement(Card,{title:'Calculadora de reparto por planta'},React.createElement(DistribucionPlantas,null)),
+        React.createElement(Card,{title:'Checklist rápido'},
+          React.createElement('ul',{className:'list-disc pl-5 text-sm space-y-1'},
+            React.createElement('li',null,'No mezclar H₂O₂ y micorrizas el mismo día.'),
+            React.createElement('li',null,'pH micorrizas: 6.3–6.5 (en suelo objetivo 6.2–6.8).'),
+            React.createElement('li',null,'Evitar encharcar; mejor riego lento y uniforme.')
+          )
+        )
+      );}
+      function DistribucionPlantas(){ const [mezcla,setMezcla]=useState(12);
+        const [tamanos,setTamanos]=useState(['grande','enferma','mediana','mediana']);
+        const reparto=useMemo(()=>{ const pesos=tamanos.map(t=> t==='grande'?0.45: (t==='enferma'?0.25:0.15));
+          const suma=pesos.reduce((a,b)=>a+b,0); return pesos.map(p=> Number(((p/suma)*mezcla).toFixed(2))); },[mezcla,tamanos]);
+        const opts=[{id:'grande',label:'Grande (≈2 m)'},{id:'enferma',label:'Afectada'},{id:'mediana',label:'Mediana'}];
+        return React.createElement('div',{className:'space-y-4'},
+          React.createElement('div',{className:'grid gap-3 md:grid-cols-2'},
+            React.createElement('div',null,React.createElement('label',{className:'text-sm'},'Litros totales preparados'),
+              React.createElement('input',{type:'range',min:8,max:40,value:mezcla,onChange:e=>setMezcla(parseInt(e.target.value)),className:'w-full'}),
+              React.createElement('div',{className:'text-sm text-slate-600'},mezcla,' L')
+            ),
+            React.createElement('div',{className:'text-sm'},React.createElement('div',{className:'mb-1'},'Tamaño por planta'),
+              React.createElement('div',{className:'grid grid-cols-2 gap-2 sm:grid-cols-4'},
+                tamanos.map((t,i)=> React.createElement('select',{key:i,className:'rounded-xl border p-2',value:t,
+                  onChange:e=>{ const v=e.target.value; const next=[...tamanos]; next[i]=v; setTamanos(next);} },
+                  opts.map(o=> React.createElement('option',{key:o.id,value:o.id},o.label))
+                )))
+            )
+          ),
+          React.createElement('div',{className:'grid grid-cols-2 gap-3 sm:grid-cols-4 text-sm'},
+            reparto.map((lit,i)=> React.createElement('div',{key:i,className:'rounded-xl bg-slate-100 p-3'},
+              React.createElement('div',{className:'font-semibold'},'Planta ',i+1),
+              React.createElement('div',null,lit,' L')
+            ))
+          )
+        );}
+      function LimoneroMinador(){ return React.createElement('div',{className:'space-y-6'},
+        React.createElement(Card,{title:'Identificación rápida (Minador)'},
+          React.createElement('ul',{className:'list-disc pl-5 text-sm space-y-1'},
+            React.createElement('li',null,'Galerías plateadas en hojas jóvenes + hojas dobladas.'),
+            React.createElement('li',null,'Las hojas dañadas no se recuperan: eliminar las peores.')
+          )
+        ),
+        React.createElement(Card,{title:'Tratamiento ecológico'},
+          React.createElement('div',{className:'prose prose-sm max-w-none'},
+            React.createElement('h4',null,'Preventivo semanal (brotes nuevos)'),
+            React.createElement('ul',null,
+              React.createElement('li',null,'Aceite de neem 3 ml/L + 1 ml/L jabón potásico (emulsionar).'),
+              React.createElement('li',null,'Aplicar al atardecer; cubrir haz y envés.')
+            ),
+            React.createElement('h4',null,'Refuerzo nutricional'),
+            React.createElement('ul',null,React.createElement('li',null,'Abono cítricos NPK + microelementos (Fe, Zn, Mg).'))
+          )
+        ),
+        React.createElement(Card,{title:'Calculadora Neem/Jabón'},React.createElement(NeemCalc,null))
+      );}
+      function NeemCalc(){ const [litros,setLitros]=useState(5);
+        const neem=useMemo(()=> (litros*3).toFixed(1),[litros]);
+        const jabon=useMemo(()=> (litros*1).toFixed(1),[litros]);
+        return React.createElement('div',{className:'space-y-3'},
+          React.createElement('label',{className:'text-sm'},'Litros de agua en mochila'),
+          React.createElement('input',{type:'range',min:1,max:20,value:litros,onChange:e=>setLitros(parseInt(e.target.value)),className:'w-full'}),
+          React.createElement('div',{className:'grid grid-cols-2 gap-3 text-sm'},
+            React.createElement('div',{className:'rounded-xl bg-emerald-50 p-3 ring-1 ring-emerald-100'},
+              React.createElement('div',{className:'font-semibold'},'Neem'),React.createElement('div',null,neem,' ml'),
+              React.createElement('div',{className:'text-xs text-slate-500'},'3 ml/L')
+            ),
+            React.createElement('div',{className:'rounded-xl bg-amber-50 p-3 ring-1 ring-amber-100'},
+              React.createElement('div',{className:'font-semibold'},'Jabón potásico'),React.createElement('div',null,jabon,' ml'),
+              React.createElement('div',{className:'text-xs text-slate-500'},'1 ml/L')
+            )
+          )
+        );}
+      function LuzUVBLED(){ return React.createElement('div',{className:'space-y-6'},
+        React.createElement(Card,{title:'Plan de luz (LED 800W)'},
+          React.createElement('ul',{className:'list-disc pl-5 text-sm space-y-1'},
+            React.createElement('li',null,'Crecimiento: 50–60%, 65–70 cm.'),
+            React.createElement('li',null,'Inicio floración: 75–85%, 50–55 cm.'),
+            React.createElement('li',null,'Floración media/final: 100%, 35–40 cm.'),
+            React.createElement('li',null,'Flush: 80–85% o +10 cm de altura.')
+          )
+        ),
+        React.createElement(Card,{title:'UV‑B (MIGRO UVB‑310 / 18–20 W equivalente)'},
+          React.createElement('ul',{className:'list-disc pl-5 text-sm space-y-1'},
+            React.createElement('li',null,'Usar solo últimas 2–3 semanas de floración.'),
+            React.createElement('li',null,'Duración: 1–2 h/día, en bloques de 30–60 min.'),
+            React.createElement('li',null,'Altura: 20–30 cm sobre el dosel. Siempre por debajo del LED principal.')
+          )
+        )
+      );}
+      function VPDTool(){ const [t,setT]=useState(26); const [rh,setRh]=useState(55);
+        const vpd=useMemo(()=>{ const es=0.6108*Math.exp((17.27*t)/(t+237.3)); const ea=(rh/100)*es; return Math.max(0,(es-ea)).toFixed(2);},[t,rh]);
+        return React.createElement('div',{className:'grid gap-4 md:grid-cols-2'},
+          React.createElement(Card,{title:'Calculadora VPD'},
+            React.createElement('div',{className:'space-y-4 text-sm'},
+              React.createElement('div',null,React.createElement('label',{className:'mb-1 block'},'Temperatura (°C)'),
+                React.createElement('input',{type:'range',min:18,max:32,value:t,onChange:e=>setT(parseInt(e.target.value)),className:'w-full'}),
+                React.createElement('div',null,t,' °C')),
+              React.createElement('div',null,React.createElement('label',{className:'mb-1 block'},'Humedad relativa (%)'),
+                React.createElement('input',{type:'range',min:30,max:80,value:rh,onChange:e=>setRh(parseInt(e.target.value)),className:'w-full'}),
+                React.createElement('div',null,rh,' %')),
+              React.createElement('div',{className:'rounded-xl bg-slate-100 p-3'},'VPD ≈ ',React.createElement('span',{className:'font-semibold'},vpd,' kPa')),
+              React.createElement('div',{className:'text-xs text-slate-500'},'Objetivos: 0.8–1.0 (crec.), 1.1–1.3 (flora media), 1.3–1.6 (flora final)')
+            )
+          ),
+          React.createElement(Card,{title:'Guía rápida'},
+            React.createElement('ul',{className:'list-disc pl-5 text-sm space-y-1'},
+              React.createElement('li',null,'Si VPD < 1.0 → sube temperatura o baja HR.'),
+              React.createElement('li',null,'Si VPD > 1.6 → baja temperatura o sube HR.'),
+              React.createElement('li',null,'Controla extracción y ventilación interna.')
+            )
+          )
+        );}
+      function Notas(){ const [texto,setTexto]=useState(''); const [items,setItems]=useState(()=>{ try{const s=localStorage.getItem('notas-cultivo-pro'); return s?JSON.parse(s):[]}catch{return []}});
+        function add(){ if(!texto.trim()) return; const next=[texto.trim(),...items]; setItems(next); setTexto(''); localStorage.setItem('notas-cultivo-pro',JSON.stringify(next)); }
+        function del(i){ const next=[...items]; next.splice(i,1); setItems(next); localStorage.setItem('notas-cultivo-pro',JSON.stringify(next)); }
+        return React.createElement('div',{className:'grid gap-4 md:grid-cols-2'},
+          React.createElement(Card,{title:'Nueva nota'},
+            React.createElement('div',{className:'flex gap-2'},
+              React.createElement('input',{value:texto,onChange:e=>setTexto(e.target.value),placeholder:'Apunta tareas, observaciones, EC/pH, etc.',className:'w-full rounded-xl border px-3 py-2'}),
+              React.createElement('button',{onClick:add,className:'rounded-xl bg-slate-900 px-3 py-2 text-white'},'Guardar')
+            )
+          ),
+          React.createElement(Card,{title:'Notas guardadas'},
+            React.createElement('ul',{className:'space-y-2 text-sm'},
+              items.length===0&&React.createElement('li',{className:'text-slate-500'},'Sin notas aún.'),
+              items.map((n,i)=> React.createElement('li',{key:i,className:'flex items-start justify-between gap-3 rounded-xl border p-3'},
+                React.createElement('span',null,n),
+                React.createElement('button',{onClick:()=>del(i),className:'rounded-lg bg-slate-100 px-2 py-1 text-xs'},'Borrar')
+              ))
+            )
+          )
+        );}
+      function Footer(){ return React.createElement('footer',{className:'mt-10 border-t bg-white/60'},
+        React.createElement('div',{className:'mx-auto max-w-6xl p-4 text-center text-xs text-slate-500'},
+          'Hecha para tu cultivo: protocolos, calculadoras y notas. Ajusta dosis a tu agua y suelo.'
+        )
+      );}
+      ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(AppCultivoPro));
+    </script>
+  </body>
+</html>

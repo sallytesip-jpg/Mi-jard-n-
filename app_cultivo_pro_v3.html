@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>App Cultivo Pro v3</title>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            boxShadow: {
+              soft: "0 10px 30px -12px rgba(2,6,23,.2)"
+            }
+          }
+        }
+      }
+    </script>
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  </head>
+  <body class="bg-gradient-to-br from-slate-50 via-emerald-50 to-slate-50 min-h-screen">
+    <div id="root"></div>
+    <script type="text/javascript">
+      const {useState, useMemo, useEffect, useRef} = React;
+
+      // ---------- Storage helpers ----------
+      const useStorage = (key, initial) => {
+        const [state, setState] = useState(()=>{
+          try{const s=localStorage.getItem(key); return s? JSON.parse(s): initial;}catch{return initial}
+        });
+        useEffect(()=>{ try{localStorage.setItem(key, JSON.stringify(state))}catch{} },[key,state]);
+        return [state,setState];
+      };
+
+      // ---------- UI atoms ----------
+      const Badge = ({children}) => React.createElement('span',{className:"rounded-full bg-white/70 px-2 py-0.5 text-[11px] ring-1 ring-slate-200"},children);
+      const SectionTitle = ({children}) => React.createElement('h2',{className:"mb-3 text-lg font-semibold tracking-tight"},children);
+      function Card({title, subtitle, children, footer}){
+        return React.createElement('div',{className:"rounded-3xl bg-white/90 p-5 shadow-soft ring-1 ring-slate-200 backdrop-blur"},
+          React.createElement('div',{className:"mb-4 flex items-center justify-between"},
+            React.createElement('div',null,
+              React.createElement('div',{className:"text-base font-semibold"}, title),
+              subtitle? React.createElement('div',{className:"text-xs text-slate-500"},subtitle): null
+            )
+          ),
+          children,
+          footer? React.createElement('div',{className:"mt-4 border-t pt-3 text-xs text-slate-500"},footer): null
+        );
+      }
+
+      // ---------- App ----------
+      function App(){
+        const [cultivo,setCultivo] = useStorage("v3-cultivo", null);
+        const [tab,setTab] = useStorage("v3-tab", "panel");
+
+        if(!cultivo){
+          return React.createElement(Landing,{onPick:setCultivo});
+        }
+        return React.createElement('div', {className:"text-slate-900"},
+          React.createElement(Topbar,{onBack:()=>{setCultivo(null); setTab("panel");}, tab, setTab, cultivo}),
+          React.createElement('main',{className:"mx-auto max-w-7xl p-4 sm:p-6 space-y-6"},
+            tab==="panel" && React.createElement(Panel,{cultivo}),
+            tab==="nutricion" && React.createElement(Nutricion,{cultivo}),
+            tab==="ambiente" && React.createElement(Ambiente,{cultivo}),
+            tab==="protocolos" && React.createElement(Protocolos,{cultivo}),
+            tab==="calculadoras" && React.createElement(Calculadoras,{cultivo}),
+            tab==="diagnostico" && React.createElement(Diagnostico,{cultivo}),
+            tab==="tareas" && React.createElement(Tareas,{cultivo}),
+            tab==="notas" && React.createElement(Notas,{cultivo})
+          ),
+          React.createElement(Footer,null)
+        );
+      }
+
+      // ---------- Landing ----------
+      function Landing({onPick}){
+        const items=[
+          {id:"gelato", title:"Indoor – Gelato", desc:"Floración con alta resina y terpenos cremosos."},
+          {id:"acai", title:"Indoor – Açaí", desc:"Aroma afrutado intenso, respuesta fuerte a UV‑B."},
+          {id:"exterior", title:"Exterior – Cannabis", desc:"Manejo de suelo y sanidad en campo."},
+          {id:"limonero", title:"Limonero – Minador", desc:"IPM ecológico y nutrición de cítricos."},
+        ];
+        return React.createElement('div',{className:"min-h-screen flex items-center"},
+          React.createElement('div',{className:"mx-auto grid max-w-6xl gap-6 p-6 sm:grid-cols-2 lg:grid-cols-4 w-full"},
+            items.map(i=> React.createElement('button',{key:i.id, onClick:()=>onPick(i.id),
+              className:"group rounded-3xl bg-white/90 p-6 text-left ring-1 ring-slate-200 hover:ring-slate-300 hover:shadow-soft transition backdrop-blur"},
+              React.createElement('div',{className:"mb-3 text-lg font-semibold"}, i.title),
+              React.createElement('p',{className:"text-sm text-slate-500"}, i.desc),
+              React.createElement('div',{className:"mt-4 flex gap-2"},
+                React.createElement(Badge,null,"EC/pH guía"),
+                React.createElement(Badge,null,"UV‑B"),
+                React.createElement(Badge,null,"IPM")
+              )
+            ))
+          )
+        );
+      }
+
+      // ---------- Topbar ----------
+      function Topbar({onBack, tab, setTab, cultivo}){
+        const tabs=[
+          {id:"panel",label:"Panel"},
+          {id:"nutricion",label:"Nutrición"},
+          {id:"ambiente",label:"Ambiente"},
+          {id:"protocolos",label:"Protocolos"},
+          {id:"calculadoras",label:"Calculadoras"},
+          {id:"diagnostico",label:"Diagnóstico (sube foto)"},
+          {id:"tareas",label:"Tareas"},
+          {id:"notas",label:"Notas"},
+        ];
+        const titleMap={
+          gelato:"Indoor – Gelato", acai:"Indoor – Açaí", exterior:"Exterior – Cannabis", limonero:"Limonero – Minador"
+        };
+        return React.createElement('header',{className:"sticky top-0 z-50 border-b border-slate-200/70 bg-white/70 backdrop-blur"},
+          React.createElement('div',{className:"mx-auto flex max-w-7xl items-center justify-between p-4"},
+            React.createElement('div',{className:"flex items-center gap-3"},
+              React.createElement('button',{onClick:onBack, className:"rounded-xl bg-white px-3 py-2 text-sm ring-1 ring-slate-200 hover:bg-slate-100"}, "← Cambiar cultivo"),
+              React.createElement('div',{className:"text-lg font-semibold tracking-tight"}, titleMap[cultivo] || "Cultivo")
+            ),
+            React.createElement('nav',{className:"hidden gap-2 md:flex"},
+              tabs.map(t=> React.createElement('button',{key:t.id, onClick:()=>setTab(t.id),
+                className: "rounded-xl px-3 py-2 text-sm font-medium transition " + (tab===t.id? "bg-slate-900 text-white shadow": "bg-white ring-1 ring-slate-200 hover:bg-slate-100")}, t.label))
+            )
+          ),
+          React.createElement('div',{className:"flex gap-2 p-2 md:hidden overflow-x-auto"},
+            tabs.map(t=> React.createElement('button',{key:t.id, onClick:()=>setTab(t.id),
+              className: "whitespace-nowrap rounded-xl px-3 py-2 text-xs font-medium transition " + (tab===t.id? "bg-slate-900 text-white shadow": "bg-white ring-1 ring-slate-200")}, t.label))
+          )
+        );
+      }
+
+      // ---------- Panel ----------
+      function Panel({cultivo}){
+        return React.createElement('div',{className:"grid gap-4 md:grid-cols-2 lg:grid-cols-3"},
+          React.createElement(Card,{title:"Hoy", subtitle:"Lo importante ahora"},
+            React.createElement('ol',{className:"list-decimal pl-5 text-sm space-y-1"},
+              React.createElement('li',null, "Comprueba HR y temperatura (usa VPD)."),
+              React.createElement('li',null, cultivo!=="limonero"? "Riego según EC/pH objetivo de la fase." : "Revisión de brotes tiernos y hojas con galerías."),
+              React.createElement('li',null, "Revisa hojas bajas amarillas o puntas quemadas.")
+            )
+          ),
+          React.createElement(Card,{title:"Checklist", subtitle:"Antes de apagar luces/irnos"},
+            React.createElement('ul',{className:"list-disc pl-5 text-sm space-y-1"},
+              React.createElement('li',null,"HR al rango; circulación de aire correcta."),
+              React.createElement('li',null,"Altura LED/UV‑B conforme a la fase."),
+              React.createElement('li',null,"Apunta en Notas riego/EC/pH y observaciones.")
+            )
+          ),
+          React.createElement(Card,{title:"Resumen de fase", subtitle:"Guías rápidas"},
+            React.createElement(ResumenFase,{cultivo})
+          )
+        );
+      }
+
+      function ResumenFase({cultivo}){
+        const data={
+          gelato:[["Crec","EC 0.6–1.0","pH 5.8–6.1"],["Flora media","EC 1.6–1.8","pH 6.1–6.3"],["Final","EC 1.8–2.0","HR 40–45%"]],
+          acai:[["Crec","EC 0.6–1.1","pH 5.8–6.1"],["Flora media","EC 1.7–1.9","UV‑B 1–2 h/d"],["Final","EC 1.8–2.0","HR 40–45%"]],
+          exterior:[["Preflora","pH 6.3–6.6","Ca/Mg + Si"],["Media","EC 1.4–1.7","PK + microbios"],["Final","HR baja","Evitar mojado de tarde"]],
+          limonero:[["Brotes","Neem 3 ml/L","Jabón 1 ml/L"],["Nutrición","Quelatos Fe/Zn","pH 6.0–6.5"],["Poda","Eliminar hojas túnel","No compostar"]]
+        };
+        return React.createElement('div',{className:"text-sm"},
+          data[cultivo].map((r,i)=> React.createElement('div',{key:i, className:"mb-2 flex items-center justify-between rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200"},
+            React.createElement('div',{className:"font-medium"}, r[0]),
+            React.createElement('div',null, r[1]),
+            React.createElement('div',{className:"text-slate-500"}, r[2])
+          ))
+        );
+      }
+
+      // ---------- Nutrición ----------
+      function Nutricion({cultivo}){
+        const tablas={
+          gelato:[["Crec 1","0.6–0.8","5.8–6.0","Silicio + raíces"],["Crec 2","0.8–1.0","5.9–6.1","N estable"],["Flora 1","1.2–1.4","6.0–6.2","PK suave"],["Flora 2–4","1.6–1.8","6.1–6.3","Carbohidratos"],["Final","1.8–2.0","6.2–6.4","UV‑B"],["Flush","<0.4","6.2–6.5","7–10 días"]],
+          acai:[["Crec 1","0.6–0.8","5.8–6.0","Silicio + raíces"],["Crec 2","0.9–1.1","5.9–6.1","Vegetativo alegre"],["Flora 1","1.3–1.5","6.0–6.2","Transición"],["Flora 2–4","1.7–1.9","6.1–6.3","Aroma/fruta"],["Final","1.8–2.0","6.2–6.4","De-leaf selectivo"],["Flush","<0.4","6.2–6.5","7–10 días"]],
+          exterior:[["Preflora","0.9–1.1","6.3–6.6","Ca/Mg + Si"],["Media","1.4–1.7","6.3–6.7","PK + microbios"],["Final","1.6–1.8","6.4–6.8","HR baja"]],
+          limonero:[["Mantenimiento","—","6.0–6.5","Quelatos + micro"]]
+        };
+        return React.createElement(Card,{title:"Tabla nutricional", subtitle:"Objetivos por fase"},
+          React.createElement('div',{className:"overflow-x-auto"},
+            React.createElement('table',{className:"min-w-full text-left text-sm"},
+              React.createElement('thead',null,
+                React.createElement('tr',{className:"border-b bg-slate-50 text-slate-600"},
+                  React.createElement('th',{className:"p-2"},"Semana/Fase"),
+                  React.createElement('th',{className:"p-2"},"EC"),
+                  React.createElement('th',{className:"p-2"},"pH"),
+                  React.createElement('th',{className:"p-2"},"Notas")
+                )
+              ),
+              React.createElement('tbody',null,
+                tablas[cultivo].map((r,i)=> React.createElement('tr',{key:i, className:"border-b"},
+                  React.createElement('td',{className:"p-2"},r[0]),
+                  React.createElement('td',{className:"p-2"},r[1]),
+                  React.createElement('td',{className:"p-2"},r[2]),
+                  React.createElement('td',{className:"p-2 text-slate-500"},r[3])
+                ))
+              )
+            )
+          )
+        );
+      }
+
+      // ---------- Ambiente ----------
+      function Ambiente({cultivo}){
+        return React.createElement('div',{className:"grid gap-4 md:grid-cols-2"},
+          React.createElement(Card,{title:"Plan de luz"},
+            React.createElement('ul',{className:"list-disc pl-5 text-sm space-y-1"},
+              React.createElement('li',null,"Crec: 50–60%, 65–70 cm"),
+              React.createElement('li',null,"Flora inicio: 75–85%, 50–55 cm"),
+              React.createElement('li',null,"Flora media/final: 100%, 35–40 cm"),
+              React.createElement('li',null,"Flush: 80–85% o +10 cm")
+            )
+          ),
+          React.createElement(Card,{title:"UV‑B"},
+            React.createElement('ul',{className:"list-disc pl-5 text-sm space-y-1"},
+              React.createElement('li',null,"Sólo últimas 2–3 semanas"),
+              React.createElement('li',null,"1–2 h/día, bloques 30–60 min"),
+              React.createElement('li',null,"20–30 cm sobre dosel (bajo el LED)")
+            )
+          ),
+          React.createElement(Card,{title:"VPD"},
+            React.createElement(VPDToolInline,null)
+          )
+        );
+      }
+      function VPDToolInline(){
+        const [t,setT]=useState(26), [rh,setRh]=useState(55);
+        const vpd = useMemo(()=>{
+          const es=0.6108*Math.exp((17.27*t)/(t+237.3)), ea=(rh/100)*es;
+          return Math.max(0, es-ea).toFixed(2);
+        },[t,rh]);
+        return React.createElement('div',{className:"space-y-2 text-sm"},
+          React.createElement('div',null,"Temp: ",t," °C"),
+          React.createElement('input',{type:"range",min:18,max:32,value:t,onChange:e=>setT(parseInt(e.target.value)),className:"w-full"}),
+          React.createElement('div',null,"HR: ",rh," %"),
+          React.createElement('input',{type:"range",min:30,max:80,value:rh,onChange:e=>setRh(parseInt(e.target.value)),className:"w-full"}),
+          React.createElement('div',{className:"rounded-xl bg-slate-100 p-2"},"VPD ≈ ", React.createElement('b',null,vpd," kPa"))
+        );
+      }
+
+      // ---------- Protocolos ----------
+      function Protocolos({cultivo}){
+        const isLimo=cultivo==="limonero", isExt=cultivo==="exterior";
+        return React.createElement('div',{className:"grid gap-4 md:grid-cols-2"},
+          !isLimo && React.createElement(Card,{title:"Raíz/Fusarium (suelo)"},
+            React.createElement('ul',{className:"list-disc pl-5 text-sm space-y-1"},
+              React.createElement('li',null,"Día 0: H₂O₂ 3% a 3 ml/L. Evitar hojas."),
+              React.createElement('li',null,"Día 3–4: Micorrizas + Trichoderma 1 g/4 L (pH 6.3–6.5)."),
+              React.createElement('li',null,"Foliar semanal: cola de caballo 5 ml/L o propóleo 2–3 ml/L.")
+            )
+          ),
+          isLimo && React.createElement(Card,{title:"Minador del limonero"},
+            React.createElement('ul',{className:"list-disc pl-5 text-sm space-y-1"},
+              React.createElement('li',null,"Neem 3 ml/L + Jabón 1 ml/L (atardecer)."),
+              React.createElement('li',null,"Eliminar hojas con grandes galerías; no compostar."),
+              React.createElement('li',null,"NPK cítricos + microelementos (Fe, Zn, Mg).")
+            )
+          ),
+          isExt && React.createElement(Card,{title:"Asociación de plantas (exterior)"},
+            React.createElement('ul',{className:"list-disc pl-5 text-sm space-y-1"},
+              React.createElement('li',null,"Aromáticas: albahaca, caléndula, lavanda (repelen)."),
+              React.createElement('li',null,"Evitar solanáceas (tomate/pimiento) cerca.")
+            )
+          )
+        );
+      }
+
+      // ---------- Calculadoras ----------
+      function Calculadoras({cultivo}){
+        return React.createElement('div',{className:"grid gap-4 md:grid-cols-2"},
+          React.createElement(Card,{title:"Riego H₂O₂ / Micorrizas"},
+            React.createElement(QuickCalc,null)
+          ),
+          React.createElement(Card,{title:"Neem / Jabón (foliar)"},
+            React.createElement(NeemCalc,null)
+          )
+        );
+      }
+      function QuickCalc(){
+        const [L,setL]=useState(12);
+        const h2o2=(L*3).toFixed(1), mic=(L/4).toFixed(2);
+        return React.createElement('div',{className:"space-y-3 text-sm"},
+          React.createElement('label',null,"Litros preparados: ",L," L"),
+          React.createElement('input',{type:"range",min:4,max:60,value:L,onChange:e=>setL(parseInt(e.target.value)),className:"w-full"}),
+          React.createElement('div',{className:"grid grid-cols-2 gap-3"},
+            React.createElement('div',{className:"rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200"},
+              React.createElement('div',{className:"font-semibold"},"H₂O₂ (3%)"),
+              React.createElement('div',null,h2o2," ml"),
+              React.createElement('div',{className:"text-xs text-slate-500"},"3 ml/L")
+            ),
+            React.createElement('div',{className:"rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200"},
+              React.createElement('div',{className:"font-semibold"},"Micorrizas"),
+              React.createElement('div',null,mic," g"),
+              React.createElement('div',{className:"text-xs text-slate-500"},"1 g/4 L")
+            )
+          )
+        );
+      }
+      function NeemCalc(){
+        const [L,setL]=useState(5);
+        const neem=(L*3).toFixed(1), jabon=(L*1).toFixed(1);
+        return React.createElement('div',{className:"space-y-3 text-sm"},
+          React.createElement('label',null,"Litros en mochila: ",L," L"),
+          React.createElement('input',{type:"range",min:1,max:20,value:L,onChange:e=>setL(parseInt(e.target.value)),className:"w-full"}),
+          React.createElement('div',{className:"grid grid-cols-2 gap-3"},
+            React.createElement('div',{className:"rounded-xl bg-emerald-50 p-3 ring-1 ring-emerald-100"},
+              React.createElement('div',{className:"font-semibold"},"Neem"),
+              React.createElement('div',null,neem," ml"),
+              React.createElement('div',{className:"text-xs text-slate-500"},"3 ml/L")
+            ),
+            React.createElement('div',{className:"rounded-xl bg-amber-50 p-3 ring-1 ring-amber-100"},
+              React.createElement('div',{className:"font-semibold"},"Jabón potásico"),
+              React.createElement('div',null,jabon," ml"),
+              React.createElement('div',{className:"text-xs text-slate-500"},"1 ml/L")
+            )
+          )
+        );
+      }
+
+      // ---------- Diagnóstico por imagen (básico) ----------
+      function Diagnostico({cultivo}){
+        const [img,setImg]=useState(null);
+        const [resultado,setResultado]=useState(null);
+        const canvasRef=useRef(null), imgRef=useRef(null);
+
+        function onFile(e){
+          const file=e.target.files[0];
+          if(!file) return;
+          const reader=new FileReader();
+          reader.onload=()=> setImg(reader.result);
+          reader.readAsDataURL(file);
+        }
+
+        function analizar(){
+          if(!imgRef.current) return;
+          const cvs=canvasRef.current, ctx=cvs.getContext('2d');
+          const w=imgRef.current.naturalWidth, h=imgRef.current.naturalHeight;
+          const s=300; // resize for speed
+          const ratio = Math.min(s/w, s/h);
+          const W=Math.max(1, Math.floor(w*ratio)), H=Math.max(1, Math.floor(h*ratio));
+          cvs.width=W; cvs.height=H;
+          ctx.drawImage(imgRef.current,0,0,W,H);
+          const data=ctx.getImageData(0,0,W,H).data;
+          let R=0,G=0,B=0,N=0;
+          for(let i=0;i<data.length;i+=4){ R+=data[i]; G+=data[i+1]; B+=data[i+2]; N++; }
+          R/=N; G/=N; B/=N;
+          // Reglas muy simples de color promedio
+          let tips=[];
+          if(G+R>380 && B<110) tips.push("Tendencia a amarilleo (posible clorosis / carencia N o envejecimiento).");
+          if(G<R && B<100) tips.push("Verde bajo y rojizo alto: vigila exceso de luz/estrés o falta de Mg.");
+          if(B>G && B>R) tips.push("Tono frío elevado (podría ser luz muy azul o balance de blancos).");
+          tips.push("Revisa puntas quemadas (EC alta) y manchas necróticas (hongos/deficiencias).");
+
+          setResultado({
+            promedio: {R: R.toFixed(0), G: G.toFixed(0), B: B.toFixed(0)},
+            consejos: tips
+          });
+        }
+
+        return React.createElement('div',{className:"grid gap-4 md:grid-cols-2"},
+          React.createElement(Card,{title:"Sube una foto de tu planta", subtitle:"Se analiza el color promedio y te doy indicios (no diagnóstico definitivo)"},
+            React.createElement('div',{className:"space-y-3 text-sm"},
+              React.createElement('input',{type:"file", accept:"image/*", onChange:onFile, className:"block w-full text-sm"}),
+              img && React.createElement('img',{ref:imgRef, src:img, alt:"preview", className:"max-h-72 rounded-2xl ring-1 ring-slate-200"}),
+              img && React.createElement('button',{onClick:analizar, className:"rounded-xl bg-slate-900 px-3 py-2 text-white"},"Analizar imagen"),
+              React.createElement('canvas',{ref:canvasRef, className:"hidden"})
+            )
+          ),
+          React.createElement(Card,{title:"Resultado"},
+            resultado? React.createElement('div',{className:"space-y-2 text-sm"},
+              React.createElement('div',null,"Promedio RGB: ", resultado.promedio.R," / ",resultado.promedio.G," / ",resultado.promedio.B),
+              React.createElement('ul',{className:"list-disc pl-5"}, resultado.consejos.map((t,i)=> React.createElement('li',{key:i}, t))),
+              React.createElement('div',{className:"mt-2 text-xs text-slate-500"},"Consejo: añade una foto de las hojas afectadas y otra del conjunto para mejor contexto.")
+            ) : React.createElement('div',{className:"text-sm text-slate-500"},"Sube una imagen y pulsa Analizar.")
+          )
+        );
+      }
+
+      // ---------- Tareas & Notas ----------
+      function Tareas(){
+        const [tasks,setTasks]=useStorage("v3-tasks", []);
+        const [text,setText]=useState("");
+        function add(){ if(!text.trim()) return; setTasks([{id:Math.random().toString(36).slice(2), title:text.trim(), done:false}, ...tasks]); setText(""); }
+        function toggle(id){ setTasks(tasks.map(t=> t.id===id? {...t,done:!t.done}: t)); }
+        function del(id){ setTasks(tasks.filter(t=> t.id!==id)); }
+        return React.createElement(Card,{title:"Tareas"},
+          React.createElement('div',{className:"mb-3 flex gap-2"},
+            React.createElement('input',{value:text,onChange:e=>setText(e.target.value),placeholder:"Añade riegos, foliar, EC/pH, etc.",className:"w-full rounded-xl border px-3 py-2"}),
+            React.createElement('button',{onClick:add,className:"rounded-xl bg-slate-900 px-3 py-2 text-white"},"Añadir")
+          ),
+          React.createElement('ul',{className:"space-y-2 text-sm"},
+            tasks.length===0 && React.createElement('li',{className:"text-slate-500"},"Sin tareas."),
+            tasks.map(t=> React.createElement('li',{key:t.id,className:"flex items-center justify-between gap-3 rounded-xl border p-3"},
+              React.createElement('label',{className:"flex items-center gap-2"},
+                React.createElement('input',{type:"checkbox",checked:t.done,onChange:()=>toggle(t.id)}),
+                React.createElement('span',{className:t.done? "line-through text-slate-400":""}, t.title)
+              ),
+              React.createElement('button',{onClick:()=>del(t.id),className:"rounded-lg bg-slate-100 px-2 py-1 text-xs"},"Borrar")
+            ))
+          )
+        );
+      }
+      function Notas(){
+        const [notes,setNotes]=useStorage("v3-notes", []);
+        const [text,setText]=useState("");
+        function add(){ if(!text.trim()) return; setNotes([text.trim(), ...notes]); setText(""); }
+        function del(i){ const next=[...notes]; next.splice(i,1); setNotes(next);}
+        return React.createElement(Card,{title:"Notas"},
+          React.createElement('div',{className:"mb-3 flex gap-2"},
+            React.createElement('input',{value:text,onChange:e=>setText(e.target.value),placeholder:"Observaciones, dosis, ideas…",className:"w-full rounded-xl border px-3 py-2"}),
+            React.createElement('button',{onClick:add,className:"rounded-xl bg-slate-900 px-3 py-2 text-white"},"Guardar")
+          ),
+          React.createElement('ul',{className:"space-y-2 text-sm"},
+            notes.length===0 && React.createElement('li',{className:"text-slate-500"},"Sin notas."),
+            notes.map((n,i)=> React.createElement('li',{key:i,className:"flex items-start justify-between gap-3 rounded-xl border p-3"},
+              React.createElement('span',null,n),
+              React.createElement('button',{onClick:()=>del(i),className:"rounded-lg bg-slate-100 px-2 py-1 text-xs"},"Borrar")
+            ))
+          )
+        );
+      }
+
+      function Footer(){
+        return React.createElement('footer',{className:"mt-10 border-t bg-white/70"},
+          React.createElement('div',{className:"mx-auto max-w-7xl p-4 text-center text-xs text-slate-500"},
+            "App Cultivo Pro v3 — visual PRO, menú por cultivo, calculadoras y diagnóstico básico por imagen."
+          )
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+    </script>
+  </body>
+</html>

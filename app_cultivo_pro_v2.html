@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>App Cultivo Pro v2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  </head>
+  <body class="bg-slate-50">
+    <div id="root"></div>
+    <script>
+      const { useState } = React;
+
+      function AppCultivoPro() {
+        const [cultivo,setCultivo]=useState(null);
+        const [tab,setTab]=useState("panel");
+
+        if(!cultivo){
+          return React.createElement('div',{className:'min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-emerald-100 to-slate-100'},
+            React.createElement('h1',{className:'text-2xl font-bold mb-6'},"Elige tu cultivo"),
+            React.createElement('div',{className:'grid gap-4 md:grid-cols-2'},
+              ["Indoor – Gelato","Indoor – Açaí","Exterior – Cannabis","Limonero – Minador"].map(c=>
+                React.createElement('button',{key:c,onClick:()=>setCultivo(c),
+                  className:'rounded-2xl bg-white p-6 shadow-md hover:shadow-xl transition text-lg font-semibold'},c)
+              )
+            )
+          );
+        }
+
+        return React.createElement('div',{className:'min-h-screen bg-slate-50 text-slate-900'},
+          React.createElement(Header,{onNav:setTab,tab,cultivo,onBack:()=>{setCultivo(null);setTab("panel");}}),
+          React.createElement('main',{className:'mx-auto max-w-6xl p-4 sm:p-6'},
+            React.createElement('h2',{className:'text-xl font-bold mb-4'},cultivo),
+            tab==="panel" && React.createElement('div',null,"Panel general con visión rápida del cultivo."),
+            tab==="nutricion" && React.createElement('div',null,"Tablas EC/pH y nutrientes."),
+            tab==="ambiente" && React.createElement('div',null,"Plan de luz, VPD y UV‑B."),
+            tab==="protocolos" && React.createElement('div',null,"Protocolos e IPM."),
+            tab==="calculadoras" && React.createElement('div',null,"Calculadoras de riego/dosis."),
+            tab==="tareas" && React.createElement('div',null,"Gestión de tareas y checklist."),
+            tab==="notas" && React.createElement('div',null,"Notas guardadas.")
+          )
+        );
+      }
+
+      function Header({onNav,tab,cultivo,onBack}){
+        const items=[
+          {id:"panel",label:"Panel"},
+          {id:"nutricion",label:"Nutrición"},
+          {id:"ambiente",label:"Ambiente"},
+          {id:"protocolos",label:"Protocolos"},
+          {id:"calculadoras",label:"Calculadoras"},
+          {id:"tareas",label:"Tareas"},
+          {id:"notas",label:"Notas"}
+        ];
+        return React.createElement('header',{className:'sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur'},
+          React.createElement('div',{className:'mx-auto flex max-w-6xl items-center justify-between p-4'},
+            React.createElement('button',{onClick:onBack,className:'text-sm text-slate-600 hover:text-slate-900'},'← Volver'),
+            React.createElement('nav',{className:'flex gap-2'},
+              items.map(i=>React.createElement('button',{key:i.id,onClick:()=>onNav(i.id),
+                className:'rounded-xl px-3 py-2 text-sm font-medium transition '+(tab===i.id?'bg-slate-900 text-white shadow':'hover:bg-slate-100')},i.label))
+            )
+          )
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(AppCultivoPro));
+    </script>
+  </body>
+</html>
