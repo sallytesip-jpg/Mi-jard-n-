@@ -1,694 +1,181 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Cultivo Pro — PWA v5 FULL</title>
-<meta name="theme-color" content="#0ea5a4"/>
-<link rel="manifest" href="manifest.json"/>
-<link rel="icon" href="icons/icon-192.png"/>
-<style>
-  :root{
-    --bg:#f6f7fb; --card:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e5e7eb;
-    --accent:#0ea5a4; --accent2:#10b981; --danger:#ef4444; --warn:#f59e0b;
-    --shadow:0 24px 60px -20px rgba(2,6,23,.25);
-  }
-  [data-theme="dark"]{
-    --bg:#0b1220; --card:#0f172a; --ink:#e5e7eb; --muted:#94a3b8; --line:#1f2937;
-    --shadow:0 32px 70px -24px rgba(0,0,0,.7);
-  }
-  *{box-sizing:border-box} html,body{height:100%}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif}
-  .aurora{position:fixed;inset:-20% -10% auto -10%;height:42vh;z-index:-1;background:
-    radial-gradient(40% 60% at 20% 30%, rgba(16,185,129,.30), transparent 60%),
-    radial-gradient(30% 50% at 80% 20%, rgba(59,130,246,.20), transparent 60%),
-    radial-gradient(25% 45% at 60% 70%, rgba(99,102,241,.18), transparent 60%);
-    filter:blur(42px);animation:drift 18s ease-in-out infinite alternate}
-  @keyframes drift{from{transform:translateY(0)}to{transform:translateY(30px)}}
-  header{position:sticky;top:0;background:rgba(255,255,255,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:6}
-  [data-theme="dark"] header{background:rgba(15,23,42,.7)}
-  .max{max-width:1024px;margin:0 auto;padding:10px 12px}
-  .brand{display:flex;gap:10px;align-items:center}
-  .logo{width:36px;height:36px;border-radius:12px;background:var(--accent2);display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:0 10px 30px -12px rgba(16,185,129,.6)}
-  .muted{color:var(--muted)}
-  .wrap{max-width:1024px;margin:10px auto 88px;padding:0 12px}
-  .grid{display:grid;gap:12px}
-  @media(min-width:780px){.grid{grid-template-columns:1fr 1fr}}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow)}
-  h2{margin:0 0 8px 0}
-  input,textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px}
-  textarea{min-height:110px;resize:vertical}
-  button{border:0;border-radius:12px;padding:10px 12px;font-weight:700;cursor:pointer}
-  .btn{background:var(--accent);color:#fff} .btn.sec{background:transparent;border:1px solid var(--line);color:var(--ink)}
-  .list{display:flex;flex-direction:column;gap:8px}
-  .task{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
-  .task small{color:var(--muted)} .task.done{opacity:.6;text-decoration:line-through}
-  .pill{display:inline-block;background:rgba(16,185,129,.12);color:#065f46;padding:4px 8px;border-radius:999px;font-size:12px}
-  [data-theme="dark"] .pill{background:rgba(16,185,129,.22); color:#a7f3d0}
-  .warn{color:var(--warn)} .danger{color:var(--danger)}
-  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
-  .thumb{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--card);cursor:pointer}
-  .thumb img{display:block;width:100%;height:110px;object-fit:cover}
-  .thumb button{position:absolute;top:6px;right:6px;background:#ef4444;color:#fff;border:0;border-radius:8px;padding:4px 6px;font-size:12px;cursor:pointer}
-  .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:50}
-  .modal img{max-width:92vw;max-height:84vh;border-radius:12px}
-  .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:7}
-  .tabwrap{max-width:1024px;margin:12px auto;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
-  [data-theme="dark"] .tabwrap{background:rgba(15,23,42,.75)}
-  .tabgrid{display:grid;grid-template-columns:repeat(7,1fr)}
-  .tabbtn{padding:10px 6px;display:flex;flex-direction:column;gap:2px;align-items:center;color:var(--muted);font-size:12px;font-weight:700;background:transparent;border:0}
-  .tabbtn.active{color:var(--ink)}
-  .view{display:none} .view.active{display:block}
-  .row{display:flex;gap:8px;flex-wrap:wrap}
-  /* Weather */
-  .w-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-  .wday{background:#ffffff;border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center}
-  [data-theme="dark"] .wday{background:#0f172a}
-  .wday .ico{font-size:20px}
-  .wday .d{font-weight:700}
-  /* Chart canvas card */
-  .chartwrap{position:relative}
-  canvas.chart{width:100%; height:220px; border:1px solid var(--line); border-radius:12px; background:var(--card)}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cultivo Pro</title>
+
+  <!-- PWA / Iconos (ajusta rutas si usas otras) -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" sizes="192x192" href="/icons/icon-192.png" />
+  <link rel="icon" sizes="512x512" href="/icons/icon-512.png" />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- Estilos rápidos embebidos -->
+  <style>
+    :root{
+      --bg:#0b1220;--panel:#111827;--muted:#94a3b8;--text:#e5e7eb;--pri:#22c55e;--pri-2:#16a34a;--warn:#f59e0b;--err:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;
+      background: radial-gradient(1200px 800px at 20% -10%, #0c1a2a 0%, #0b1220 40%, #0b1220 100%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+    header{
+      display:flex; align-items:center; gap:.75rem; padding:20px 16px; border-bottom:1px solid #1f2937;
+      position:sticky; top:0; backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(11,18,32,.85), rgba(11,18,32,.65));
+      z-index:5;
+    }
+    header img{width:36px;height:36px;border-radius:10px}
+    header h1{margin:0;font-size:1.15rem;letter-spacing:.3px}
+    header small{display:block;color:var(--muted);font-weight:500}
+    main{max-width:900px;margin:24px auto;padding:0 16px 40px}
+    .grid{display:grid; gap:16px}
+    @media (min-width:900px){ .grid{grid-template-columns: 1fr 1fr; } }
+
+    .card{
+      background: linear-gradient(180deg,#0f172a,#0b1423);
+      border:1px solid #1f2937; border-radius:16px; padding:18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.03);
+    }
+    .card h2{margin:.2rem 0 1rem 0; font-size:1.05rem}
+    .muted{color:var(--muted); font-size:.92rem}
+    .badge{display:inline-flex;align-items:center;gap:.4rem;background:#052e1a;color:#86efac;border:1px solid #064e3b;border-radius:999px;padding:.25rem .6rem;font-size:.75rem}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+    /* Formulario */
+    form{display:grid; gap:10px}
+    input[type="text"]{
+      background:#0b1220;border:1px solid #263244;color:#e5e7eb;border-radius:12px;padding:12px 14px;font-size:1rem;outline:none;
+    }
+    input[type="text"]::placeholder{color:#94a3b8}
+    button{
+      border:0; padding:12px 14px; border-radius:12px; color:white; font-weight:600; cursor:pointer;
+      background: linear-gradient(180deg,var(--pri),var(--pri-2));
+      box-shadow: 0 6px 18px rgba(34,197,94,.25);
+    }
+    button:active{transform:translateY(1px)}
+    .status{margin-top:8px;font-size:.9rem}
+    .ok{color:#86efac} .err{color:#fecaca}
+
+    /* Lista */
+    ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+    li{
+      background:#0b1220;border:1px solid #1f2937;border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;
+    }
+    .stamp{color:#94a3b8;font-size:.8rem}
+    footer{margin-top:26px;color:#94a3b8;font-size:.85rem;text-align:center}
+  </style>
 </head>
 <body>
-<div class="aurora"></div>
-<header>
-  <div class="max">
-    <div class="brand">
-      <div class="logo">CP</div>
-      <div>
-        <div style="font-weight:800">Cultivo Pro</div>
-        <div class="muted" style="font-size:12px">PWA v5 · Tiempo + Notif + Galería + Modo oscuro + Gráficas</div>
-      </div>
-      <div style="margin-left:auto" class="row">
-        <button id="btn-theme" class="btn sec" title="Tema">Tema: Auto</button>
-        <button id="btn-install" class="btn sec" style="display:none">Instalar</button>
-        <button id="btn-backup" class="btn sec" title="Descargar copia">Backup</button>
-        <label class="btn sec" title="Restaurar"><input type="file" id="restore" accept="application/json" style="display:none">Restore</label>
-      </div>
+  <header>
+    <img src="/icons/icon-192.png" alt="Cultivo Pro" />
+    <div>
+      <h1>Cultivo Pro</h1>
+      <small>Gestión de cultivo + recordatorios en la nube</small>
     </div>
-  </div>
-</header>
+    <span class="badge" style="margin-left:auto">PWA lista</span>
+  </header>
 
-<main class="wrap">
-  <!-- Dashboard -->
-  <section id="v-dashboard" class="view active">
+  <main>
     <div class="grid">
-      <div class="card">
-        <div class="row" style="justify-content:space-between;align-items:center">
-          <h2>🌧️ Tiempo · <span id="locName">La Bisbal del Penedès</span></h2>
-          <div id="rainAdvice" class="pill">Cargando…</div>
-        </div>
-        <div class="muted" style="font-size:12px;margin:4px 0">Max/Mín, % lluvia, mm acumulados · 7 días (Open‑Meteo)</div>
-        <div id="wgrid" class="w-grid"></div>
-      </div>
+      <!-- Tarjeta: nuevo recordatorio -->
+      <section class="card">
+        <h2>➕ Añadir recordatorio</h2>
+        <p class="muted">Guárdalo en tu Firebase (Firestore) para verlo en cualquier dispositivo.</p>
+        <form id="form-recordatorio" autocomplete="off">
+          <input type="text" id="texto" placeholder="Ej.: Aplicar micorrizas el viernes" required />
+          <div class="row">
+            <button type="submit">Guardar</button>
+            <span id="estado" class="status"></span>
+          </div>
+        </form>
+      </section>
 
-      <div class="card">
-        <h2>📈 Gráficas EC/pH</h2>
-        <div class="row">
-          <label> Cultivo </label>
-          <select id="chart-cultivo">
-            <option value="gelato">Gelato</option>
-            <option value="acai">Açaí</option>
-            <option value="exterior">Exterior</option>
-            <option value="limoneros">Limoneros</option>
-          </select>
-        </div>
-        <div class="chartwrap" style="margin-top:8px">
-          <canvas id="chart" class="chart" width="960" height="300"></canvas>
-        </div>
-        <div class="muted" style="font-size:12px;margin-top:6px">Arriba: EC (izquierda), pH (derecha). Desliza para ver más si hay muchos puntos.</div>
-      </div>
-
-      <div class="card">
-        <h2>📅 Próximas tareas</h2>
-        <div id="proxTareas" class="list"></div>
-      </div>
-
-      <div class="card">
-        <h2>🧪 Últimos EC/pH</h2>
-        <div id="ultimosReg"></div>
-      </div>
-
-      <div class="card">
-        <h2>🧮 Calculadoras rápidas</h2>
-        <div class="row">
-          <div><label>Litros</label><br><input id="calcL" type="number" value="10" min="1" style="width:120px"></div>
-          <div class="pill">H₂O₂ 3%: <b id="h2o2">30</b> ml</div>
-          <div class="pill">Micorrizas: <b id="mico">2.5</b> g</div>
-          <div class="pill">Neem: <b id="neem">30</b> ml + Jabón: <b id="jabon">10</b> ml</div>
-        </div>
-        <div class="row" style="margin-top:8px">
-          <div><label>PPFD</label><br><input id="ppfd" type="number" value="800" min="0" style="width:120px"></div>
-          <div><label>Horas</label><br><input id="horas" type="number" value="12" min="1" max="24" style="width:100px"></div>
-          <div class="pill">DLI ≈ <b id="dli">34.6</b> mol/m²/d</div>
-        </div>
-        <div class="row" style="margin-top:8px">
-          <div><label>Temp (°C)</label><br><input id="t" type="number" value="26" step="0.1" style="width:100px"></div>
-          <div><label>HR (%)</label><br><input id="rh" type="number" value="55" step="1" style="width:100px"></div>
-          <div class="pill">VPD ≈ <b id="vpd">1.28</b> kPa</div>
-        </div>
-      </div>
+      <!-- Tarjeta: recordatorios guardados -->
+      <section class="card">
+        <h2>📋 Recordatorios</h2>
+        <p class="muted">Se actualiza en tiempo real (no necesitas recargar).</p>
+        <ul id="lista"></ul>
+      </section>
     </div>
-  </section>
 
-  <!-- Cultivos -->
-  <div id="cultivos"></div>
+    <footer>
+      José &amp; Sally • THC ⚗️ + cítricos 🍋 • v1.0
+    </footer>
+  </main>
 
-  <!-- Notas -->
-  <section id="v-notas" class="view">
-    <div class="card">
-      <h2>📝 Notas globales</h2>
-      <textarea id="notas-global" placeholder="Ideas, compras, recordatorios…"></textarea>
-      <div class="muted" style="font-size:12px;margin-top:6px">Auto-guardado en este dispositivo.</div>
-    </div>
-  </section>
+  <!-- ====================== LÓGICA FIREBASE ====================== -->
+  <script type="module">
+    /* Importa tu app inicializada desde src/firebase-config.js
+       (ese archivo lo creaste con initializeApp y getAnalytics) */
+    import { app } from "./src/firebase-config.js";
 
-  <!-- Ajustes -->
-  <section id="v-ajustes" class="view">
-    <div class="grid">
-      <div class="card">
-        <h2>🌙 Apariencia</h2>
-        <p class="muted">Modo oscuro <b>automático</b> (según el móvil) o manual.</p>
-        <div class="row"><button id="btn-theme2" class="btn">Cambiar tema</button></div>
-        <p id="themeState" class="muted" style="margin-top:6px">Tema actual: Auto</p>
-      </div>
-      <div class="card">
-        <h2>🔔 Notificaciones</h2>
-        <p class="muted">Recibe avisos de tareas de hoy y lluvia alta (24–48h).</p>
-        <div class="row">
-          <button id="btn-notify" class="btn">Activar notificaciones</button>
-          <button id="btn-test-notify" class="btn sec">Probar aviso</button>
-        </div>
-        <p id="notifyState" class="muted" style="margin-top:6px">Estado: desconocido</p>
-      </div>
-      <div class="card">
-        <h2>📍 Ubicación del tiempo</h2>
-        <div class="row">
-          <div><label>Nombre</label><br><input id="loc-nombre" value="La Bisbal del Penedès" style="min-width:220px"></div>
-          <div><label>Lat</label><br><input id="loc-lat" value="41.29" style="width:110px"></div>
-          <div><label>Lon</label><br><input id="loc-lon" value="1.44" style="width:110px"></div>
-          <button class="btn" onclick="saveLocation()">Guardar</button>
-        </div>
-        <p class="muted" style="margin-top:6px">Ajusta las coordenadas si lo necesitas.</p>
-      </div>
-      <div class="card">
-        <h2>🧹 Mantenimiento</h2>
-        <div class="row">
-          <button class="btn sec" onclick="clearImages()">Vaciar galerías</button>
-          <button class="btn sec" onclick="clearAll()">Borrar todo</button>
-        </div>
-        <p class="muted" style="margin-top:6px">Útil si el almacenamiento del navegador se llena.</p>
-      </div>
-    </div>
-  </section>
-</main>
+    /* SDKs de Firebase (desde CDN) */
+    import {
+      getFirestore, collection, addDoc, serverTimestamp,
+      onSnapshot, orderBy, query
+    } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 
-<!-- Tab bar -->
-<nav class="tabbar">
-  <div class="tabwrap">
-    <div class="tabgrid">
-      <button class="tabbtn active" data-tab="dashboard">🏠<span>Inicio</span></button>
-      <button class="tabbtn" data-tab="gelato">🌿<span>Gelato</span></button>
-      <button class="tabbtn" data-tab="acai">🍇<span>Açaí</span></button>
-      <button class="tabbtn" data-tab="exterior">☀️<span>Exterior</span></button>
-      <button class="tabbtn" data-tab="limoneros">🍋<span>Limoneros</span></button>
-      <button class="tabbtn" data-tab="notas">📝<span>Notas</span></button>
-      <button class="tabbtn" data-tab="ajustes">⚙️<span>Ajustes</span></button>
-    </div>
-  </div>
-</nav>
+    const db = getFirestore(app);
 
-<!-- Modal de imagen -->
-<div id="modal" class="modal" onclick="this.style.display='none'"><img id="modalImg" alt="zoom"></div>
+    // DOM
+    const form = document.getElementById("form-recordatorio");
+    const estado = document.getElementById("estado");
+    const lista = document.getElementById("lista");
 
-<script>
-/* ====== Estado y utilidades ====== */
-const KEY = (k)=>`cpV5:${k}`;
-const load=(k,def)=>{try{const v=localStorage.getItem(KEY(k));return v?JSON.parse(v):def}catch{return def}};
-const save=(k,v)=>localStorage.setItem(KEY(k),JSON.stringify(v));
-const todayISO=()=>new Date().toISOString().slice(0,10);
-const CULTIVOS=[
-  {id:'gelato', titulo:'Gelato (Interior)', emoji:'🌿'},
-  {id:'acai', titulo:'Açaí (Interior)', emoji:'🍇'},
-  {id:'exterior', titulo:'Exterior', emoji:'☀️'},
-  {id:'limoneros', titulo:'Limoneros', emoji:'🍋'}
-];
-CULTIVOS.forEach(c=>{
-  if(!load(`${c.id}:tasks`)) save(`${c.id}:tasks`,[]);
-  if(!load(`${c.id}:gal`))   save(`${c.id}:gal`,[]);
-  if(!load(`${c.id}:regs`))  save(`${c.id}:regs`,[]);
-  if(!load(`${c.id}:notas`)) save(`${c.id}:notas`,'');
-});
-if(!load('loc')) save('loc',{nombre:'La Bisbal del Penedès', lat:41.29, lon:1.44});
+    // Guardar
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const txt = document.getElementById("texto").value.trim();
+      if (!txt) return;
 
-/* ====== Tema: Auto / Light / Dark ====== */
-function applyTheme(){
-  const pref = load('theme','auto');
-  document.getElementById('btn-theme').textContent = 'Tema: ' + (pref==='auto'?'Auto':pref==='light'?'Claro':'Oscuro');
-  document.getElementById('themeState').textContent = 'Tema actual: ' + (pref==='auto'?'Auto':pref==='light'?'Claro':'Oscuro');
-  if(pref==='auto'){
-    const dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if(dark) document.documentElement.setAttribute('data-theme','dark'); else document.documentElement.removeAttribute('data-theme');
-  }else if(pref==='dark'){
-    document.documentElement.setAttribute('data-theme','dark');
-  }else{
-    document.documentElement.removeAttribute('data-theme');
-  }
-}
-function cycleTheme(){
-  const cur = load('theme','auto');
-  const next = cur==='auto'?'light':(cur==='light'?'dark':'auto');
-  save('theme',next); applyTheme();
-}
-document.getElementById('btn-theme').onclick=cycleTheme;
-document.getElementById('btn-theme2').onclick=cycleTheme;
-applyTheme();
-window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+      estado.textContent = "Guardando…";
+      estado.className = "status";
 
-/* ====== PWA Install ====== */
-let deferredPrompt=null; const btnInstall=document.getElementById('btn-install');
-window.addEventListener('beforeinstallprompt', e=>{e.preventDefault(); deferredPrompt=e; btnInstall.style.display='inline-block';});
-btnInstall?.addEventListener('click', async ()=>{ if(!deferredPrompt) return; deferredPrompt.prompt(); const r=await deferredPrompt.userChoice; if(r.outcome==='accepted'){btnInstall.style.display='none';}});
-
-/* ====== Backup/Restore ====== */
-document.getElementById('btn-backup').onclick=()=>{
-  const data = Object.fromEntries(Object.entries(localStorage).filter(([k])=>k.startsWith('cpV5:')));
-  const blob = new Blob([JSON.stringify({when:new Date().toISOString(), data}, null, 2)], {type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='cultivo_pro_pwa_v5_backup.json'; a.click();
-};
-document.getElementById('restore').addEventListener('change',(e)=>{
-  const f=e.target.files[0]; if(!f) return;
-  const r=new FileReader();
-  r.onload=()=>{try{const j=JSON.parse(r.result); for(const [k,v] of Object.entries(j.data||{})) localStorage.setItem(k,v); alert('Restaurado. Recarga la página.')}catch{alert('Archivo inválido')}};
-  r.readAsText(f);
-});
-
-/* ====== Calculadoras ====== */
-function recalc(){
-  const L=parseFloat(document.getElementById('calcL').value||0);
-  document.getElementById('h2o2').textContent=(L*3).toFixed(0);
-  document.getElementById('mico').textContent=(L/4).toFixed(2);
-  document.getElementById('neem').textContent=(L*3).toFixed(0);
-  document.getElementById('jabon').textContent=(L*1).toFixed(0);
-  const ppfd=parseFloat(document.getElementById('ppfd').value||0);
-  const horas=parseFloat(document.getElementById('horas').value||0);
-  const dli=(ppfd*3600*horas/1e6); document.getElementById('dli').textContent=dli.toFixed(1);
-  const t=parseFloat(document.getElementById('t').value||0), rh=parseFloat(document.getElementById('rh').value||0);
-  const es=0.6108*Math.exp((17.27*t)/(t+237.3)); const ea=(rh/100)*es; const vpd=Math.max(0, es-ea);
-  document.getElementById('vpd').textContent=vpd.toFixed(2);
-}
-['calcL','ppfd','horas','t','rh'].forEach(id=>document.getElementById(id).addEventListener('input', recalc)); recalc();
-
-/* ====== Notas globales ====== */
-const ng=document.getElementById('notas-global'); ng.value=load('notasGlobal',''); ng.oninput=()=>save('notasGlobal',ng.value);
-
-/* ====== Secciones de cultivo ====== */
-function cultivoSection(c){
-  return `
-  <section id="v-${c.id}" class="view">
-    <div class="grid">
-      <div class="card">
-        <h2>${c.emoji} ${c.titulo} · Tareas</h2>
-        <div class="row">
-          <input id="${c.id}-task-text" placeholder="Ej: Micorrizas 1 g/4 L, pH 6.4">
-          <input id="${c.id}-task-date" type="date">
-          <button class="btn" onclick="addTask('${c.id}')">Añadir</button>
-        </div>
-        <div id="${c.id}-tasks" class="list" style="margin-top:8px"></div>
-      </div>
-      <div class="card">
-        <h2>📷 Galería</h2>
-        <input type="file" accept="image/*" multiple onchange="addImages(event,'${c.id}')">
-        <div id="${c.id}-gal" class="gallery" style="margin-top:8px"></div>
-        <p class="muted" style="font-size:12px;margin-top:6px">Se comprimen al subir para ahorrar espacio.</p>
-      </div>
-      <div class="card">
-        <h2>🧪 Registros EC / pH</h2>
-        <div class="row">
-          <input id="${c.id}-ec" type="number" step="0.01" placeholder="EC (mS/cm)">
-          <input id="${c.id}-ph" type="number" step="0.01" placeholder="pH">
-          <button class="btn" onclick="addRegistro('${c.id}')">Guardar</button>
-          <button class="btn sec" onclick="borrarRegistros('${c.id}')">Borrar</button>
-        </div>
-        <table style="width:100%;border-collapse:collapse;margin-top:8px">
-          <thead><tr><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Fecha</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">EC</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">pH</th></tr></thead>
-          <tbody id="${c.id}-tabla"></tbody>
-        </table>
-      </div>
-      <div class="card">
-        <h2>🗒️ Notas</h2>
-        <textarea id="${c.id}-notas" placeholder="Observaciones, dosis, problemas…"></textarea>
-      </div>
-    </div>
-  </section>`;
-}
-document.getElementById('cultivos').innerHTML = CULTIVOS.map(cultivoSection).join('');
-
-/* ====== Render ====== */
-function addTask(id){
-  const text=document.getElementById(id+'-task-text').value.trim();
-  const date=document.getElementById(id+'-task-date').value;
-  if(!text) return alert('Escribe la tarea');
-  const list=load(id+':tasks',[]);
-  const task = {id:Date.now()+Math.random().toString(16).slice(2), text, date, done:false, ts:Date.now()};
-  list.push(task); save(id+':tasks',list);
-  document.getElementById(id+'-task-text').value=''; document.getElementById(id+'-task-date').value='';
-  renderTasks(id); renderDashboard(); scheduleDueChecks(); updateChart();
-}
-function toggleTask(id,idx){const list=load(id+':tasks',[]); list[idx].done=!list[idx].done; save(id+':tasks',list); renderTasks(id); renderDashboard();}
-function delTask(id,idx){const list=load(id+':tasks',[]); list.splice(idx,1); save(id+':tasks',list); renderTasks(id); renderDashboard();}
-function renderTasks(id){
-  const cont=document.getElementById(id+'-tasks'); if(!cont) return;
-  const list=load(id+':tasks',[]);
-  if(!list.length){cont.innerHTML='<div class="muted">Sin tareas.</div>'; return;}
-  cont.innerHTML=list.sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999')).map((t,i)=>{
-    const cls=t.done?'task done':'task';
-    const st = t.date ? (new Date(t.date) < new Date(new Date().toDateString()) ? 'danger' : (t.date===todayISO()?'':'') ) : '';
-    return `<div class="${cls}">
-      <div><b>${t.text}</b><br><small class="${st}">${t.date||'Sin fecha'}</small></div>
-      <div class="row">
-        <button class="btn sec" onclick="toggleTask('${id}',${i})">${t.done?'Desmarcar':'Hecho'}</button>
-        <button class="btn" style="background:#ef4444" onclick="delTask('${id}',${i})">Borrar</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-function addImages(ev,id){
-  const files=Array.from(ev.target.files||[]);
-  const jobs=files.map(f=> compressImage(f,1280,0.8));
-  Promise.all(jobs).then(imgs=>{
-    const gal=load(id+':gal',[]);
-    try{ save(id+':gal',[...imgs,...gal].slice(0,200)); }
-    catch(e){ alert('Almacenamiento lleno. Vacía en Ajustes > Vaciar galerías.'); }
-    renderGal(id);
-  });
-  ev.target.value='';
-}
-function delImg(id,idx){const gal=load(id+':gal',[]); gal.splice(idx,1); save(id+':gal',gal); renderGal(id);}
-function renderGal(id){
-  const cont=document.getElementById(id+'-gal'); if(!cont) return;
-  const gal=load(id+':gal',[]);
-  cont.innerHTML = gal.length ? gal.map((src,i)=>`
-    <div class="thumb" onclick="zoom('${id}',${i})">
-      <img src="${src}" alt="foto">
-      <button onclick="event.stopPropagation(); delImg('${id}',${i})">×</button>
-    </div>`).join('') : '<div class="muted">Sin fotos aún.</div>';
-}
-function zoom(id,idx){ const gal=load(id+':gal',[]); const m=document.getElementById('modal'); const i=document.getElementById('modalImg'); i.src=gal[idx]; m.style.display='flex'; }
-
-function addRegistro(id){
-  const ec=parseFloat(document.getElementById(id+'-ec').value);
-  const ph=parseFloat(document.getElementById(id+'-ph').value);
-  if(isNaN(ec)||isNaN(ph)) return alert('Completa EC y pH');
-  const regs=load(id+':regs',[]); regs.unshift({ec,ph,fecha:todayISO()});
-  save(id+':regs',regs.slice(0,180));
-  document.getElementById(id+'-ec').value=''; document.getElementById(id+'-ph').value='';
-  renderRegs(id); renderDashboard(); updateChart();
-}
-function borrarRegistros(id){ if(!confirm('¿Borrar todos los registros?'))return; save(id+':regs',[]); renderRegs(id); renderDashboard(); updateChart();}
-function renderRegs(id){
-  const tbody=document.getElementById(id+'-tabla'); if(!tbody) return;
-  const regs=load(id+':regs',[]);
-  tbody.innerHTML = regs.map(r=>`<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ec}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ph}</td></tr>`).join('');
-}
-
-/* ====== Dashboard ====== */
-function renderDashboard(){
-  const all=CULTIVOS.flatMap(c=>load(c.id+':tasks',[]).map(t=>({...t,cultivo:c.titulo,emoji:c.emoji})));
-  const prox=all.filter(t=>!t.done).sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999')).slice(0,8);
-  document.getElementById('proxTareas').innerHTML = prox.length
-    ? prox.map(t=>`<div class="task"><div><b>${t.text}</b><br><small>${t.emoji} ${t.cultivo} · ${t.date||'Sin fecha'}</small></div></div>`).join('')
-    : '<div class="muted">No hay tareas próximas.</div>';
-  const ul=CULTIVOS.flatMap(c=> (load(c.id+':regs',[])[0]? [{cultivo:c.titulo, ...load(c.id+':regs',[])[0]}]:[]));
-  document.getElementById('ultimosReg').innerHTML = ul.length
-    ? '<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Cultivo</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Fecha</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">EC</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">pH</th></tr></thead><tbody>'
-      + ul.map(r=>`<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${r.cultivo}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ec}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ph}</td></tr>`).join('')
-      + '</tbody></table>'
-    : '<div class="muted">Aún no hay registros.</div>';
-}
-
-/* ====== Tiempo (Open‑Meteo) ====== */
-function WICON(code){
-  const sun='☀️', cloud='⛅', rain='🌧️', storm='⛈️', snow='❄️', fog='🌫️';
-  if([0].includes(code)) return sun;
-  if([1,2,3].includes(code)) return cloud;
-  if([45,48].includes(code)) return fog;
-  if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return rain;
-  if([95,96,99].includes(code)) return storm;
-  if([71,73,75,77,85,86].includes(code)) return snow;
-  return cloud;
-}
-async function loadWeather(){
-  const loc=load('loc'); document.getElementById('locName').textContent = loc.nombre || 'Mi ubicación';
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Madrid";
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=${encodeURIComponent(tz)}`;
-  try{
-    const res = await fetch(url); const j = await res.json(); const d = j.daily;
-    const days = d.time.map((t,i)=>({
-      date: t, code: d.weathercode[i], tmax: d.temperature_2m_max[i], tmin: d.temperature_2m_min[i], pr: d.precipitation_probability_max[i], mm: d.precipitation_sum[i]
-    }));
-    document.getElementById('wgrid').innerHTML = days.map(x=>`
-      <div class="wday">
-        <div class="d">${new Date(x.date).toLocaleDateString('es-ES',{weekday:'short'})}</div>
-        <div class="ico">${WICON(x.code)}</div>
-        <div>${Math.round(x.tmax)}° / ${Math.round(x.tmin)}°</div>
-        <div class="${x.pr>=60?'danger': x.pr>=30?'warn':''}">${x.pr}%</div>
-        <div class="${x.mm>=5?'danger': x.mm>=1?'warn':''}">${x.mm.toFixed(1)} mm</div>
-      </div>`).join('');
-    let msg = 'Sin lluvia relevante. Mantén tu plan de riego.';
-    const t0 = days[0], t1 = days[1];
-    if((t0.pr>=60||t1.pr>=60) || (t0.mm>=3 || t1.mm>=3)){ msg = 'Prob. lluvia alta (24–48h). ⚠️ Reduce o pospone riego.'; }
-    else if((t0.pr>=30||t1.pr>=30) || (t0.mm>=1 || t1.mm>=1)){ msg = 'Puede llover algo. 🔶 Ajusta riego y vigila drenaje.'; }
-    document.getElementById('rainAdvice').textContent=msg;
-    save('weatherCache', {when:Date.now(), days, msg, loc});
-    maybeNotifyRain(msg);
-  }catch(e){
-    const cache=load('weatherCache'); if(cache){ document.getElementById('rainAdvice').textContent=cache.msg||'Offline'; document.getElementById('wgrid').innerHTML = cache.days.map(x=>`
-      <div class="wday">
-        <div class="d">${new Date(x.date).toLocaleDateString('es-ES',{weekday:'short'})}</div>
-        <div class="ico">${WICON(x.code)}</div>
-        <div>${Math.round(x.tmax)}° / ${Math.round(x.tmin)}°</div>
-        <div class="${x.pr>=60?'danger': x.pr>=30?'warn':''}">${x.pr}%</div>
-        <div class="${x.mm>=5?'danger': x.mm>=1?'warn':''}">${x.mm.toFixed(1)} mm</div>
-      </div>`).join(''); }
-    else { document.getElementById('wgrid').innerHTML = '<div class="muted">No se pudo cargar el tiempo.</div>'; document.getElementById('rainAdvice').textContent='Reintenta más tarde'; }
-  }
-}
-
-/* ====== Ajustes ====== */
-function saveLocation(){
-  const nombre = document.getElementById('loc-nombre').value || 'Mi ubicación';
-  const lat = parseFloat(document.getElementById('loc-lat').value);
-  const lon = parseFloat(document.getElementById('loc-lon').value);
-  if(isNaN(lat)||isNaN(lon)) return alert('Lat/Lon inválidos');
-  save('loc',{nombre,lat,lon}); loadWeather(); alert('Ubicación guardada. Widget actualizado.');
-}
-function clearImages(){
-  if(!confirm('¿Vaciar TODAS las galerías?')) return;
-  CULTIVOS.forEach(c=> save(c.id+':gal',[]));
-  alert('Galerías vaciadas.');
-}
-function clearAll(){
-  if(!confirm('¿Borrar todos los datos de Cultivo Pro en este dispositivo?')) return;
-  Object.keys(localStorage).filter(k=>k.startsWith('cpV5:')).forEach(k=> localStorage.removeItem(k));
-  location.reload();
-}
-
-/* ====== Notificaciones ====== */
-const notifyState = document.getElementById('notifyState');
-function updateNotifyState(){
-  const perm = Notification?.permission || 'unsupported';
-  notifyState.textContent = 'Estado: ' + perm;
-}
-async function enableNotifications(){
-  if(!('Notification' in window)) return alert('Notificaciones no soportadas');
-  const perm = await Notification.requestPermission();
-  updateNotifyState();
-  if(perm==='granted'){ new Notification('¡Notificaciones activadas!', {body:'Te avisaré de tareas y lluvia alta.'}); }
-}
-function testNotify(){ if(Notification?.permission==='granted'){ new Notification('Prueba de aviso ✅', {body:'Así verás las notificaciones.'}); } else alert('Activa las notificaciones primero.'); }
-document.getElementById('btn-notify').onclick=enableNotifications;
-document.getElementById('btn-test-notify').onclick=testNotify;
-updateNotifyState();
-
-function maybeNotifyRain(msg){
-  if(Notification?.permission!=='granted') return;
-  if(msg.includes('lluvia alta')){
-    const last = load('lastRainNotify',0);
-    if(Date.now()-last > 6*3600e3){ new Notification('⚠️ Lluvia alta prevista', {body: msg}); save('lastRainNotify', Date.now()); }
-  }
-}
-function checkDueTasksAndNotify(){
-  if(Notification?.permission!=='granted') return;
-  const notified = load('notifiedTasks',{});
-  for(const c of CULTIVOS){
-    const tasks = load(c.id+':tasks',[]);
-    tasks.forEach(t=>{
-      if(t.done) return;
-      if(t.date===todayISO()){
-        const key = t.id || (t.text+'@'+t.date);
-        if(!notified[key]){
-          new Notification('📅 Tarea para HOY', { body: `${c.titulo}: ${t.text}` });
-          notified[key]=true;
-        }
+      try {
+        await addDoc(collection(db, "recordatorios"), {
+          texto: txt,
+          fecha: serverTimestamp()
+        });
+        estado.textContent = "✅ Guardado en Firestore";
+        estado.className = "status ok";
+        form.reset();
+      } catch (err) {
+        console.error(err);
+        estado.textContent = "❌ Error al guardar";
+        estado.className = "status err";
       }
     });
-  }
-  save('notifiedTasks', notified);
-}
-function scheduleDueChecks(){
-  checkDueTasksAndNotify();
-  clearTimeout(window.__dueTimer);
-  window.__dueTimer = setTimeout(scheduleDueChecks, 60*60*1000); // cada hora
-}
 
-/* ====== Navegación ====== */
-function show(tab){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById('v-'+tab).classList.add('active');
-  document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
-  document.querySelector(`.tabbtn[data-tab="${tab}"]`).classList.add('active');
-  if(['gelato','acai','exterior','limoneros'].includes(tab)){
-    renderTasks(tab); renderGal(tab); renderRegs(tab);
-    const ta=document.getElementById(tab+'-notas'); if(ta){ ta.value=load(tab+':notas',''); ta.oninput=()=>save(tab+':notas',ta.value); }
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-  if(tab==='dashboard'){ renderDashboard(); loadWeather(); updateChart(); }
-}
-document.querySelectorAll('.tabbtn').forEach(b=> b.addEventListener('click', ()=> show(b.dataset.tab)));
-
-/* ====== Image compression (canvas) ====== */
-function compressImage(file, maxW=1280, quality=0.8){
-  return new Promise((resolve, reject)=>{
-    const img = new Image();
-    const reader = new FileReader();
-    reader.onload = e => { img.src = e.target.result; };
-    reader.onerror = reject;
-    img.onload = ()=>{
-      const canvas = document.createElement('canvas');
-      const scale = Math.min(1, maxW / img.width);
-      canvas.width = Math.round(img.width * scale);
-      canvas.height= Math.round(img.height* scale);
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0,0, canvas.width, canvas.height);
-      try{
-        const data = canvas.toDataURL('image/jpeg', quality);
-        resolve(data);
-      }catch(err){ resolve(img.src); }
-    };
-    img.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-/* ====== Canvas Chart (sin librerías) ====== */
-const chartCanvas = document.getElementById('chart');
-const chartCtx = chartCanvas.getContext('2d');
-document.getElementById('chart-cultivo').addEventListener('change', updateChart);
-
-function updateChart(){
-  const sel = document.getElementById('chart-cultivo').value;
-  const regs = load(sel+':regs',[]).slice(0,60).reverse(); // últimos 60, orden cronológico
-  drawChart(regs);
-}
-function drawChart(regs){
-  const W=chartCanvas.width, H=chartCanvas.height;
-  chartCtx.clearRect(0,0,W,H);
-  // fondo
-  chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card').trim();
-  chartCtx.fillRect(0,0,W,H);
-  // márgenes
-  const m = {l:40, r:40, t:20, b:24};
-  // ejes ranges
-  const ecVals = regs.map(r=>r.ec);
-  const phVals = regs.map(r=>r.ph);
-  const xCount = Math.max(2, regs.length);
-  const ecMin = Math.min(0.4, Math.min(...ecVals, 9999)); const ecMax = Math.max(2.2, Math.max(...ecVals, 0));
-  const phMin = 5.5, phMax = 6.8;
-  // grid
-  chartCtx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--line').trim();
-  chartCtx.lineWidth = 1;
-  chartCtx.setLineDash([4,4]);
-  for(let i=0;i<=6;i++){
-    const y = m.t + (H-m.t-m.b)*i/6;
-    chartCtx.beginPath(); chartCtx.moveTo(m.l,y); chartCtx.lineTo(W-m.r,y); chartCtx.stroke();
-    // labels EC (izq)
-    const ecLabel = (ecMax - (ecMax-ecMin)*i/6).toFixed(1);
-    chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
-    chartCtx.font = '12px system-ui';
-    chartCtx.fillText(ecLabel, 6, y+4);
-    // labels pH (der)
-    const phLabel = (phMin + (phMax-phMin)*i/6).toFixed(1);
-    chartCtx.fillText(phLabel, W-30, y+4);
-  }
-  chartCtx.setLineDash([]);
-  // helpers
-  const x = i => m.l + (W-m.l-m.r) * (i/(xCount-1||1));
-  const yEC = v => m.t + (H-m.t-m.b) * (1 - (v-ecMin)/(ecMax-ecMin||1));
-  const yPH = v => m.t + (H-m.t-m.b) * (1 - (v-phMin)/(phMax-phMin||1));
-  // líneas
-  // EC
-  chartCtx.strokeStyle = '#0ea5a4'; chartCtx.lineWidth=2;
-  chartCtx.beginPath();
-  regs.forEach((r,i)=>{ const xx=x(i), yy=yEC(r.ec); i? chartCtx.lineTo(xx,yy):chartCtx.moveTo(xx,yy); });
-  chartCtx.stroke();
-  // pH
-  chartCtx.strokeStyle = '#10b981'; chartCtx.lineWidth=2; chartCtx.setLineDash([6,4]);
-  chartCtx.beginPath();
-  regs.forEach((r,i)=>{ const xx=x(i), yy=yPH(r.ph); i? chartCtx.lineTo(xx,yy):chartCtx.moveTo(xx,yy); });
-  chartCtx.stroke(); chartCtx.setLineDash([]);
-  // puntos
-  chartCtx.fillStyle='#0ea5a4'; regs.forEach((r,i)=>{ chartCtx.beginPath(); chartCtx.arc(x(i), yEC(r.ec), 2.5, 0, Math.PI*2); chartCtx.fill(); });
-  chartCtx.fillStyle='#10b981'; regs.forEach((r,i)=>{ chartCtx.beginPath(); chartCtx.arc(x(i), yPH(r.ph), 2.5, 0, Math.PI*2); chartCtx.fill(); });
-  // labels bottom (cada 3)
-  chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
-  chartCtx.font='11px system-ui';
-  regs.forEach((r,i)=>{ if(i%3===0){ chartCtx.fillText(r.fecha.slice(5), x(i)-12, H-6); } });
-}
-
-/* ====== Inicio ====== */
-window.addEventListener('load', ()=>{
-  renderDashboard(); loadWeather(); scheduleDueChecks(); updateChart();
-  ['gelato','acai','exterior','limoneros'].forEach(id=>{ renderTasks(id); renderGal(id); renderRegs(id); });
-});
-
-</script>
-  <script type="module">
-  import { app, analytics } from "./src/firebase-config.js";
-
-  console.log("✅ Firebase conectado:", app);
-</script>
-  <!-- Firestore: leer documentos de la colección "pruebas" -->
-<script type="module">
-  import { app } from "./src/firebase-config.js";
-  import {
-    getFirestore,
-    collection,
-    getDocs
-  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-lite.js";
-
-  // Inicializa Firestore con tu app
-  const db = getFirestore(app);
-
-  async function leerPruebas() {
-    try {
-      const snap = await getDocs(collection(db, "pruebas"));
+    // Listado en tiempo real (últimos primero)
+    const q = query(collection(db, "recordatorios"), orderBy("fecha", "desc"));
+    onSnapshot(q, (snap) => {
+      lista.innerHTML = "";
       if (snap.empty) {
-        console.log("⚠️ La colección 'pruebas' está vacía.");
+        lista.innerHTML = '<li><span class="muted">Sin recordatorios aún.</span></li>';
         return;
       }
-      snap.forEach((doc) => {
-        console.log("📄 Documento:", doc.id, "=>", doc.data());
+      snap.forEach(doc => {
+        const d = doc.data();
+        const fecha = d.fecha?.toDate ? d.fecha.toDate() : null;
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span>${d.texto}</span>
+          <span class="stamp">${fecha ? fecha.toLocaleString() : "…"}</span>
+        `;
+        lista.appendChild(li);
       });
-    } catch (err) {
-      console.error("❌ Error leyendo Firestore:", err);
-    }
-  }
+    });
 
-  // Lanza la lectura al cargar
-  leerPruebas();
-</script>
+    // PWA: registro del Service Worker (opcional, no falla si no existe)
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(()=>{});
+    }
+  </script>
 </body>
 </html>
