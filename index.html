@@ -660,5 +660,35 @@ window.addEventListener('load', ()=>{
 
   console.log("✅ Firebase conectado:", app);
 </script>
+  <!-- Firestore: leer documentos de la colección "pruebas" -->
+<script type="module">
+  import { app } from "./src/firebase-config.js";
+  import {
+    getFirestore,
+    collection,
+    getDocs
+  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-lite.js";
+
+  // Inicializa Firestore con tu app
+  const db = getFirestore(app);
+
+  async function leerPruebas() {
+    try {
+      const snap = await getDocs(collection(db, "pruebas"));
+      if (snap.empty) {
+        console.log("⚠️ La colección 'pruebas' está vacía.");
+        return;
+      }
+      snap.forEach((doc) => {
+        console.log("📄 Documento:", doc.id, "=>", doc.data());
+      });
+    } catch (err) {
+      console.error("❌ Error leyendo Firestore:", err);
+    }
+  }
+
+  // Lanza la lectura al cargar
+  leerPruebas();
+</script>
 </body>
 </html>
