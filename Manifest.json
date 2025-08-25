@@ -1,0 +1,11 @@
+{
+  "name": "Cultivo Pro",
+  "short_name": "CultivoPro",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0ea5a4",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
