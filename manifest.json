@@ -1,10 +1,12 @@
 {
   "name": "Cultivo Pro",
   "short_name": "CultivoPro",
+  "description": "App de control de Cannabis, Limoneros y Cultivos en exterior.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f6f7fb",
-  "theme_color": "#0ea5a4",
+  "background_color": "#111111",
+  "theme_color": "#1DB954",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "icons/icon-192.png",
