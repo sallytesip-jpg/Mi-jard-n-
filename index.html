@@ -1,181 +1,181 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cultivo Pro</title>
-
-  <!-- PWA / Iconos (ajusta rutas si usas otras) -->
-  <link rel="manifest" href="/manifest.webmanifest" />
-  <link rel="icon" sizes="192x192" href="/icons/icon-192.png" />
-  <link rel="icon" sizes="512x512" href="/icons/icon-512.png" />
-  <meta name="theme-color" content="#0f172a" />
-
-  <!-- Estilos rápidos embebidos -->
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Cultivo Pro — v5 FULL RESTORE</title>
+  <meta name="theme-color" content="#0ea5a4"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="icon" href="icons/icon-192.png"/>
   <style>
-    :root{
-      --bg:#0b1220;--panel:#111827;--muted:#94a3b8;--text:#e5e7eb;--pri:#22c55e;--pri-2:#16a34a;--warn:#f59e0b;--err:#ef4444;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;
-      background: radial-gradient(1200px 800px at 20% -10%, #0c1a2a 0%, #0b1220 40%, #0b1220 100%);
-      color:var(--text);
-      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-    }
-    header{
-      display:flex; align-items:center; gap:.75rem; padding:20px 16px; border-bottom:1px solid #1f2937;
-      position:sticky; top:0; backdrop-filter: blur(6px);
-      background: linear-gradient(180deg, rgba(11,18,32,.85), rgba(11,18,32,.65));
-      z-index:5;
-    }
-    header img{width:36px;height:36px;border-radius:10px}
-    header h1{margin:0;font-size:1.15rem;letter-spacing:.3px}
-    header small{display:block;color:var(--muted);font-weight:500}
-    main{max-width:900px;margin:24px auto;padding:0 16px 40px}
-    .grid{display:grid; gap:16px}
-    @media (min-width:900px){ .grid{grid-template-columns: 1fr 1fr; } }
-
-    .card{
-      background: linear-gradient(180deg,#0f172a,#0b1423);
-      border:1px solid #1f2937; border-radius:16px; padding:18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.03);
-    }
-    .card h2{margin:.2rem 0 1rem 0; font-size:1.05rem}
-    .muted{color:var(--muted); font-size:.92rem}
-    .badge{display:inline-flex;align-items:center;gap:.4rem;background:#052e1a;color:#86efac;border:1px solid #064e3b;border-radius:999px;padding:.25rem .6rem;font-size:.75rem}
-    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-
-    /* Formulario */
-    form{display:grid; gap:10px}
-    input[type="text"]{
-      background:#0b1220;border:1px solid #263244;color:#e5e7eb;border-radius:12px;padding:12px 14px;font-size:1rem;outline:none;
-    }
-    input[type="text"]::placeholder{color:#94a3b8}
-    button{
-      border:0; padding:12px 14px; border-radius:12px; color:white; font-weight:600; cursor:pointer;
-      background: linear-gradient(180deg,var(--pri),var(--pri-2));
-      box-shadow: 0 6px 18px rgba(34,197,94,.25);
-    }
-    button:active{transform:translateY(1px)}
-    .status{margin-top:8px;font-size:.9rem}
-    .ok{color:#86efac} .err{color:#fecaca}
-
-    /* Lista */
-    ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-    li{
-      background:#0b1220;border:1px solid #1f2937;border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;
-    }
-    .stamp{color:#94a3b8;font-size:.8rem}
-    footer{margin-top:26px;color:#94a3b8;font-size:.85rem;text-align:center}
+    body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0b1220;color:#e5e7eb}
+    header{padding:14px 12px;border-bottom:1px solid #1f2937;position:sticky;top:0;background:#0b1220b3;backdrop-filter:blur(8px)}
+    .wrap{max-width:1024px;margin:0 auto;padding:12px}
+    .grid{display:grid;gap:12px}
+    @media(min-width:800px){.grid{grid-template-columns:1fr 1fr}}
+    .card{background:#0f172a;border:1px solid #1f2937;border-radius:16px;padding:14px}
+    h2{margin:0 0 8px 0}
+    .muted{color:#94a3b8}
+    .tab{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 0}
+    .tab button{background:#111827;border:1px solid #1f2937;color:#e5e7eb;border-radius:10px;padding:8px 10px;cursor:pointer}
+    .active{outline:2px solid #10b981}
+    .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+    .thumb{border:1px solid #1f2937;border-radius:12px;overflow:hidden}
+    .thumb img{width:100%;height:110px;object-fit:cover;display:block}
+    table{width:100%;border-collapse:collapse}
+    th,td{border-bottom:1px solid #1f2937;padding:6px;text-align:left}
   </style>
 </head>
 <body>
-  <header>
-    <img src="/icons/icon-192.png" alt="Cultivo Pro" />
-    <div>
-      <h1>Cultivo Pro</h1>
-      <small>Gestión de cultivo + recordatorios en la nube</small>
-    </div>
-    <span class="badge" style="margin-left:auto">PWA lista</span>
-  </header>
+<header class="wrap">
+  <h1>Cultivo Pro — v5 FULL RESTORE</h1>
+  <div class="muted">Dashboard + Cultivos (Gelato, Açai, Exterior, Limoneros)</div>
+</header>
 
-  <main>
+<main class="wrap">
+  <section class="grid">
+    <div class="card">
+      <h2>🌧️ Tiempo</h2>
+      <div class="muted" id="rainAdvice">Cargando…</div>
+      <div id="wgrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px"></div>
+    </div>
+    <div class="card">
+      <h2>📈 Últimos EC/pH</h2>
+      <div id="ultimosReg" class="muted">Aún no hay registros.</div>
+    </div>
+    <div class="card">
+      <h2>📅 Próximas tareas</h2>
+      <div id="proxTareas" class="muted">Sin tareas.</div>
+    </div>
+  </section>
+
+  <section class="tab">
+    <button data-tab="gelato" class="active">🌿 Gelato</button>
+    <button data-tab="acai">🍇 Açai</button>
+    <button data-tab="exterior">☀️ Exterior</button>
+    <button data-tab="limoneros">🍋 Limoneros</button>
+  </section>
+
+  <section id="cultivo" class="card" style="margin-top:8px">
+    <h2 id="title">🌿 Gelato · Tareas / Galería / Registros</h2>
     <div class="grid">
-      <!-- Tarjeta: nuevo recordatorio -->
-      <section class="card">
-        <h2>➕ Añadir recordatorio</h2>
-        <p class="muted">Guárdalo en tu Firebase (Firestore) para verlo en cualquier dispositivo.</p>
-        <form id="form-recordatorio" autocomplete="off">
-          <input type="text" id="texto" placeholder="Ej.: Aplicar micorrizas el viernes" required />
-          <div class="row">
-            <button type="submit">Guardar</button>
-            <span id="estado" class="status"></span>
-          </div>
-        </form>
-      </section>
-
-      <!-- Tarjeta: recordatorios guardados -->
-      <section class="card">
-        <h2>📋 Recordatorios</h2>
-        <p class="muted">Se actualiza en tiempo real (no necesitas recargar).</p>
-        <ul id="lista"></ul>
-      </section>
+      <div>
+        <h3>Tareas</h3>
+        <div>
+          <input id="task-text" placeholder="Ej.: Micorrizas 1g/4L"/>
+          <input id="task-date" type="date"/>
+          <button onclick="addTask()">Añadir</button>
+        </div>
+        <div id="tasks" style="margin-top:8px" class="muted">Sin tareas.</div>
+      </div>
+      <div>
+        <h3>Galería</h3>
+        <input type="file" accept="image/*" multiple onchange="addImages(event)"/>
+        <div id="gal" class="gallery" style="margin-top:8px"></div>
+      </div>
+      <div>
+        <h3>Registros EC/pH</h3>
+        <div>
+          <input id="ec" type="number" step="0.01" placeholder="EC"/>
+          <input id="ph" type="number" step="0.01" placeholder="pH"/>
+          <button onclick="addReg()">Guardar</button>
+        </div>
+        <table style="margin-top:8px">
+          <thead><tr><th>Fecha</th><th>EC</th><th>pH</th></tr></thead>
+          <tbody id="tabla"></tbody>
+        </table>
+      </div>
     </div>
+  </section>
+</main>
 
-    <footer>
-      José &amp; Sally • THC ⚗️ + cítricos 🍋 • v1.0
-    </footer>
-  </main>
+<script>
+const CULTIVOS=['gelato','acai','exterior','limoneros'];
+let current='gelato';
+const KEY=k=>`cpV5:${current}:${k}`;
+const load=(k,def)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch{return def}};
+const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 
-  <!-- ====================== LÓGICA FIREBASE ====================== -->
-  <script type="module">
-    /* Importa tu app inicializada desde src/firebase-config.js
-       (ese archivo lo creaste con initializeApp y getAnalytics) */
-    import { app } from "./src/firebase-config.js";
+document.querySelectorAll('.tab button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tab button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); current=b.dataset.tab;
+  document.getElementById('title').textContent = (b.textContent + ' · Tareas / Galería / Registros');
+  renderAll();
+});
 
-    /* SDKs de Firebase (desde CDN) */
-    import {
-      getFirestore, collection, addDoc, serverTimestamp,
-      onSnapshot, orderBy, query
-    } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+function addTask(){
+  const text=document.getElementById('task-text').value.trim();
+  const date=document.getElementById('task-date').value||null;
+  if(!text) return;
+  const list=load(KEY('tasks'),[]); list.push({text,date,done:false,ts:Date.now()}); save(KEY('tasks'),list);
+  document.getElementById('task-text').value=''; document.getElementById('task-date').value='';
+  renderTasks(); renderDashboard();
+}
+function toggleTask(i){const list=load(KEY('tasks'),[]); list[i].done=!list[i].done; save(KEY('tasks'),list); renderTasks(); renderDashboard();}
+function delTask(i){const list=load(KEY('tasks'),[]); list.splice(i,1); save(KEY('tasks'),list); renderTasks(); renderDashboard();}
+function renderTasks(){
+  const list=load(KEY('tasks'),[]);
+  const box=document.getElementById('tasks');
+  box.innerHTML = list.length? list.map((t,i)=>`<div>${t.done?'✅':'⬜️'} <b>${t.text}</b> <small>${t.date||''}</small>
+    <button onclick="toggleTask(${i})">Hecho</button>
+    <button onclick="delTask(${i})">Borrar</button></div>`).join('') : 'Sin tareas.';
+}
 
-    const db = getFirestore(app);
+function addImages(ev){
+  const files=[...ev.target.files]; const gal=load(KEY('gal'),[]);
+  let i=0;
+  const next=()=>{ if(i>=files.length){ save(KEY('gal'),gal); renderGal(); return; }
+    const f=files[i++]; const r=new FileReader();
+    r.onload=e=>{ gal.push(e.target.result); next(); }; r.readAsDataURL(f);
+  }; next();
+}
+function renderGal(){
+  const gal=load(KEY('gal'),[]);
+  document.getElementById('gal').innerHTML = gal.length? gal.map(src=>`<div class='thumb'><img src='${src}'/></div>`).join('') : '<div class="muted">Sin fotos aún.</div>';
+}
 
-    // DOM
-    const form = document.getElementById("form-recordatorio");
-    const estado = document.getElementById("estado");
-    const lista = document.getElementById("lista");
+function addReg(){
+  const ec=parseFloat(document.getElementById('ec').value);
+  const ph=parseFloat(document.getElementById('ph').value);
+  if(isNaN(ec)||isNaN(ph)) return;
+  const regs=load(KEY('regs'),[]); regs.unshift({fecha:new Date().toISOString().slice(0,10), ec, ph}); save(KEY('regs'),regs);
+  document.getElementById('ec').value=''; document.getElementById('ph').value=''; renderRegs(); renderDashboard();
+}
+function renderRegs(){
+  const regs=load(KEY('regs'),[]);
+  document.getElementById('tabla').innerHTML = regs.map(r=>`<tr><td>${r.fecha}</td><td>${r.ec}</td><td>${r.ph}</td></tr>`).join('');
+}
 
-    // Guardar
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const txt = document.getElementById("texto").value.trim();
-      if (!txt) return;
+function renderDashboard(){
+  const all = CULTIVOS.flatMap(c=>{
+    const tasks=load(`cpV5:${c}:tasks`,[]).map(t=>({...t,c}));
+    const regs = load(`cpV5:${c}:regs`,[]); return [{c, task:tasks[0]||null, reg:regs[0]||null}];
+  });
+  const prox = all.flatMap(x=>x.task?[x.task]:[]).slice(0,5);
+  document.getElementById('proxTareas').textContent = prox.length? prox.map(t=>t.text + (t.date?` (${t.date})`:'')).join(' · ') : 'Sin tareas.';
+  const ult = all.flatMap(x=>x.reg?[x.c+': '+x.reg.ec+' / '+x.reg.ph]:[]).join(' · ');
+  document.getElementById('ultimosReg').textContent = ult || 'Aún no hay registros.';
+}
 
-      estado.textContent = "Guardando…";
-      estado.className = "status";
+function loadWeather(){
+  const lat=41.29, lon=1.44, tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'Europe/Madrid';
+  fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=${encodeURIComponent(tz)}`)
+    .then(r=>r.json()).then(j=>{
+      const d=j.daily;
+      const days=d.time.map((t,i)=>({date:t, code:d.weathercode[i], tmax:d.temperature_2m_max[i], tmin:d.temperature_2m_min[i], pr:d.precipitation_probability_max[i], mm:d.precipitation_sum[i]}));
+      const WICON=(code)=>{if([0].includes(code)) return '☀️'; if([1,2,3].includes(code)) return '⛅'; if([45,48].includes(code)) return '🌫️';
+        if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return '🌧️'; if([95,96,99].includes(code)) return '⛈️'; if([71,73,75,77,85,86].includes(code)) return '❄️'; return '⛅';};
+      document.getElementById('wgrid').innerHTML = days.map(x=>`<div style="background:#0f172a;border:1px solid #1f2937;border-radius:12px;padding:8px;text-align:center">
+        <div>${new Date(x.date).toLocaleDateString('es-ES',{weekday:'short'})}</div>
+        <div style="font-size:20px">${WICON(x.code)}</div>
+        <div>${Math.round(x.tmax)}° / ${Math.round(x.tmin)}°</div>
+        <div>${x.pr}% · ${x.mm.toFixed(1)}mm</div></div>`).join('');
+      document.getElementById('rainAdvice').textContent = (days[0].pr>=60||days[1].pr>=60)?'⚠️ Puede llover (24–48h)':'Sin lluvia relevante';
+    }).catch(()=>{document.getElementById('rainAdvice').textContent='Sin conexión al tiempo';});
+}
 
-      try {
-        await addDoc(collection(db, "recordatorios"), {
-          texto: txt,
-          fecha: serverTimestamp()
-        });
-        estado.textContent = "✅ Guardado en Firestore";
-        estado.className = "status ok";
-        form.reset();
-      } catch (err) {
-        console.error(err);
-        estado.textContent = "❌ Error al guardar";
-        estado.className = "status err";
-      }
-    });
-
-    // Listado en tiempo real (últimos primero)
-    const q = query(collection(db, "recordatorios"), orderBy("fecha", "desc"));
-    onSnapshot(q, (snap) => {
-      lista.innerHTML = "";
-      if (snap.empty) {
-        lista.innerHTML = '<li><span class="muted">Sin recordatorios aún.</span></li>';
-        return;
-      }
-      snap.forEach(doc => {
-        const d = doc.data();
-        const fecha = d.fecha?.toDate ? d.fecha.toDate() : null;
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <span>${d.texto}</span>
-          <span class="stamp">${fecha ? fecha.toLocaleString() : "…"}</span>
-        `;
-        lista.appendChild(li);
-      });
-    });
-
-    // PWA: registro del Service Worker (opcional, no falla si no existe)
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch(()=>{});
-    }
-  </script>
+window.addEventListener('load', ()=>{ renderAll(); loadWeather(); });
+function renderAll(){ renderTasks(); renderGal(); renderRegs(); renderDashboard(); }
+</script>
 </body>
 </html>
