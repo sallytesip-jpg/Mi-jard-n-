@@ -1,33 +1,40 @@
-
-const CACHE = 'cultivo-pro-v5';
-const ASSETS = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png'
+// sw.js
+const CACHE_NAME = "cultivo-pro-v1";
+const urlsToCache = [
+  "/",              // la raíz
+  "/index.html",    // tu index
+  "/manifest.json", // el manifest
+  "/icons/icon-192.png", // iconos
+  "/icons/icon-512.png"
 ];
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
-});
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.map(k => k !== CACHE && caches.delete(k)))).then(() => self.clients.claim())
+
+// Instalar y cachear archivos
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(urlsToCache);
+    })
   );
 });
-self.addEventListener('fetch', e => {
-  const { request } = e;
-  if (request.method !== 'GET') return;
-  e.respondWith(
-    caches.match(request).then(cached => {
-      const fetchPromise = fetch(request).then(network => {
-        if(network && network.status === 200 && new URL(request.url).origin === location.origin){
-          const copy = network.clone();
-          caches.open(CACHE).then(c => c.put(request, copy));
-        }
-        return network;
-      }).catch(() => cached || caches.match('./index.html'));
-      return cached || fetchPromise;
+
+// Servir desde caché
+self.addEventListener("fetch", (event) => {
+  event.respondWith(
+    caches.match(event.request).then((resp) => {
+      return resp || fetch(event.request);
     })
+  );
+});
+
+// Actualizar SW
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) return caches.delete(key);
+        })
+      )
+    )
   );
 });
