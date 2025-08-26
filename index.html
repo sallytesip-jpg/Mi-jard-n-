@@ -57,19 +57,23 @@
   .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:7}
   .tabwrap{max-width:1024px;margin:12px auto;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
   [data-theme="light"] .tabwrap{background:rgba(255,255,255,.92)}
-  .tabgrid{display:grid;grid-template-columns:repeat(7,1fr)}
+  .tabgrid{display:grid;grid-template-columns:repeat(8,1fr)}
   .tabbtn{padding:10px 6px;display:flex;flex-direction:column;gap:2px;align-items:center;color:var(--muted);font-size:12px;font-weight:700;background:transparent;border:0}
   .tabbtn.active{color:var(--ink)}
   .view{display:none} .view.active{display:block}
   .row{display:flex;gap:8px;flex-wrap:wrap}
-  /* Weather */
   .w-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
   .wday{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center}
   .wday .ico{font-size:20px}
   .wday .d{font-weight:700}
-  /* Chart */
   .chartwrap{position:relative}
   canvas.chart{width:100%; height:220px; border:1px solid var(--line); border-radius:12px; background:var(--card)}
+  /* Guías & Agenda */
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .subtab{border:1px solid var(--line);background:transparent;color:var(--ink)}
+  .subtab.active{background:var(--accent);color:#fff;border-color:transparent}
+  .prose ul{margin:0 0 8px 18px}
+  .prose li{margin:4px 0}
 </style>
 </head>
 <body>
@@ -157,6 +161,119 @@
   <!-- Cultivos -->
   <div id="cultivos"></div>
 
+  <!-- Guías & Agenda -->
+  <section id="v-guias" class="view">
+    <div class="card">
+      <h2>📘 Guías & Agenda</h2>
+      <div class="tabs">
+        <button class="subtab active" data-subtab="ext">🌿 Exterior</button>
+        <button class="subtab" data-subtab="int">💡 Interior (AN)</button>
+        <button class="subtab" data-subtab="cit">🍋 Cítricos</button>
+        <button class="subtab" data-subtab="agenda">📝 Agenda</button>
+      </div>
+
+      <!-- Exterior -->
+      <div id="sub-ext">
+        <div class="prose">
+          <h3>Exterior — Raíces & Top Crop</h3>
+          <ul>
+            <li><b>Protocolo raíces:</b> H₂O₂ 1–2 ml/L (choque) → 72 h → Micorrizas 2–5 g/L → 3–4 días → Carbohidratos 1–2 ml/L → 3–4 días → Micorrizas ½ dosis + amino/algas.</li>
+            <li><b>Top Crop + Guano:</b>
+              <ul>
+                <li><b>Crecimiento</b>: Top Veg.</li>
+                <li><b>Inicio floración</b>: Big One (foliar/riego).</li>
+                <li><b>Floración</b>: Top Bloom + Guano de murciélago.</li>
+                <li><b>Engorde</b>: Top Candy cada riego + Top Bud últimas 3–4 semanas.</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Interior AN -->
+      <div id="sub-int" style="display:none">
+        <div class="prose">
+          <h3>Interior — Advanced Nutrients</h3>
+          <p><b>Tabla (ml/L)</b> — controla EC/pH y signos de exceso:</p>
+          <ul>
+            <li><b>Crec 1–2</b>: Grow 1–2, Micro 1–2, Bloom 1–2, Voodoo 2, B-52 2</li>
+            <li><b>Pre-flora</b>: Grow 2, Micro 2, Bloom 2, B-52 2</li>
+            <li><b>Flora 1–2</b>: Grow 1, Micro 2, Bloom 2, Bud Ignitor 2, B-52 2</li>
+            <li><b>Flora 2–4</b>: Grow 1, Micro 2, Bloom 2, Big Bud 2, Bud Candy 2</li>
+            <li><b>Flora 5</b>: Grow 1, Micro 2, Bloom 3, Bud Candy 2</li>
+            <li><b>Flora 6–7</b>: Grow 1, Micro 2, Bloom 3, Bud Candy 2, Overdrive 2</li>
+            <li><b>Lavado</b>: Flawless Finish 2 ml/L</li>
+          </ul>
+        </div>
+
+        <!-- Calculadora AN -->
+        <div class="card" style="margin-top:10px">
+          <h3>🧮 Calculadora AN</h3>
+          <div class="row">
+            <label>Semana<br>
+              <select id="an-week">
+                <option value="crec1">Crec 1</option>
+                <option value="crec2">Crec 2</option>
+                <option value="pre">Pre-flora</option>
+                <option value="fl1">Flora 1</option>
+                <option value="fl2">Flora 2</option>
+                <option value="fl3">Flora 3</option>
+                <option value="fl4">Flora 4</option>
+                <option value="fl5">Flora 5</option>
+                <option value="fl6">Flora 6</option>
+                <option value="fl7">Flora 7</option>
+                <option value="lavado">Lavado</option>
+              </select>
+            </label>
+            <label>Litros de agua<br><input id="an-litros" type="number" min="1" step="0.5" value="5" style="width:120px"></label>
+          </div>
+          <button id="an-calc" class="btn" style="margin-top:8px">Calcular</button>
+          <div id="an-out" style="margin-top:10px"></div>
+          <p class="muted" style="font-size:12px;margin-top:6px">Nota: ml/L orientativos. Controla EC y signos de exceso/deficiencia.</p>
+        </div>
+      </div>
+
+      <!-- Cítricos -->
+      <div id="sub-cit" style="display:none">
+        <div class="prose">
+          <h3>Cítricos — Minador</h3>
+          <ol>
+            <li><b>Semana 1</b>: Epik (acetamiprid sistémico 0.5–1 g/L, al atardecer, brotes nuevos).</li>
+            <li><b>Semana 2</b>: Spruzit o jabón potásico + neem.</li>
+            <li><b>Semana 3</b>: Descanso o bioestimulantes.</li>
+            <li><b>Semana 4</b>: Epik otra vez (no más de 3 aplicaciones/campaña).</li>
+          </ol>
+          <p><b>Abono semanal</b>: usa la Agenda para registrar cada aplicación.</p>
+        </div>
+      </div>
+
+      <!-- Agenda -->
+      <div id="sub-agenda" style="display:none">
+        <div class="card">
+          <h3>📝 Agenda — Registro</h3>
+          <form id="ag-form" class="row" style="align-items:flex-end">
+            <label>Fecha<br><input id="ag-fecha" type="date" required></label>
+            <label>Cultivo<br>
+              <select id="ag-cultivo">
+                <option>Exterior</option>
+                <option>Interior</option>
+                <option>Cítricos</option>
+              </select>
+            </label>
+            <label>Producto / Tratamiento<br><input id="ag-producto" type="text" placeholder="Micorrizas, Epik, Top Bloom…" required></label>
+            <label>Observaciones<br><input id="ag-notas" type="text" placeholder="Dosis, clima, síntomas…"></label>
+            <button class="btn">Guardar</button>
+          </form>
+        </div>
+
+        <div class="card" style="margin-top:10px">
+          <h3>📂 Últimos apuntes</h3>
+          <div id="ag-list" class="list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Notas -->
   <section id="v-notas" class="view">
     <div class="card">
@@ -215,6 +332,7 @@
       <button class="tabbtn" data-tab="acai">🍇<span>Açaí</span></button>
       <button class="tabbtn" data-tab="exterior">☀️<span>Exterior</span></button>
       <button class="tabbtn" data-tab="limoneros">🍋<span>Limoneros</span></button>
+      <button class="tabbtn" data-tab="guias">📘<span>Guías</span></button>
       <button class="tabbtn" data-tab="notas">📝<span>Notas</span></button>
       <button class="tabbtn" data-tab="ajustes">⚙️<span>Ajustes</span></button>
     </div>
@@ -243,8 +361,9 @@ CULTIVOS.forEach(c=>{
   if(!load(`${c.id}:notas`)) save(`${c.id}:notas`,'');
 });
 if(!load('loc')) save('loc',{nombre:'La Bisbal del Penedès', lat:41.29, lon:1.44});
+if(!load('agenda')) save('agenda',[]);
 
-/* ====== Tema: Auto / Claro / Oscuro ====== */
+/* ====== Tema ====== */
 function applyTheme(){
   const pref = load('theme','auto');
   document.getElementById('btn-theme').textContent = 'Tema: ' + (pref==='auto'?'Auto':pref==='light'?'Claro':'Oscuro');
@@ -287,7 +406,7 @@ document.getElementById('restore').addEventListener('change',(e)=>{
   r.readAsText(f);
 });
 
-/* ====== Calculadoras ====== */
+/* ====== Calculadoras rápidas ====== */
 function recalc(){
   const L=parseFloat(document.getElementById('calcL').value||0);
   document.getElementById('h2o2').textContent=(L*3).toFixed(0);
@@ -558,32 +677,82 @@ function show(tab){
     window.scrollTo({top:0,behavior:'smooth'});
   }
   if(tab==='dashboard'){ renderDashboard(); loadWeather(); updateChart(); }
+  if(tab==='guias'){ renderAgendaList(); }
 }
 document.querySelectorAll('.tabbtn').forEach(b=> b.addEventListener('click', ()=> show(b.dataset.tab)));
 
-/* ====== Image compression (canvas) ====== */
-function compressImage(file, maxW=1280, quality=0.8){
-  return new Promise((resolve, reject)=>{
-    const img = new Image();
-    const reader = new FileReader();
-    reader.onload = e => { img.src = e.target.result; };
-    reader.onerror = reject;
-    img.onload = ()=>{
-      const canvas = document.createElement('canvas');
-      const scale = Math.min(1, maxW / img.width);
-      canvas.width = Math.round(img.width * scale);
-      canvas.height= Math.round(img.height* scale);
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0,0, canvas.width, canvas.height);
-      try{
-        const data = canvas.toDataURL('image/jpeg', quality);
-        resolve(data);
-      }catch(err){ resolve(img.src); }
-    };
-    img.onerror = reject;
-    reader.readAsDataURL(file);
+/* ====== Subtabs (Guías & Agenda) ====== */
+const subTabs = document.querySelectorAll('.subtab');
+subTabs.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    subTabs.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    ['ext','int','cit','agenda'].forEach(id=> document.getElementById('sub-'+id).style.display='none');
+    document.getElementById('sub-'+btn.dataset.subtab).style.display='block';
   });
+});
+
+/* ====== Agenda (localStorage) ====== */
+const agForm = document.getElementById('ag-form');
+const agList = document.getElementById('ag-list');
+
+function renderAgendaList(){
+  const items = load('agenda',[]);
+  agList.innerHTML = items.length ? items
+    .sort((a,b)=> (b.createdAt||0)-(a.createdAt||0))
+    .slice(0,50)
+    .map(it=>`<div class="task"><div><b>${it.cultivo}</b> · ${it.fecha}<br><small>${it.producto}${it.notas?': '+it.notas:''}</small></div></div>`).join('')
+    : '<div class="muted">Sin apuntes aún.</div>';
 }
+agForm.addEventListener('submit', e=>{
+  e.preventDefault();
+  const fecha = document.getElementById('ag-fecha').value;
+  const cultivo = document.getElementById('ag-cultivo').value;
+  const producto = document.getElementById('ag-producto').value.trim();
+  const notas = document.getElementById('ag-notas').value.trim();
+  if(!fecha || !producto) return;
+  const items = load('agenda',[]);
+  items.push({fecha, cultivo, producto, notas, createdAt: Date.now()});
+  save('agenda', items);
+  agForm.reset();
+  renderAgendaList();
+  // Notificación local para recordarte el abono semanal de cítricos
+  if(Notification?.permission==='granted' && cultivo==='Cítricos'){
+    new Notification('🗓️ Apunte guardado', { body: `Cítricos: ${producto} (${fecha})` });
+  }
+});
+
+/* ====== Calculadora AN (en Guías) ====== */
+const WEEK_RECIPES = {
+  "crec1": {Grow:1, Micro:1, Bloom:1, "Voodoo Juice":2, "B-52":2},
+  "crec2": {Grow:2, Micro:2, Bloom:2, "Voodoo Juice":2, "B-52":2},
+  "pre":   {Grow:2, Micro:2, Bloom:2, "B-52":2},
+  "fl1":   {Grow:1, Micro:2, Bloom:2, "Bud Ignitor":2, "B-52":2},
+  "fl2":   {Grow:1, Micro:2, Bloom:2, "Big Bud":2, "Bud Candy":2},
+  "fl3":   {Grow:1, Micro:2, Bloom:2, "Big Bud":2, "Bud Candy":2},
+  "fl4":   {Grow:1, Micro:2, Bloom:2, "Big Bud":2, "Bud Candy":2},
+  "fl5":   {Grow:1, Micro:2, Bloom:3, "Bud Candy":2},
+  "fl6":   {Grow:1, Micro:2, Bloom:3, "Bud Candy":2, "Overdrive":2},
+  "fl7":   {Grow:1, Micro:2, Bloom:3, "Bud Candy":2, "Overdrive":2},
+  "lavado": {"Flawless Finish":2}
+};
+const anWeek = document.getElementById("an-week");
+const anLitros = document.getElementById("an-litros");
+const anBtn = document.getElementById("an-calc");
+const anOut = document.getElementById("an-out");
+anBtn.onclick = ()=>{
+  const w = anWeek.value;
+  const L = Math.max(0, parseFloat(anLitros.value||"0"));
+  const rec = WEEK_RECIPES[w] || {};
+  if (!L || !Object.keys(rec).length) { anOut.innerHTML = "Introduce litros y semana"; return; }
+  let html = `<table style="width:100%;border-collapse:collapse"><tr><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Producto</th><th style="text-align:right;border-bottom:1px solid var(--line);padding:6px">ml totales</th></tr>`;
+  for (const k of Object.keys(rec)) {
+    const ml = rec[k] * L;
+    html += `<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${k}</td><td style="padding:6px;border-bottom:1px solid var(--line);text-align:right">${ml.toFixed(1)} ml</td></tr>`;
+  }
+  html += `</table>`;
+  anOut.innerHTML = html;
+};
 
 /* ====== Canvas Chart (EC/pH) ====== */
 const chartCanvas = document.getElementById('chart');
@@ -621,28 +790,94 @@ function drawChart(regs){
   }
   chartCtx.setLineDash([]);
   const x = i => m.l + (W-m.l-m.r) * (i/(xCount-1||1));
+  const yEC = v => m.t + (H-m.t-m-b) * (1 - (v-ecMin)/(ecMax-ecMin||1));
+}
+</script>
+
+<script>
+/* ====== Completar drawChart (separado para evitar scroll infinito) ====== */
+function drawChart(regs){
+  const W=chart.width, H=chart.height;
+  const ctx=chartCtx;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--card').trim();
+  ctx.fillRect(0,0,W,H);
+  const m={l:40,r:40,t:20,b:24};
+  const ecVals=regs.map(r=>r.ec), phVals=regs.map(r=>r.ph);
+  const xCount=Math.max(2,regs.length);
+  const ecMin=Math.min(0.4, Math.min(...ecVals,9999)), ecMax=Math.max(2.2, Math.max(...ecVals,0));
+  const phMin=5.5, phMax=6.8;
+
+  // rejilla
+  ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--line').trim();
+  ctx.lineWidth=1; ctx.setLineDash([4,4]);
+  for(let i=0;i<=6;i++){
+    const y=m.t+(H-m.t-m.b)*i/6;
+    ctx.beginPath(); ctx.moveTo(m.l,y); ctx.lineTo(W-m.r,y); ctx.stroke();
+    const ecLabel=(ecMax-(ecMax-ecMin)*i/6).toFixed(1);
+    const phLabel=(phMin+(phMax-phMin)*i/6).toFixed(1);
+    ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
+    ctx.font='12px system-ui';
+    ctx.fillText(ecLabel,6,y+4);
+    ctx.fillText(phLabel,W-30,y+4);
+  }
+  ctx.setLineDash([]);
+
+  const x = i => m.l + (W-m.l-m.r) * (i/(xCount-1||1));
   const yEC = v => m.t + (H-m.t-m.b) * (1 - (v-ecMin)/(ecMax-ecMin||1));
   const yPH = v => m.t + (H-m.t-m.b) * (1 - (v-phMin)/(phMax-phMin||1));
-  chartCtx.strokeStyle = '#0ea5a4'; chartCtx.lineWidth=2;
-  chartCtx.beginPath();
-  regs.forEach((r,i)=>{ const xx=x(i), yy=yEC(r.ec); i? chartCtx.lineTo(xx,yy):chartCtx.moveTo(xx,yy); });
-  chartCtx.stroke();
-  chartCtx.strokeStyle = '#10b981'; chartCtx.lineWidth=2; chartCtx.setLineDash([6,4]);
-  chartCtx.beginPath();
-  regs.forEach((r,i)=>{ const xx=x(i), yy=yPH(r.ph); i? chartCtx.lineTo(xx,yy):chartCtx.moveTo(xx,yy); });
-  chartCtx.stroke(); chartCtx.setLineDash([]);
-  chartCtx.fillStyle='#0ea5a4'; regs.forEach((r,i)=>{ chartCtx.beginPath(); chartCtx.arc(x(i), yEC(r.ec), 2.5, 0, Math.PI*2); chartCtx.fill(); });
-  chartCtx.fillStyle='#10b981'; regs.forEach((r,i)=>{ chartCtx.beginPath(); chartCtx.arc(x(i), yPH(r.ph), 2.5, 0, Math.PI*2); chartCtx.fill(); });
-  chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
-  chartCtx.font='11px system-ui';
-  regs.forEach((r,i)=>{ if(i%3===0){ chartCtx.fillText(r.fecha.slice(5), x(i)-12, H-6); } });
+
+  // EC
+  ctx.strokeStyle='#0ea5a4'; ctx.lineWidth=2;
+  ctx.beginPath();
+  regs.forEach((r,i)=>{ const xx=x(i), yy=yEC(r.ec); i? ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); });
+  ctx.stroke();
+  ctx.fillStyle='#0ea5a4';
+  regs.forEach((r,i)=>{ ctx.beginPath(); ctx.arc(x(i), yEC(r.ec), 2.5, 0, Math.PI*2); ctx.fill(); });
+
+  // pH
+  ctx.strokeStyle='#10b981'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+  ctx.beginPath();
+  regs.forEach((r,i)=>{ const xx=x(i), yy=yPH(r.ph); i? ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); });
+  ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle='#10b981';
+  regs.forEach((r,i)=>{ ctx.beginPath(); ctx.arc(x(i), yPH(r.ph), 2.5, 0, Math.PI*2); ctx.fill(); });
+
+  // fechas
+  ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
+  ctx.font='11px system-ui';
+  regs.forEach((r,i)=>{ if(i%3===0){ ctx.fillText(r.fecha.slice(5), x(i)-12, H-6); } });
+}
+
+/* ====== Image compression helper ====== */
+function compressImage(file, maxW=1280, quality=0.8){
+  return new Promise((resolve, reject)=>{
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = e => { img.src = e.target.result; };
+    reader.onerror = reject;
+    img.onload = ()=>{
+      const canvas = document.createElement('canvas');
+      const scale = Math.min(1, maxW / img.width);
+      canvas.width = Math.round(img.width * scale);
+      canvas.height= Math.round(img.height* scale);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0,0, canvas.width, canvas.height);
+      try{
+        const data = canvas.toDataURL('image/jpeg', quality);
+        resolve(data);
+      }catch(err){ resolve(img.src); }
+    };
+    img.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 
 /* ====== Inicio ====== */
 window.addEventListener('load', ()=>{
   renderDashboard(); loadWeather(); scheduleDueChecks(); updateChart();
   ['gelato','acai','exterior','limoneros'].forEach(id=>{ renderTasks(id); renderGal(id); renderRegs(id); const ta=document.getElementById(id+'-notas'); if(ta){ ta.value=load(id+':notas',''); ta.oninput=()=>save(id+':notas',ta.value);} });
-  // SW (opcional; no falla si no existe)
+  renderAgendaList();
   if('serviceWorker'in navigator){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
 });
 </script>
