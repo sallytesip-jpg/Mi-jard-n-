@@ -8,48 +8,61 @@
 <link rel="manifest" href="manifest.json"/>
 <link rel="icon" href="icons/icon-192.png"/>
 <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+
 <style>
   :root{
     --bg:#0b1220; --card:#0f172a; --ink:#e5e7eb; --muted:#94a3b8; --line:#1f2937;
     --accent:#0ea5a4; --accent2:#10b981; --danger:#ef4444; --warn:#f59e0b;
     --shadow:0 24px 60px -20px rgba(2,6,23,.35);
+    --tabh:88px; /* Altura de la barra inferior */
   }
   [data-theme="light"]{
     --bg:#f6f7fb; --card:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e5e7eb;
     --shadow:0 24px 60px -20px rgba(2,6,23,.15);
   }
-  *{box-sizing:border-box} html,body{height:100%}
+  *{box-sizing:border-box}
+  html, body{min-height:100%; height:auto;}
   body{
-    margin:0; color:var(--ink);
-    background:var(--bg) no-repeat fixed center/cover;
+    margin:0;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif;
+    background:var(--bg);
   }
-  /* Marca de agua del logo */
+  /* ===== Marca de agua ===== */
   body::before{
-    content:""; position:fixed; inset:0; z-index:-2;
+    content:"";
+    position:fixed; inset:0; z-index:-2;
     background:
-      radial-gradient(1200px 800px at 20% -10%, #0c1a2a 0%, var(--bg) 40%, var(--bg) 100%);
+      radial-gradient(1000px 700px at 20% -10%, #0c1a2a 0%, transparent 40%),
+      radial-gradient(900px 600px at 120% -20%, #0c1a2a 0%, transparent 45%);
   }
   body::after{
-    content:""; position:fixed; inset:0; z-index:-1;
-    background-image:url('icons/logo.png'); /* <-- Asegúrate de tener PNG transparente aquí */
-    background-repeat:no-repeat; background-position:center 28vh;
-    background-size: min(86vw, 950px);
-    opacity:.06; pointer-events:none; filter:contrast(90%) saturate(90%);
+    /* Coloca aquí tu logo transparente (PNG) */
+    content:"";
+    position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.08;
+    background-image:url("icons/watermark.png");
+    background-repeat:no-repeat; background-position:center center; background-size: min(95vmin, 1100px) auto;
+    filter:saturate(1) contrast(1);
   }
 
   header{position:sticky;top:0;background:rgba(11,18,32,.78);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:6}
   [data-theme="light"] header{background:rgba(255,255,255,.85)}
   .max{max-width:1080px;margin:0 auto;padding:10px 12px}
-  .brand{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-  .logo{width:38px;height:38px;border-radius:10px;overflow:hidden;display:grid;place-items:center;background:var(--accent2);box-shadow:0 10px 30px -12px rgba(16,185,129,.6)}
-  .logo img{width:100%;height:100%;object-fit:cover}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:38px;height:38px;border-radius:12px;background:var(--accent2);display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:0 10px 30px -12px rgba(16,185,129,.6);overflow:hidden}
+  .logo img{width:100%;height:100%;object-fit:cover;border-radius:12px}
   .muted{color:var(--muted)}
-  .wrap{max-width:1080px;margin:14px auto 92px;padding:0 12px}
+
+  /* ===== Contenido con aire al final para no tapar con la tabbar ===== */
+  .wrap{
+    max-width:1080px;
+    margin:14px auto 0;
+    padding:0 12px;
+    padding-bottom: calc(var(--tabh) + 40px + env(safe-area-inset-bottom, 0px));
+  }
+
   .grid{display:grid;gap:12px}
-  @media(min-width:860px){.grid{grid-template-columns:1.4fr 1fr}}
+  @media(min-width:780px){.grid{grid-template-columns:1fr 1fr}}
   .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow)}
-  h2{margin:0 0 10px 0}
-  h3{margin:0 0 8px 0}
+  h2{margin:0 0 8px 0}
   input,textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px}
   textarea{min-height:110px;resize:vertical}
   button{border:0;border-radius:12px;padding:10px 12px;font-weight:700;cursor:pointer}
@@ -66,34 +79,35 @@
   .thumb button{position:absolute;top:6px;right:6px;background:#ef4444;color:#fff;border:0;border-radius:8px;padding:4px 6px;font-size:12px;cursor:pointer}
   .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:50}
   .modal img{max-width:92vw;max-height:84vh;border-radius:12px}
-  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .row{display:flex;gap:8px;flex-wrap:wrap}
 
-  /* Tab bar */
+  /* ===== Tab bar fija con safe-area y altura consistente ===== */
   .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:7}
-  .tabwrap{max-width:1080px;margin:12px auto;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+  .tabwrap{
+    max-width:1080px;margin:12px auto;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);
+    height: calc(var(--tabh) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
   [data-theme="light"] .tabwrap{background:rgba(255,255,255,.92)}
-  .tabgrid{display:grid;grid-template-columns:repeat(7,1fr)}
-  .tabbtn{padding:10px 6px;display:flex;flex-direction:column;gap:2px;align-items:center;color:var(--muted);font-size:12px;font-weight:700;background:transparent;border:0}
+  .tabgrid{display:grid;grid-template-columns:repeat(7,1fr); height: var(--tabh);}
+  .tabbtn{padding:8px 4px; display:flex; flex-direction:column; gap:2px; align-items:center; justify-content:center; color:var(--muted); font-size:12px; font-weight:700; background:transparent; border:0; height:100%}
   .tabbtn.active{color:var(--ink)}
   .view{display:none} .view.active{display:block}
 
-  /* Weather */
-  .w-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
-  .wday{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+  /* ===== Tiempo ===== */
+  .w-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .wday{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center}
   .wday .ico{font-size:20px}
   .wday .d{font-weight:700}
 
-  /* Chart */
+  /* ===== Gráfica ===== */
   .chartwrap{position:relative}
-  canvas.chart{width:100%; height:260px; border:1px solid var(--line); border-radius:12px; background:var(--card)}
-
-  /* Dashboard resumen */
-  .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-  @media(min-width:720px){.kpis{grid-template-columns:repeat(4,1fr)}}
-  .kpi{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--card)}
-  .kpi b{font-size:18px}
-
-  .qrcode{width:140px;height:140px;border-radius:12px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;overflow:hidden}
+  canvas.chart{
+    display:block;
+    width:100%; height:260px;
+    border:1px solid var(--line); border-radius:12px; background:var(--card);
+    touch-action: pan-y; /* permite scroll vertical sobre el canvas */
+  }
 </style>
 </head>
 <body>
@@ -103,10 +117,10 @@
       <div class="logo"><img src="icons/icon-192.png" alt="Cultivo Pro"/></div>
       <div>
         <div style="font-weight:800">Cultivo Pro</div>
-        <div class="muted" style="font-size:12px">PWA v6 PRO+ · Tiempo · Notif · Galería · Gráficas · Fases · QR</div>
+        <div class="muted" style="font-size:12px">PWA v6 PRO+ · Tiempo + Notif + Galería + Gráficas</div>
       </div>
       <div style="margin-left:auto" class="row">
-        <button id="btn-theme" class="btn sec" title="Tema">Tema</button>
+        <button id="btn-theme" class="btn sec" title="Tema">Tema: Auto</button>
         <button id="btn-install" class="btn sec" style="display:none">Instalar</button>
         <button id="btn-backup" class="btn sec" title="Descargar copia">Backup</button>
         <label class="btn sec" title="Restaurar"><input type="file" id="restore" accept="application/json" style="display:none">Restore</label>
@@ -120,39 +134,29 @@
   <section id="v-dashboard" class="view active">
     <div class="grid">
       <div class="card">
-        <h2>📊 Resumen rápido</h2>
-        <div id="kpis" class="kpis">
-          <div class="kpi"><div class="muted">🌡️ Ahora</div><b id="kpiTemp">—</b><div class="muted">°C</div></div>
-          <div class="kpi"><div class="muted">💧 Último riego</div><b id="kpiRiego">—</b><div class="muted">días</div></div>
-          <div class="kpi"><div class="muted">📅 Próxima tarea</div><b id="kpiTask">—</b><div class="muted">fecha</div></div>
-          <div class="kpi"><div class="muted">🟢 Estado</div><b id="kpiEstado">OK</b><div class="muted">cultivos</div></div>
+        <div class="row" style="justify-content:space-between;align-items:center">
+          <h2>🌧️ Tiempo · <span id="locName">La Bisbal del Penedès</span></h2>
+          <div id="rainAdvice" class="pill">Cargando…</div>
         </div>
+        <div class="muted" style="font-size:12px;margin:4px 0">Max/Mín, % lluvia, mm acumulados · 7 días (Open-Meteo)</div>
+        <div id="wgrid" class="w-grid"></div>
       </div>
 
       <div class="card">
-        <h2>🌧️ Tiempo · <span id="locName">La Bisbal del Penedès</span></h2>
-        <div class="muted" style="font-size:12px;margin:4px 0">Max/Mín, % lluvia, mm acumulados · 7 días (Open-Meteo)</div>
-        <div id="rainAdvice" class="pill">Cargando…</div>
-        <div id="wgrid" class="w-grid" style="margin-top:10px"></div>
-      </div>
-
-      <div class="card" style="grid-column:1/-1">
-        <div class="row" style="justify-content:space-between;align-items:center">
-          <h2>📈 Gráficas EC/pH/Temp/HR</h2>
-          <div class="row">
-            <label>Cultivo</label>
-            <select id="chart-cultivo">
-              <option value="gelato">Gelato</option>
-              <option value="acai">Açaí</option>
-              <option value="exterior">Exterior</option>
-              <option value="limoneros">Limoneros</option>
-            </select>
-          </div>
+        <h2>📈 Gráficas EC/pH</h2>
+        <div class="row">
+          <label> Cultivo </label>
+          <select id="chart-cultivo">
+            <option value="gelato">Gelato</option>
+            <option value="acai">Açaí</option>
+            <option value="exterior">Exterior</option>
+            <option value="limoneros">Limoneros</option>
+          </select>
         </div>
         <div class="chartwrap" style="margin-top:8px">
-          <canvas id="chart" class="chart" width="1080" height="300"></canvas>
+          <canvas id="chart" class="chart" width="960" height="300"></canvas>
         </div>
-        <div class="muted" style="font-size:12px;margin-top:6px">EC (verde), pH (turquesa), T (amarillo), HR (azul). Arrastra la página para ver más.</div>
+        <div class="muted" style="font-size:12px;margin-top:6px">Arriba: EC (izq.), pH (dcha.). Desliza para ver más si hay muchos puntos.</div>
       </div>
 
       <div class="card">
@@ -161,7 +165,7 @@
       </div>
 
       <div class="card">
-        <h2>🧪 Últimos registros</h2>
+        <h2>🧪 Últimos EC/pH</h2>
         <div id="ultimosReg"></div>
       </div>
     </div>
@@ -188,7 +192,6 @@
         <div class="row"><button id="btn-theme2" class="btn">Cambiar tema</button></div>
         <p id="themeState" class="muted" style="margin-top:6px">Tema actual: Auto</p>
       </div>
-
       <div class="card">
         <h2>🔔 Notificaciones</h2>
         <p class="muted">Avisos de tareas del día y lluvia alta.</p>
@@ -198,7 +201,6 @@
         </div>
         <p id="notifyState" class="muted" style="margin-top:6px">Estado: desconocido</p>
       </div>
-
       <div class="card">
         <h2>📍 Ubicación del tiempo</h2>
         <div class="row">
@@ -208,7 +210,6 @@
           <button class="btn" onclick="saveLocation()">Guardar</button>
         </div>
       </div>
-
       <div class="card">
         <h2>🧹 Mantenimiento</h2>
         <div class="row">
@@ -219,6 +220,9 @@
     </div>
   </section>
 </main>
+
+<!-- Modal de imagen -->
+<div id="modal" class="modal" onclick="this.style.display='none'"><img id="modalImg" alt="zoom"></div>
 
 <!-- Tab bar -->
 <nav class="tabbar">
@@ -235,9 +239,6 @@
   </div>
 </nav>
 
-<!-- Modal de imagen -->
-<div id="modal" class="modal" onclick="this.style.display='none'"><img id="modalImg" alt="zoom"></div>
-
 <script>
 /* ====== Estado y utilidades ====== */
 const KEY = (k)=>`cpV6:${k}`;
@@ -250,15 +251,11 @@ const CULTIVOS=[
   {id:'exterior', titulo:'Exterior', emoji:'☀️'},
   {id:'limoneros', titulo:'Limoneros', emoji:'🍋'}
 ];
-const FASES = ['Germinación','Vegetativo','Floración','Maduración'];
-
 CULTIVOS.forEach(c=>{
   if(!load(`${c.id}:tasks`)) save(`${c.id}:tasks`,[]);
   if(!load(`${c.id}:gal`))   save(`${c.id}:gal`,[]);
   if(!load(`${c.id}:regs`))  save(`${c.id}:regs`,[]);
   if(!load(`${c.id}:notas`)) save(`${c.id}:notas`,'');
-  if(!load(`${c.id}:fase`))  save(`${c.id}:fase`,'Vegetativo');
-  if(!load(`${c.id}:ultRiego`)) save(`${c.id}:ultRiego`,null);
 });
 if(!load('loc')) save('loc',{nombre:'La Bisbal del Penedès', lat:41.29, lon:1.44});
 
@@ -310,87 +307,47 @@ const ng=document.getElementById('notas-global'); ng.value=load('notasGlobal',''
 
 /* ====== Secciones de cultivo ====== */
 function cultivoSection(c){
-  const fase = load(`${c.id}:fase`,'Vegetativo');
   return `
   <section id="v-${c.id}" class="view">
     <div class="grid">
       <div class="card">
         <h2>${c.emoji} ${c.titulo} · Tareas</h2>
         <div class="row">
-          <input id="${c.id}-task-text" placeholder="Ej: Riego 10 L, EC 1.6, pH 6.3">
+          <input id="${c.id}-task-text" placeholder="Ej: Micorrizas 1 g/4 L, pH 6.4">
           <input id="${c.id}-task-date" type="date">
           <button class="btn" onclick="addTask('${c.id}')">Añadir</button>
         </div>
         <div id="${c.id}-tasks" class="list" style="margin-top:8px"></div>
       </div>
-
-      <div class="card">
-        <h2>🧪 Registros EC/pH/Temp/HR</h2>
-        <div class="row">
-          <input id="${c.id}-ec" type="number" step="0.01" placeholder="EC (mS/cm)" style="width:120px">
-          <input id="${c.id}-ph" type="number" step="0.01" placeholder="pH" style="width:110px">
-          <input id="${c.id}-t" type="number" step="0.1" placeholder="T °C" style="width:110px">
-          <input id="${c.id}-hr" type="number" step="1" placeholder="HR %" style="width:110px">
-          <button class="btn" onclick="addRegistro('${c.id}')">Guardar</button>
-          <button class="btn sec" onclick="borrarRegistros('${c.id}')">Borrar</button>
-        </div>
-        <table style="width:100%;border-collapse:collapse;margin-top:8px">
-          <thead><tr>
-            <th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Fecha</th>
-            <th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">EC</th>
-            <th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">pH</th>
-            <th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">T</th>
-            <th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">HR</th>
-          </tr></thead>
-          <tbody id="${c.id}-tabla"></tbody>
-        </table>
-      </div>
-
-      <div class="card">
-        <h2>🌱 Fase & recomendaciones</h2>
-        <div class="row">
-          <select id="${c.id}-fase" onchange="setFase('${c.id}', this.value)">
-            ${FASES.map(f=>`<option ${f===fase?'selected':''}>${f}</option>`).join('')}
-          </select>
-          <div class="pill" id="${c.id}-reco">—</div>
-        </div>
-      </div>
-
       <div class="card">
         <h2>📷 Galería</h2>
         <input type="file" accept="image/*" multiple onchange="addImages(event,'${c.id}')">
         <div id="${c.id}-gal" class="gallery" style="margin-top:8px"></div>
+        <p class="muted" style="font-size:12px;margin-top:6px">Se comprimen al subir para ahorrar espacio.</p>
       </div>
-
+      <div class="card">
+        <h2>🧪 Registros EC / pH</h2>
+        <div class="row">
+          <input id="${c.id}-ec" type="number" step="0.01" placeholder="EC (mS/cm)">
+          <input id="${c.id}-ph" type="number" step="0.01" placeholder="pH">
+          <button class="btn" onclick="addRegistro('${c.id}')">Guardar</button>
+          <button class="btn sec" onclick="borrarRegistros('${c.id}')">Borrar</button>
+        </div>
+        <table style="width:100%;border-collapse:collapse;margin-top:8px">
+          <thead><tr><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Fecha</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">EC</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">pH</th></tr></thead>
+          <tbody id="${c.id}-tabla"></tbody>
+        </table>
+      </div>
       <div class="card">
         <h2>🗒️ Notas</h2>
         <textarea id="${c.id}-notas" placeholder="Observaciones, dosis, problemas…"></textarea>
-      </div>
-
-      <div class="card">
-        <h2>🔗 QR de la ficha</h2>
-        <div class="row">
-          <div id="${c.id}-qr" class="qrcode"></div>
-          <button class="btn sec" onclick="genQR('${c.id}')">Actualizar QR</button>
-        </div>
-        <p class="muted" style="margin-top:6px">Escanéalo para abrir directamente esta ficha.</p>
       </div>
     </div>
   </section>`;
 }
 document.getElementById('cultivos').innerHTML = CULTIVOS.map(cultivoSection).join('');
 
-/* ====== Recomendaciones por fase ====== */
-function recomendaciones(id){
-  const f = load(id+':fase','Vegetativo');
-  if(f==='Germinación') return 'Riego suave, pH 5.8–6.2 · EC ≤ 0.6 · Micorrizas.';
-  if(f==='Vegetativo')  return 'pH 5.9–6.3 · EC 1.0–1.4 · N alto · VPD 0.9–1.2.';
-  if(f==='Floración')   return 'pH 6.2–6.6 · EC 1.5–2.0 · Añade PK (semanas 3–6).';
-  return 'pH 6.2–6.6 · EC 0.8–1.2 · Solo agua + flushing si procede.';
-}
-function setFase(id,val){ save(id+':fase',val); document.getElementById(id+'-reco').textContent=recomendaciones(id); maybePhaseHints(); }
-
-/* ====== Render, Tasks, Gallery ====== */
+/* ====== Tareas / Galería / Registros ====== */
 function addTask(id){
   const text=document.getElementById(id+'-task-text').value.trim();
   const date=document.getElementById(id+'-task-date').value;
@@ -399,7 +356,7 @@ function addTask(id){
   const task = {id:Date.now()+Math.random().toString(16).slice(2), text, date, done:false, ts:Date.now()};
   list.push(task); save(id+':tasks',list);
   document.getElementById(id+'-task-text').value=''; document.getElementById(id+'-task-date').value='';
-  renderTasks(id); renderDashboard(); scheduleDueChecks();
+  renderTasks(id); renderDashboard(); scheduleDueChecks(); updateChart();
 }
 function toggleTask(id,idx){const list=load(id+':tasks',[]); list[idx].done=!list[idx].done; save(id+':tasks',list); renderTasks(id); renderDashboard();}
 function delTask(id,idx){const list=load(id+':tasks',[]); list.splice(idx,1); save(id+':tasks',list); renderTasks(id); renderDashboard();}
@@ -419,7 +376,6 @@ function renderTasks(id){
     </div>`;
   }).join('');
 }
-
 function addImages(ev,id){
   const files=Array.from(ev.target.files||[]);
   const jobs=files.map(f=> compressImage(f,1280,0.8));
@@ -443,62 +399,35 @@ function renderGal(id){
 }
 function zoom(id,idx){ const gal=load(id+':gal',[]); const m=document.getElementById('modal'); const i=document.getElementById('modalImg'); i.src=gal[idx]; m.style.display='flex'; }
 
-/* ====== Registros / Gráfica ====== */
 function addRegistro(id){
   const ec=parseFloat(document.getElementById(id+'-ec').value);
   const ph=parseFloat(document.getElementById(id+'-ph').value);
-  const t =parseFloat(document.getElementById(id+'-t').value);
-  const hr=parseFloat(document.getElementById(id+'-hr').value);
-  if([ec,ph].some(x=>isNaN(x))) return alert('Completa al menos EC y pH');
-  const regs=load(id+':regs',[]);
-  regs.unshift({ec,ph,t:isNaN(t)?null:t,hr:isNaN(hr)?null:hr,fecha:todayISO()});
-  save(id+':regs',regs.slice(0,240));
-  save(id+':ultRiego',Date.now());
-  ['ec','ph','t','hr'].forEach(x=>document.getElementById(id+'-'+x).value='');
+  if(isNaN(ec)||isNaN(ph)) return alert('Completa EC y pH');
+  const regs=load(id+':regs',[]); regs.unshift({ec,ph,fecha:todayISO()});
+  save(id+':regs',regs.slice(0,180));
+  document.getElementById(id+'-ec').value=''; document.getElementById(id+'-ph').value='';
   renderRegs(id); renderDashboard(); updateChart();
 }
 function borrarRegistros(id){ if(!confirm('¿Borrar todos los registros?'))return; save(id+':regs',[]); renderRegs(id); renderDashboard(); updateChart();}
 function renderRegs(id){
   const tbody=document.getElementById(id+'-tabla'); if(!tbody) return;
   const regs=load(id+':regs',[]);
-  tbody.innerHTML = regs.map(r=>`<tr>
-    <td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha}</td>
-    <td style="padding:6px;border-bottom:1px solid var(--line)">${(r.ec??'')}</td>
-    <td style="padding:6px;border-bottom:1px solid var(--line)">${(r.ph??'')}</td>
-    <td style="padding:6px;border-bottom:1px solid var(--line)">${(r.t??'')}</td>
-    <td style="padding:6px;border-bottom:1px solid var(--line)">${(r.hr??'')}</td>
-  </tr>`).join('');
+  tbody.innerHTML = regs.map(r=>`<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ec}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ph}</td></tr>`).join('');
 }
 
 /* ====== Dashboard ====== */
 function renderDashboard(){
-  // Próximas tareas
   const all=CULTIVOS.flatMap(c=>load(c.id+':tasks',[]).map(t=>({...t,cultivo:c.titulo,emoji:c.emoji})));
   const prox=all.filter(t=>!t.done).sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999')).slice(0,8);
   document.getElementById('proxTareas').innerHTML = prox.length
     ? prox.map(t=>`<div class="task"><div><b>${t.text}</b><br><small>${t.emoji} ${t.cultivo} · ${t.date||'Sin fecha'}</small></div></div>`).join('')
     : '<div class="muted">No hay tareas próximas.</div>';
-
-  // Últimos registros
   const ul=CULTIVOS.flatMap(c=> (load(c.id+':regs',[])[0]? [{cultivo:c.titulo, ...load(c.id+':regs',[])[0]}]:[]));
   document.getElementById('ultimosReg').innerHTML = ul.length
-    ? '<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Cultivo</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Fecha</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">EC</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">pH</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">T</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">HR</th></tr></thead><tbody>'
-      + ul.map(r=>`<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${r.cultivo}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ec??''}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ph??''}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.t??''}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.hr??''}</td></tr>`).join('')
+    ? '<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Cultivo</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Fecha</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">EC</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">pH</th></tr></thead><tbody>'
+      + ul.map(r=>`<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${r.cultivo}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ec}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ph}</td></tr>`).join('')
       + '</tbody></table>'
     : '<div class="muted">Aún no hay registros.</div>';
-
-  // KPIs
-  const loc=load('loc');
-  document.getElementById('locName').textContent = loc.nombre || 'Mi ubicación';
-  const lastWaterDays = (()=> {
-    const t = Math.min(...CULTIVOS.map(c=>load(c.id+':ultRiego',Infinity)));
-    if(!isFinite(t)) return '—';
-    return Math.max(0, Math.floor((Date.now()-t)/86400000));
-  })();
-  document.getElementById('kpiRiego').textContent = lastWaterDays;
-  const nextTask = prox[0]?.date || '—';
-  document.getElementById('kpiTask').textContent = nextTask;
-  document.getElementById('kpiEstado').textContent = 'OK';
 }
 
 /* ====== Tiempo (Open-Meteo) ====== */
@@ -515,11 +444,9 @@ function WICON(code){
 async function loadWeather(){
   const loc=load('loc'); document.getElementById('locName').textContent = loc.nombre || 'Mi ubicación';
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Madrid";
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&current=temperature_2m&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=${encodeURIComponent(tz)}`;
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=${encodeURIComponent(tz)}`;
   try{
-    const res = await fetch(url); const j = await res.json();
-    document.getElementById('kpiTemp').textContent = Math.round(j.current?.temperature_2m ?? '-');
-    const d = j.daily;
+    const res = await fetch(url); const j = await res.json(); const d = j.daily;
     const days = d.time.map((t,i)=>({
       date: t, code: d.weathercode[i], tmax: d.temperature_2m_max[i], tmin: d.temperature_2m_min[i], pr: d.precipitation_probability_max[i], mm: d.precipitation_sum[i]
     }));
@@ -537,22 +464,16 @@ async function loadWeather(){
     else if((t0.pr>=30||t1.pr>=30) || (t0.mm>=1 || t1.mm>=1)){ msg = 'Puede llover algo. 🔶 Ajusta riego y vigila drenaje.'; }
     document.getElementById('rainAdvice').textContent=msg;
     save('weatherCache', {when:Date.now(), days, msg, loc});
-    maybeNotifyRain(msg);
   }catch(e){
-    const cache=load('weatherCache'); if(cache){
-      document.getElementById('rainAdvice').textContent=cache.msg||'Offline';
-      document.getElementById('wgrid').innerHTML = cache.days.map(x=>`
-        <div class="wday">
-          <div class="d">${new Date(x.date).toLocaleDateString('es-ES',{weekday:'short'})}</div>
-          <div class="ico">${WICON(x.code)}</div>
-          <div>${Math.round(x.tmax)}° / ${Math.round(x.tmin)}°</div>
-          <div class="${x.pr>=60?'danger': x.pr>=30?'warn':''}">${x.pr}%</div>
-          <div class="${x.mm>=5?'danger': x.mm>=1?'warn':''}">${x.mm.toFixed(1)} mm</div>
-        </div>`).join('');
-    } else {
-      document.getElementById('wgrid').innerHTML = '<div class="muted">No se pudo cargar el tiempo.</div>';
-      document.getElementById('rainAdvice').textContent='Reintenta más tarde';
-    }
+    const cache=load('weatherCache'); if(cache){ document.getElementById('rainAdvice').textContent=cache.msg||'Offline'; document.getElementById('wgrid').innerHTML = cache.days.map(x=>`
+      <div class="wday">
+        <div class="d">${new Date(x.date).toLocaleDateString('es-ES',{weekday:'short'})}</div>
+        <div class="ico">${WICON(x.code)}</div>
+        <div>${Math.round(x.tmax)}° / ${Math.round(x.tmin)}°</div>
+        <div class="${x.pr>=60?'danger': x.pr>=30?'warn':''}">${x.pr}%</div>
+        <div class="${x.mm>=5?'danger': x.mm>=1?'warn':''}">${x.mm.toFixed(1)} mm</div>
+      </div>`).join(''); }
+    else { document.getElementById('wgrid').innerHTML = '<div class="muted">No se pudo cargar el tiempo.</div>'; document.getElementById('rainAdvice').textContent='Reintenta más tarde'; }
   }
 }
 
@@ -592,50 +513,6 @@ document.getElementById('btn-notify').onclick=enableNotifications;
 document.getElementById('btn-test-notify').onclick=testNotify;
 updateNotifyState();
 
-function maybeNotifyRain(msg){
-  if(Notification?.permission!=='granted') return;
-  if(msg.includes('lluvia alta')){
-    const last = load('lastRainNotify',0);
-    if(Date.now()-last > 6*3600e3){ new Notification('⚠️ Lluvia alta prevista', {body: msg}); save('lastRainNotify', Date.now()); }
-  }
-}
-function checkDueTasksAndNotify(){
-  if(Notification?.permission!=='granted') return;
-  const notified = load('notifiedTasks',{});
-  for(const c of CULTIVOS){
-    const tasks = load(c.id+':tasks',[]);
-    tasks.forEach(t=>{
-      if(t.done) return;
-      if(t.date===todayISO()){
-        const key = t.id || (t.text+'@'+t.date);
-        if(!notified[key]){
-          new Notification('📅 Tarea para HOY', { body: `${c.titulo}: ${t.text}` });
-          notified[key]=true;
-        }
-      }
-    });
-  }
-  save('notifiedTasks', notified);
-}
-function scheduleDueChecks(){
-  checkDueTasksAndNotify();
-  clearTimeout(window.__dueTimer);
-  window.__dueTimer = setTimeout(scheduleDueChecks, 60*60*1000); // cada hora
-}
-function maybePhaseHints(){
-  if(Notification?.permission!=='granted') return;
-  for(const c of CULTIVOS){
-    const f = load(c.id+':fase','Vegetativo');
-    if(f==='Floración'){
-      const last = load(c.id+':pkHint',0);
-      if(Date.now()-last>24*3600e3){
-        new Notification(`🔔 ${c.titulo}`, {body:'Estás en Floración. Recuerda PK en semanas 3–6.'});
-        save(c.id+':pkHint',Date.now());
-      }
-    }
-  }
-}
-
 /* ====== Navegación ====== */
 function show(tab){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
@@ -645,8 +522,6 @@ function show(tab){
   if(['gelato','acai','exterior','limoneros'].includes(tab)){
     renderTasks(tab); renderGal(tab); renderRegs(tab);
     const ta=document.getElementById(tab+'-notas'); if(ta){ ta.value=load(tab+':notas',''); ta.oninput=()=>save(tab+':notas',ta.value); }
-    document.getElementById(tab+'-reco').textContent=recomendaciones(tab);
-    genQR(tab);
     window.scrollTo({top:0,behavior:'smooth'});
   }
   if(tab==='dashboard'){ renderDashboard(); loadWeather(); updateChart(); }
@@ -677,14 +552,44 @@ function compressImage(file, maxW=1280, quality=0.8){
   });
 }
 
-/* ====== Canvas Chart (EC/pH/T/HR) ====== */
+/* ====== Tareas / Registros / Dashboard / Chart ====== */
+function addRegistro(id){
+  const ec=parseFloat(document.getElementById(id+'-ec').value);
+  const ph=parseFloat(document.getElementById(id+'-ph').value);
+  if(isNaN(ec)||isNaN(ph)) return alert('Completa EC y pH');
+  const regs=load(id+':regs',[]); regs.unshift({ec,ph,fecha:todayISO()});
+  save(id+':regs',regs.slice(0,180));
+  document.getElementById(id+'-ec').value=''; document.getElementById(id+'-ph').value='';
+  renderRegs(id); renderDashboard(); updateChart();
+}
+function borrarRegistros(id){ if(!confirm('¿Borrar todos los registros?'))return; save(id+':regs',[]); renderRegs(id); renderDashboard(); updateChart();}
+function renderRegs(id){
+  const tbody=document.getElementById(id+'-tabla'); if(!tbody) return;
+  const regs=load(id+':regs',[]);
+  tbody.innerHTML = regs.map(r=>`<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ec}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ph}</td></tr>`).join('');
+}
+function renderDashboard(){
+  const all=CULTIVOS.flatMap(c=>load(c.id+':tasks',[]).map(t=>({...t,cultivo:c.titulo,emoji:c.emoji})));
+  const prox=all.filter(t=>!t.done).sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999')).slice(0,8);
+  document.getElementById('proxTareas').innerHTML = prox.length
+    ? prox.map(t=>`<div class="task"><div><b>${t.text}</b><br><small>${t.emoji} ${t.cultivo} · ${t.date||'Sin fecha'}</small></div></div>`).join('')
+    : '<div class="muted">No hay tareas próximas.</div>';
+  const ul=CULTIVOS.flatMap(c=> (load(c.id+':regs',[])[0]? [{cultivo:c.titulo, ...load(c.id+':regs',[])[0]}]:[]));
+  document.getElementById('ultimosReg').innerHTML = ul.length
+    ? '<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Cultivo</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Fecha</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">EC</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">pH</th></tr></thead><tbody>'
+      + ul.map(r=>`<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${r.cultivo}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ec}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ph}</td></tr>`).join('')
+      + '</tbody></table>'
+    : '<div class="muted">Aún no hay registros.</div>';
+}
+
+/* ====== Selector cultivo + Gráfica ====== */
 const chartCanvas = document.getElementById('chart');
 const chartCtx = chartCanvas.getContext('2d');
 document.getElementById('chart-cultivo').addEventListener('change', updateChart);
 
 function updateChart(){
   const sel = document.getElementById('chart-cultivo').value;
-  const regs = load(sel+':regs',[]).slice(0,90).reverse(); // cronológico
+  const regs = load(sel+':regs',[]).slice(0,60).reverse(); // últimos 60, cronológico
   drawChart(regs);
 }
 function drawChart(regs){
@@ -692,71 +597,87 @@ function drawChart(regs){
   chartCtx.clearRect(0,0,W,H);
   chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card').trim();
   chartCtx.fillRect(0,0,W,H);
-  const m = {l:40, r:40, t:24, b:24};
-  // Ejes guías
+  const m = {l:40, r:40, t:20, b:24};
+  const ecVals = regs.map(r=>r.ec);
+  const phVals = regs.map(r=>r.ph);
+  const xCount = Math.max(2, regs.length||2);
+  const ecMin = Math.min(0.4, Math.min(...ecVals, 9999)); const ecMax = Math.max(2.2, Math.max(...ecVals, 0));
+  const phMin = 5.5, phMax = 6.8;
+
   chartCtx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--line').trim();
   chartCtx.lineWidth = 1; chartCtx.setLineDash([4,4]);
   for(let i=0;i<=6;i++){
     const y = m.t + (H-m.t-m.b)*i/6;
     chartCtx.beginPath(); chartCtx.moveTo(m.l,y); chartCtx.lineTo(W-m.r,y); chartCtx.stroke();
+    const ecLabel = (ecMax - (ecMax-ecMin)*i/6).toFixed(1);
+    chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
+    chartCtx.font = '12px system-ui';
+    chartCtx.fillText(ecLabel, 6, y+4);
+    const phLabel = (phMin + (phMax-phMin)*i/6).toFixed(1);
+    chartCtx.fillText(phLabel, W-30, y+4);
   }
   chartCtx.setLineDash([]);
 
-  // Escalas
-  const xCount = Math.max(2, regs.length);
-  const ecVals = regs.map(r=>r.ec).filter(v=>v!=null);
-  const ecMin = Math.min(0.4, Math.min(...ecVals, 9999)); const ecMax = Math.max(2.2, Math.max(...ecVals, 0));
-  const phMin = 5.5, phMax = 6.9;
-  const tMin  = 16, tMax = 32;
-  const hMin  = 30, hMax = 80;
   const x = i => m.l + (W-m.l-m.r) * (i/(xCount-1||1));
   const yEC = v => m.t + (H-m.t-m.b) * (1 - (v-ecMin)/(ecMax-ecMin||1));
   const yPH = v => m.t + (H-m.t-m.b) * (1 - (v-phMin)/(phMax-phMin||1));
-  const yT  = v => m.t + (H-m.t-m.b) * (1 - (v-tMin)/(tMax-tMin||1));
-  const yH  = v => m.t + (H-m.t-m.b) * (1 - (v-hMin)/(hMax-hMin||1));
 
-  // Series
-  function drawLine(vals, yfn, color, dash=[]){
-    chartCtx.strokeStyle = color; chartCtx.lineWidth=2; chartCtx.setLineDash(dash);
-    chartCtx.beginPath();
-    vals.forEach((v,i)=>{ if(v==null)return; const xx=x(i), yy=yfn(v); if(chartCtx.currentPathStarted){ chartCtx.lineTo(xx,yy);}else{chartCtx.moveTo(xx,yy); chartCtx.currentPathStarted=true;} });
-    chartCtx.stroke(); chartCtx.setLineDash([]); chartCtx.currentPathStarted=false;
-    chartCtx.fillStyle=color; vals.forEach((v,i)=>{ if(v==null)return; chartCtx.beginPath(); chartCtx.arc(x(i), yfn(v), 2.5, 0, Math.PI*2); chartCtx.fill(); });
-  }
-  drawLine(regs.map(r=>r.ec??null), yEC, '#10b981'); // EC
-  drawLine(regs.map(r=>r.ph??null), yPH, '#0ea5a4', [6,4]); // pH
-  drawLine(regs.map(r=>r.t ??null), yT , '#f59e0b'); // T
-  drawLine(regs.map(r=>r.hr??null), yH , '#60a5fa'); // HR
+  chartCtx.strokeStyle = '#0ea5a4'; chartCtx.lineWidth=2;
+  chartCtx.beginPath();
+  regs.forEach((r,i)=>{ const xx=x(i), yy=yEC(r.ec); i? chartCtx.lineTo(xx,yy):chartCtx.moveTo(xx,yy); });
+  chartCtx.stroke();
 
-  // Fechas
+  chartCtx.strokeStyle = '#10b981'; chartCtx.lineWidth=2; chartCtx.setLineDash([6,4]);
+  chartCtx.beginPath();
+  regs.forEach((r,i)=>{ const xx=x(i), yy=yPH(r.ph); i? chartCtx.lineTo(xx,yy):chartCtx.moveTo(xx,yy); });
+  chartCtx.stroke(); chartCtx.setLineDash([]);
+
+  chartCtx.fillStyle='#0ea5a4'; regs.forEach((r,i)=>{ chartCtx.beginPath(); chartCtx.arc(x(i), yEC(r.ec), 2.5, 0, Math.PI*2); chartCtx.fill(); });
+  chartCtx.fillStyle='#10b981'; regs.forEach((r,i)=>{ chartCtx.beginPath(); chartCtx.arc(x(i), yPH(r.ph), 2.5, 0, Math.PI*2); chartCtx.fill(); });
+
   chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
   chartCtx.font='11px system-ui';
   regs.forEach((r,i)=>{ if(i%3===0){ chartCtx.fillText(r.fecha.slice(5), x(i)-12, H-6); } });
 }
 
-/* ====== QR sencillo (usa servicio de imagen) ======
-   Si prefieres offline total, luego te paso una versión canvas sin red. */
-function genQR(id){
-  const el = document.getElementById(id+'-qr');
-  const url = location.href.split('#')[0] + '#'+id; // hash para abrir ficha
-  const img = new Image();
-  img.alt='QR'; img.loading='lazy';
-  img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&data='+encodeURIComponent(url);
-  img.style.maxWidth='100%'; img.style.maxHeight='100%';
-  el.innerHTML=''; el.appendChild(img);
-}
-
 /* ====== Inicio ====== */
+function renderDashboard(){ /* ya definida arriba */ }
 window.addEventListener('load', ()=>{
-  renderDashboard(); loadWeather(); scheduleDueChecks(); updateChart();
+  renderDashboard(); loadWeather(); updateChart();
   ['gelato','acai','exterior','limoneros'].forEach(id=>{
     renderTasks(id); renderGal(id); renderRegs(id);
-    const ta=document.getElementById(id+'-notas'); if(ta){ ta.value=load(id+':notas',''); ta.oninput=()=>save(id+':notas',ta.value);}
-    document.getElementById(id+'-reco').textContent=recomendaciones(id);
-    genQR(id);
+    const ta=document.getElementById(id+'-notas'); if(ta){ ta.value=load(id+':notas',''); ta.oninput=()=>save(id+':notas',ta.value); }
   });
   if('serviceWorker'in navigator){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+  // revisa tareas cada hora para posibles notificaciones
+  scheduleDueChecks();
 });
+
+/* ====== Notificaciones de tareas ====== */
+function scheduleDueChecks(){
+  if(!('Notification' in window)) return;
+  checkDueTasksAndNotify();
+  clearTimeout(window.__dueTimer);
+  window.__dueTimer = setTimeout(scheduleDueChecks, 60*60*1000);
+}
+function checkDueTasksAndNotify(){
+  if(Notification?.permission!=='granted') return;
+  const notified = load('notifiedTasks',{});
+  for(const c of CULTIVOS){
+    const tasks = load(c.id+':tasks',[]);
+    tasks.forEach(t=>{
+      if(t.done) return;
+      if(t.date===todayISO()){
+        const key = t.id || (t.text+'@'+t.date);
+        if(!notified[key]){
+          new Notification('📅 Tarea para HOY', { body: `${c.titulo}: ${t.text}` });
+          notified[key]=true;
+        }
+      }
+    });
+  }
+  save('notifiedTasks', notified);
+}
 </script>
 </body>
 </html>
