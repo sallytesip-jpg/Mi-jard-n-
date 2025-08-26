@@ -18,90 +18,85 @@
     --bg:#f6f7fb; --card:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e5e7eb;
     --shadow:0 24px 60px -20px rgba(2,6,23,.15);
   }
-  *{box-sizing:border-box}
-  html,body{height:100%}
+  *{box-sizing:border-box} html,body{height:100%}
   body{
     margin:0; color:var(--ink);
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif;
-    background: radial-gradient(1200px 800px at 20% -10%, #0c1a2a 0%, var(--bg) 40%, var(--bg) 100%);
-    background-attachment: fixed;
+    background:var(--bg) no-repeat fixed center/cover;
   }
-  /* Marca de agua/logo gigante (puedes subir icons/cultivo-logo.png) */
+  /* Marca de agua del logo */
   body::before{
-    content:""; position:fixed; inset:0; z-index:-1;
-    background: url("icons/cultivo-logo.png") center/60% no-repeat;
-    opacity:.15; pointer-events:none;
+    content:""; position:fixed; inset:0; z-index:-2;
+    background:
+      radial-gradient(1200px 800px at 20% -10%, #0c1a2a 0%, var(--bg) 40%, var(--bg) 100%);
   }
-  [data-theme="light"] body::before{ opacity:.10 }
-
-  .aurora{position:fixed;inset:-20% -10% auto -10%;height:42vh;z-index:-2;background:
-    radial-gradient(40% 60% at 20% 30%, rgba(16,185,129,.30), transparent 60%),
-    radial-gradient(30% 50% at 80% 20%, rgba(59,130,246,.22), transparent 60%),
-    radial-gradient(25% 45% at 60% 70%, rgba(99,102,241,.18), transparent 60%);
-    filter:blur(42px);animation:drift 18s ease-in-out infinite alternate}
-  @keyframes drift{from{transform:translateY(0)}to{transform:translateY(30px)}}
+  body::after{
+    content:""; position:fixed; inset:0; z-index:-1;
+    background-image:url('icons/logo.png'); /* <-- Asegúrate de tener PNG transparente aquí */
+    background-repeat:no-repeat; background-position:center 28vh;
+    background-size: min(86vw, 950px);
+    opacity:.06; pointer-events:none; filter:contrast(90%) saturate(90%);
+  }
 
   header{position:sticky;top:0;background:rgba(11,18,32,.78);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:6}
   [data-theme="light"] header{background:rgba(255,255,255,.85)}
-  .max{max-width:1024px;margin:0 auto;padding:10px 12px}
-  .brand{display:flex;gap:12px;align-items:center}
-  .logo{width:38px;height:38px;border-radius:12px;background:var(--accent2);display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:0 10px 30px -12px rgba(16,185,129,.6);overflow:hidden}
-  .logo img{width:100%;height:100%;object-fit:cover;border-radius:12px}
+  .max{max-width:1080px;margin:0 auto;padding:10px 12px}
+  .brand{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .logo{width:38px;height:38px;border-radius:10px;overflow:hidden;display:grid;place-items:center;background:var(--accent2);box-shadow:0 10px 30px -12px rgba(16,185,129,.6)}
+  .logo img{width:100%;height:100%;object-fit:cover}
   .muted{color:var(--muted)}
-  .wrap{max-width:1024px;margin:10px auto 88px;padding:0 12px}
+  .wrap{max-width:1080px;margin:14px auto 92px;padding:0 12px}
   .grid{display:grid;gap:12px}
-  @media(min-width:780px){.grid{grid-template-columns:1fr 1fr}}
+  @media(min-width:860px){.grid{grid-template-columns:1.4fr 1fr}}
   .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow)}
-  h2{margin:0 0 8px 0}
+  h2{margin:0 0 10px 0}
+  h3{margin:0 0 8px 0}
   input,textarea,select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px}
   textarea{min-height:110px;resize:vertical}
   button{border:0;border-radius:12px;padding:10px 12px;font-weight:700;cursor:pointer}
   .btn{background:var(--accent);color:#fff} .btn.sec{background:transparent;border:1px solid var(--line);color:var(--ink)}
-
   .list{display:flex;flex-direction:column;gap:8px}
   .task{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
   .task small{color:var(--muted)} .task.done{opacity:.6;text-decoration:line-through}
   .pill{display:inline-block;background:rgba(16,185,129,.12);color:#a7f3d0;padding:4px 8px;border-radius:999px;font-size:12px}
   [data-theme="light"] .pill{color:#065f46}
   .warn{color:var(--warn)} .danger{color:var(--danger)}
-
   .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
   .thumb{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--card);cursor:pointer}
   .thumb img{display:block;width:100%;height:120px;object-fit:cover}
   .thumb button{position:absolute;top:6px;right:6px;background:#ef4444;color:#fff;border:0;border-radius:8px;padding:4px 6px;font-size:12px;cursor:pointer}
-
   .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:50}
   .modal img{max-width:92vw;max-height:84vh;border-radius:12px}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
+  /* Tab bar */
   .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:7}
-  .tabwrap{max-width:1024px;margin:12px auto;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+  .tabwrap{max-width:1080px;margin:12px auto;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
   [data-theme="light"] .tabwrap{background:rgba(255,255,255,.92)}
   .tabgrid{display:grid;grid-template-columns:repeat(7,1fr)}
   .tabbtn{padding:10px 6px;display:flex;flex-direction:column;gap:2px;align-items:center;color:var(--muted);font-size:12px;font-weight:700;background:transparent;border:0}
   .tabbtn.active{color:var(--ink)}
   .view{display:none} .view.active{display:block}
-  .row{display:flex;gap:8px;flex-wrap:wrap}
 
   /* Weather */
-  .w-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-  .wday{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center}
+  .w-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+  .wday{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
   .wday .ico{font-size:20px}
   .wday .d{font-weight:700}
 
   /* Chart */
   .chartwrap{position:relative}
-  canvas.chart{width:100%; height:220px; border:1px solid var(--line); border-radius:12px; background:var(--card)}
+  canvas.chart{width:100%; height:260px; border:1px solid var(--line); border-radius:12px; background:var(--card)}
 
-  /* Extras */
-  .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:12px}
-  .badge{display:inline-block;padding:2px 6px;border-radius:6px;font-size:11px;background:rgba(16,185,129,.12);color:#a7f3d0}
-  .table{width:100%;border-collapse:collapse}
-  .table th,.table td{padding:6px;border-bottom:1px solid var(--line);text-align:left}
+  /* Dashboard resumen */
+  .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  @media(min-width:720px){.kpis{grid-template-columns:repeat(4,1fr)}}
+  .kpi{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--card)}
+  .kpi b{font-size:18px}
+
+  .qrcode{width:140px;height:140px;border-radius:12px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;overflow:hidden}
 </style>
 </head>
 <body>
-<div class="aurora"></div>
-
 <header>
   <div class="max">
     <div class="brand">
@@ -111,7 +106,7 @@
         <div class="muted" style="font-size:12px">PWA v6 PRO+ · Tiempo · Notif · Galería · Gráficas · Fases · QR</div>
       </div>
       <div style="margin-left:auto" class="row">
-        <button id="btn-theme" class="btn sec" title="Tema">Tema: Auto</button>
+        <button id="btn-theme" class="btn sec" title="Tema">Tema</button>
         <button id="btn-install" class="btn sec" style="display:none">Instalar</button>
         <button id="btn-backup" class="btn sec" title="Descargar copia">Backup</button>
         <label class="btn sec" title="Restaurar"><input type="file" id="restore" accept="application/json" style="display:none">Restore</label>
@@ -125,29 +120,39 @@
   <section id="v-dashboard" class="view active">
     <div class="grid">
       <div class="card">
-        <div class="row" style="justify-content:space-between;align-items:center">
-          <h2>🌧️ Tiempo · <span id="locName">La Bisbal del Penedès</span></h2>
-          <div id="rainAdvice" class="pill">Cargando…</div>
+        <h2>📊 Resumen rápido</h2>
+        <div id="kpis" class="kpis">
+          <div class="kpi"><div class="muted">🌡️ Ahora</div><b id="kpiTemp">—</b><div class="muted">°C</div></div>
+          <div class="kpi"><div class="muted">💧 Último riego</div><b id="kpiRiego">—</b><div class="muted">días</div></div>
+          <div class="kpi"><div class="muted">📅 Próxima tarea</div><b id="kpiTask">—</b><div class="muted">fecha</div></div>
+          <div class="kpi"><div class="muted">🟢 Estado</div><b id="kpiEstado">OK</b><div class="muted">cultivos</div></div>
         </div>
-        <div class="muted" style="font-size:12px;margin:4px 0">Max/Mín, % lluvia, mm acumulados · 7 días (Open-Meteo)</div>
-        <div id="wgrid" class="w-grid"></div>
       </div>
 
       <div class="card">
-        <h2>📈 Gráficas EC/pH/T/HR</h2>
-        <div class="row">
-          <label> Cultivo </label>
-          <select id="chart-cultivo">
-            <option value="gelato">Gelato</option>
-            <option value="acai">Açaí</option>
-            <option value="exterior">Exterior</option>
-            <option value="limoneros">Limoneros</option>
-          </select>
+        <h2>🌧️ Tiempo · <span id="locName">La Bisbal del Penedès</span></h2>
+        <div class="muted" style="font-size:12px;margin:4px 0">Max/Mín, % lluvia, mm acumulados · 7 días (Open-Meteo)</div>
+        <div id="rainAdvice" class="pill">Cargando…</div>
+        <div id="wgrid" class="w-grid" style="margin-top:10px"></div>
+      </div>
+
+      <div class="card" style="grid-column:1/-1">
+        <div class="row" style="justify-content:space-between;align-items:center">
+          <h2>📈 Gráficas EC/pH/Temp/HR</h2>
+          <div class="row">
+            <label>Cultivo</label>
+            <select id="chart-cultivo">
+              <option value="gelato">Gelato</option>
+              <option value="acai">Açaí</option>
+              <option value="exterior">Exterior</option>
+              <option value="limoneros">Limoneros</option>
+            </select>
+          </div>
         </div>
         <div class="chartwrap" style="margin-top:8px">
-          <canvas id="chart" class="chart" width="960" height="300"></canvas>
+          <canvas id="chart" class="chart" width="1080" height="300"></canvas>
         </div>
-        <div class="muted" style="font-size:12px;margin-top:6px">EC y pH en líneas; Temperatura y HR añadidas.</div>
+        <div class="muted" style="font-size:12px;margin-top:6px">EC (verde), pH (turquesa), T (amarillo), HR (azul). Arrastra la página para ver más.</div>
       </div>
 
       <div class="card">
@@ -159,30 +164,10 @@
         <h2>🧪 Últimos registros</h2>
         <div id="ultimosReg"></div>
       </div>
-
-      <div class="card">
-        <h2>🧮 Calculadoras rápidas</h2>
-        <div class="row">
-          <div><label>Litros</label><br><input id="calcL" type="number" value="10" min="1" style="width:120px"></div>
-          <div class="pill">H₂O₂ 3%: <b id="h2o2">30</b> ml</div>
-          <div class="pill">Micorrizas: <b id="mico">2.5</b> g</div>
-          <div class="pill">Neem: <b id="neem">30</b> ml + Jabón: <b id="jabon">10</b> ml</div>
-        </div>
-        <div class="row" style="margin-top:8px">
-          <div><label>PPFD</label><br><input id="ppfd" type="number" value="800" min="0" style="width:120px"></div>
-          <div><label>Horas</label><br><input id="horas" type="number" value="12" min="1" max="24" style="width:100px"></div>
-          <div class="pill">DLI ≈ <b id="dli">34.6</b> mol/m²/d</div>
-        </div>
-        <div class="row" style="margin-top:8px">
-          <div><label>Temp (°C)</label><br><input id="t" type="number" value="26" step="0.1" style="width:100px"></div>
-          <div><label>HR (%)</label><br><input id="rh" type="number" value="55" step="1" style="width:100px"></div>
-          <div class="pill">VPD ≈ <b id="vpd">1.28</b> kPa</div>
-        </div>
-      </div>
     </div>
   </section>
 
-  <!-- Cultivos renderizados dinámicamente -->
+  <!-- Cultivos -->
   <div id="cultivos"></div>
 
   <!-- Notas -->
@@ -199,28 +184,14 @@
     <div class="grid">
       <div class="card">
         <h2>🌙 Apariencia</h2>
-        <p class="muted">Modo oscuro <b>automático</b> (según tu móvil) o manual.</p>
+        <p class="muted">Modo oscuro/claro o automático.</p>
         <div class="row"><button id="btn-theme2" class="btn">Cambiar tema</button></div>
         <p id="themeState" class="muted" style="margin-top:6px">Tema actual: Auto</p>
       </div>
 
       <div class="card">
-        <h2>🎨 Paleta</h2>
-        <div class="row">
-          <select id="palette">
-            <option value="dark">Dark (actual)</option>
-            <option value="jungle">Jungle</option>
-            <option value="minimal">Minimal</option>
-            <option value="sunset">Sunset</option>
-          </select>
-          <button class="btn" onclick="applyPaletteSel()">Aplicar</button>
-        </div>
-        <p class="muted" style="margin-top:6px">Cambia colores base sin afectar al modo claro/oscuro.</p>
-      </div>
-
-      <div class="card">
         <h2>🔔 Notificaciones</h2>
-        <p class="muted">Avisos de tareas de hoy y lluvia fuerte (24–48h).</p>
+        <p class="muted">Avisos de tareas del día y lluvia alta.</p>
         <div class="row">
           <button id="btn-notify" class="btn">Activar notificaciones</button>
           <button id="btn-test-notify" class="btn sec">Probar aviso</button>
@@ -236,7 +207,6 @@
           <div><label>Lon</label><br><input id="loc-lon" value="1.44" style="width:110px"></div>
           <button class="btn" onclick="saveLocation()">Guardar</button>
         </div>
-        <p class="muted" style="margin-top:6px">Ajusta las coordenadas si lo necesitas.</p>
       </div>
 
       <div class="card">
@@ -245,13 +215,12 @@
           <button class="btn sec" onclick="clearImages()">Vaciar galerías</button>
           <button class="btn sec" onclick="clearAll()">Borrar todo</button>
         </div>
-        <p class="muted" style="margin-top:6px">Útil si el almacenamiento del navegador se llena.</p>
       </div>
     </div>
   </section>
 </main>
 
-<!-- Tabs -->
+<!-- Tab bar -->
 <nav class="tabbar">
   <div class="tabwrap">
     <div class="tabgrid">
@@ -266,32 +235,34 @@
   </div>
 </nav>
 
-<!-- Modal -->
+<!-- Modal de imagen -->
 <div id="modal" class="modal" onclick="this.style.display='none'"><img id="modalImg" alt="zoom"></div>
 
 <script>
-/* =================== Storage & utils =================== */
+/* ====== Estado y utilidades ====== */
 const KEY = (k)=>`cpV6:${k}`;
 const load=(k,def)=>{try{const v=localStorage.getItem(KEY(k));return v?JSON.parse(v):def}catch{return def}};
 const save=(k,v)=>localStorage.setItem(KEY(k),JSON.stringify(v));
 const todayISO=()=>new Date().toISOString().slice(0,10);
-
 const CULTIVOS=[
   {id:'gelato', titulo:'Gelato (Interior)', emoji:'🌿'},
   {id:'acai', titulo:'Açaí (Interior)', emoji:'🍇'},
   {id:'exterior', titulo:'Exterior', emoji:'☀️'},
   {id:'limoneros', titulo:'Limoneros', emoji:'🍋'}
 ];
+const FASES = ['Germinación','Vegetativo','Floración','Maduración'];
+
 CULTIVOS.forEach(c=>{
   if(!load(`${c.id}:tasks`)) save(`${c.id}:tasks`,[]);
   if(!load(`${c.id}:gal`))   save(`${c.id}:gal`,[]);
   if(!load(`${c.id}:regs`))  save(`${c.id}:regs`,[]);
   if(!load(`${c.id}:notas`)) save(`${c.id}:notas`,'');
-  if(!load(`${c.id}:fase`))  save(`${c.id}:fase`,{fase:'vegetativo',inicio:todayISO()});
+  if(!load(`${c.id}:fase`))  save(`${c.id}:fase`,'Vegetativo');
+  if(!load(`${c.id}:ultRiego`)) save(`${c.id}:ultRiego`,null);
 });
 if(!load('loc')) save('loc',{nombre:'La Bisbal del Penedès', lat:41.29, lon:1.44});
 
-/* =================== Tema / paleta =================== */
+/* ====== Tema ====== */
 function applyTheme(){
   const pref = load('theme','auto');
   document.getElementById('btn-theme').textContent = 'Tema: ' + (pref==='auto'?'Auto':pref==='light'?'Claro':'Oscuro');
@@ -316,28 +287,12 @@ document.getElementById('btn-theme2').onclick=cycleTheme;
 applyTheme();
 window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
 
-function applyPalette(p){
-  let vars={};
-  if(p==='jungle'){
-    vars={'--accent':'#0ea5a4','--accent2':'#16a34a','--bg':'#07121a','--card':'#0d1b24','--line':'#0f2430'};
-  }else if(p==='minimal'){
-    vars={'--bg':'#f7f8fb','--card':'#ffffff','--ink':'#0f172a','--muted':'#6b7280','--accent':'#0ea5a4','--line':'#e5e7eb'};
-  }else if(p==='sunset'){
-    vars={'--bg':'#0b1220','--card':'#111827','--accent':'#fb923c','--accent2':'#f97316'};
-  }else{ // dark
-    vars={'--bg':'#0b1220','--card':'#0f172a','--accent':'#0ea5a4','--accent2':'#10b981'};
-  }
-  const root=document.documentElement; Object.entries(vars).forEach(([k,v])=>root.style.setProperty(k,v));
-  save('palette', p);
-}
-function applyPaletteSel(){ applyPalette(document.getElementById('palette').value); }
-
-/* =================== PWA Install =================== */
+/* ====== PWA Install ====== */
 let deferredPrompt=null; const btnInstall=document.getElementById('btn-install');
 window.addEventListener('beforeinstallprompt', e=>{e.preventDefault(); deferredPrompt=e; btnInstall.style.display='inline-block';});
 btnInstall?.addEventListener('click', async ()=>{ if(!deferredPrompt) return; deferredPrompt.prompt(); const r=await deferredPrompt.userChoice; if(r.outcome==='accepted'){btnInstall.style.display='none';}});
 
-/* =================== Backup/Restore =================== */
+/* ====== Backup/Restore ====== */
 document.getElementById('btn-backup').onclick=()=>{
   const data = Object.fromEntries(Object.entries(localStorage).filter(([k])=>k.startsWith('cpV6:')));
   const blob = new Blob([JSON.stringify({when:new Date().toISOString(), data}, null, 2)], {type:'application/json'});
@@ -350,65 +305,19 @@ document.getElementById('restore').addEventListener('change',(e)=>{
   r.readAsText(f);
 });
 
-/* =================== Calculadoras =================== */
-function recalc(){
-  const L=parseFloat(document.getElementById('calcL').value||0);
-  document.getElementById('h2o2').textContent=(L*3).toFixed(0);
-  document.getElementById('mico').textContent=(L/4).toFixed(2);
-  document.getElementById('neem').textContent=(L*3).toFixed(0);
-  document.getElementById('jabon').textContent=(L*1).toFixed(0);
-  const ppfd=parseFloat(document.getElementById('ppfd').value||0);
-  const horas=parseFloat(document.getElementById('horas').value||0);
-  const dli=(ppfd*3600*horas/1e6); document.getElementById('dli').textContent=dli.toFixed(1);
-  const t=parseFloat(document.getElementById('t').value||0), rh=parseFloat(document.getElementById('rh').value||0);
-  const es=0.6108*Math.exp((17.27*t)/(t+237.3)); const ea=(rh/100)*es; const vpd=Math.max(0, es-ea);
-  document.getElementById('vpd').textContent=vpd.toFixed(2);
-}
-['calcL','ppfd','horas','t','rh'].forEach(id=>document.getElementById(id).addEventListener('input', recalc)); recalc();
-
-/* =================== Notas globales =================== */
+/* ====== Notas globales ====== */
 const ng=document.getElementById('notas-global'); ng.value=load('notasGlobal',''); ng.oninput=()=>save('notasGlobal',ng.value);
 
-/* =================== Secciones de cultivo =================== */
+/* ====== Secciones de cultivo ====== */
 function cultivoSection(c){
+  const fase = load(`${c.id}:fase`,'Vegetativo');
   return `
   <section id="v-${c.id}" class="view">
     <div class="grid">
       <div class="card">
-        <h2>${c.emoji} ${c.titulo} · Fase y riegos</h2>
-        <div class="row" style="gap:8px;align-items:flex-end">
-          <div>
-            <label>Fase</label><br>
-            <select id="${c.id}-fase">
-              <option value="germinacion">Germinación</option>
-              <option value="vegetativo">Vegetativo</option>
-              <option value="floracion">Floración</option>
-              <option value="maduracion">Maduración</option>
-            </select>
-          </div>
-          <div>
-            <label>Inicio fase</label><br>
-            <input id="${c.id}-fase-inicio" type="date">
-          </div>
-          <div class="pill">Días fase: <b id="${c.id}-dias-fase">0</b></div>
-          <button class="btn" onclick="saveFase('${c.id}')">Guardar fase</button>
-        </div>
-
-        <div class="row" style="margin-top:10px;gap:8px;align-items:flex-end">
-          <div><label>Litros</label><br><input id="${c.id}-rL" type="number" step="0.1" style="width:110px"></div>
-          <div><label>EC</label><br><input id="${c.id}-rEC" type="number" step="0.01" style="width:100px"></div>
-          <div><label>pH</label><br><input id="${c.id}-rPH" type="number" step="0.01" style="width:100px"></div>
-          <div><label>Temp °C</label><br><input id="${c.id}-rT" type="number" step="0.1" style="width:100px"></div>
-          <div><label>HR %</label><br><input id="${c.id}-rRH" type="number" step="1" style="width:100px"></div>
-          <button class="btn" onclick="registrarRiego('${c.id}')">💧 Registrar riego</button>
-        </div>
-        <p class="muted" style="margin-top:6px">Añade un registro al historial y actualiza alertas.</p>
-      </div>
-
-      <div class="card">
-        <h2>🗓️ Tareas</h2>
+        <h2>${c.emoji} ${c.titulo} · Tareas</h2>
         <div class="row">
-          <input id="${c.id}-task-text" placeholder="Ej: Micorrizas 1 g/4 L, pH 6.4">
+          <input id="${c.id}-task-text" placeholder="Ej: Riego 10 L, EC 1.6, pH 6.3">
           <input id="${c.id}-task-date" type="date">
           <button class="btn" onclick="addTask('${c.id}')">Añadir</button>
         </div>
@@ -416,48 +325,72 @@ function cultivoSection(c){
       </div>
 
       <div class="card">
-        <h2>📷 Galería</h2>
-        <input type="file" accept="image/*" multiple onchange="addImages(event,'${c.id}')">
-        <div id="${c.id}-gal" class="gallery" style="margin-top:8px"></div>
-        <p class="muted" style="font-size:12px;margin-top:6px">Se comprimen al subir para ahorrar espacio.</p>
-      </div>
-
-      <div class="card">
-        <h2>🧪 Registros EC / pH / T / HR</h2>
+        <h2>🧪 Registros EC/pH/Temp/HR</h2>
         <div class="row">
-          <input id="${c.id}-ec" type="number" step="0.01" placeholder="EC (mS/cm)">
-          <input id="${c.id}-ph" type="number" step="0.01" placeholder="pH">
-          <input id="${c.id}-t"  type="number" step="0.1" placeholder="Temp °C">
-          <input id="${c.id}-rh" type="number" step="1"   placeholder="HR %">
+          <input id="${c.id}-ec" type="number" step="0.01" placeholder="EC (mS/cm)" style="width:120px">
+          <input id="${c.id}-ph" type="number" step="0.01" placeholder="pH" style="width:110px">
+          <input id="${c.id}-t" type="number" step="0.1" placeholder="T °C" style="width:110px">
+          <input id="${c.id}-hr" type="number" step="1" placeholder="HR %" style="width:110px">
           <button class="btn" onclick="addRegistro('${c.id}')">Guardar</button>
           <button class="btn sec" onclick="borrarRegistros('${c.id}')">Borrar</button>
         </div>
-        <table class="table" style="margin-top:8px">
-          <thead><tr><th>Fecha</th><th>EC</th><th>pH</th><th>T °C</th><th>HR %</th></tr></thead>
+        <table style="width:100%;border-collapse:collapse;margin-top:8px">
+          <thead><tr>
+            <th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Fecha</th>
+            <th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">EC</th>
+            <th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">pH</th>
+            <th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">T</th>
+            <th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">HR</th>
+          </tr></thead>
           <tbody id="${c.id}-tabla"></tbody>
         </table>
       </div>
 
       <div class="card">
-        <h2>🔗 QR de planta/maceta</h2>
+        <h2>🌱 Fase & recomendaciones</h2>
         <div class="row">
-          <input id="${c.id}-pid" placeholder="ID planta (ej: EX-01)">
-          <button class="btn" onclick="mostrarQR('${c.id}')">Mostrar QR</button>
+          <select id="${c.id}-fase" onchange="setFase('${c.id}', this.value)">
+            ${FASES.map(f=>`<option ${f===fase?'selected':''}>${f}</option>`).join('')}
+          </select>
+          <div class="pill" id="${c.id}-reco">—</div>
         </div>
-        <div id="${c.id}-qr" style="margin-top:8px"></div>
-        <p class="muted" style="font-size:12px;margin-top:6px">Escanéalo para abrir la ficha directa de este cultivo.</p>
+      </div>
+
+      <div class="card">
+        <h2>📷 Galería</h2>
+        <input type="file" accept="image/*" multiple onchange="addImages(event,'${c.id}')">
+        <div id="${c.id}-gal" class="gallery" style="margin-top:8px"></div>
       </div>
 
       <div class="card">
         <h2>🗒️ Notas</h2>
         <textarea id="${c.id}-notas" placeholder="Observaciones, dosis, problemas…"></textarea>
       </div>
+
+      <div class="card">
+        <h2>🔗 QR de la ficha</h2>
+        <div class="row">
+          <div id="${c.id}-qr" class="qrcode"></div>
+          <button class="btn sec" onclick="genQR('${c.id}')">Actualizar QR</button>
+        </div>
+        <p class="muted" style="margin-top:6px">Escanéalo para abrir directamente esta ficha.</p>
+      </div>
     </div>
   </section>`;
 }
 document.getElementById('cultivos').innerHTML = CULTIVOS.map(cultivoSection).join('');
 
-/* =================== CRUD tareas / imágenes / registros =================== */
+/* ====== Recomendaciones por fase ====== */
+function recomendaciones(id){
+  const f = load(id+':fase','Vegetativo');
+  if(f==='Germinación') return 'Riego suave, pH 5.8–6.2 · EC ≤ 0.6 · Micorrizas.';
+  if(f==='Vegetativo')  return 'pH 5.9–6.3 · EC 1.0–1.4 · N alto · VPD 0.9–1.2.';
+  if(f==='Floración')   return 'pH 6.2–6.6 · EC 1.5–2.0 · Añade PK (semanas 3–6).';
+  return 'pH 6.2–6.6 · EC 0.8–1.2 · Solo agua + flushing si procede.';
+}
+function setFase(id,val){ save(id+':fase',val); document.getElementById(id+'-reco').textContent=recomendaciones(id); maybePhaseHints(); }
+
+/* ====== Render, Tasks, Gallery ====== */
 function addTask(id){
   const text=document.getElementById(id+'-task-text').value.trim();
   const date=document.getElementById(id+'-task-date').value;
@@ -466,7 +399,7 @@ function addTask(id){
   const task = {id:Date.now()+Math.random().toString(16).slice(2), text, date, done:false, ts:Date.now()};
   list.push(task); save(id+':tasks',list);
   document.getElementById(id+'-task-text').value=''; document.getElementById(id+'-task-date').value='';
-  renderTasks(id); renderDashboard(); scheduleDueChecks(); updateChart();
+  renderTasks(id); renderDashboard(); scheduleDueChecks();
 }
 function toggleTask(id,idx){const list=load(id+':tasks',[]); list[idx].done=!list[idx].done; save(id+':tasks',list); renderTasks(id); renderDashboard();}
 function delTask(id,idx){const list=load(id+':tasks',[]); list.splice(idx,1); save(id+':tasks',list); renderTasks(id); renderDashboard();}
@@ -510,15 +443,18 @@ function renderGal(id){
 }
 function zoom(id,idx){ const gal=load(id+':gal',[]); const m=document.getElementById('modal'); const i=document.getElementById('modalImg'); i.src=gal[idx]; m.style.display='flex'; }
 
+/* ====== Registros / Gráfica ====== */
 function addRegistro(id){
   const ec=parseFloat(document.getElementById(id+'-ec').value);
   const ph=parseFloat(document.getElementById(id+'-ph').value);
   const t =parseFloat(document.getElementById(id+'-t').value);
-  const rh=parseFloat(document.getElementById(id+'-rh').value);
-  if(isNaN(ec)||isNaN(ph)) return alert('Completa EC y pH');
-  const regs=load(id+':regs',[]); regs.unshift({ec,ph,t,rh,fecha:todayISO()});
-  save(id+':regs',regs.slice(0,180));
-  ['ec','ph','t','rh'].forEach(s=>{const e=document.getElementById(id+'-'+s); if(e) e.value='';});
+  const hr=parseFloat(document.getElementById(id+'-hr').value);
+  if([ec,ph].some(x=>isNaN(x))) return alert('Completa al menos EC y pH');
+  const regs=load(id+':regs',[]);
+  regs.unshift({ec,ph,t:isNaN(t)?null:t,hr:isNaN(hr)?null:hr,fecha:todayISO()});
+  save(id+':regs',regs.slice(0,240));
+  save(id+':ultRiego',Date.now());
+  ['ec','ph','t','hr'].forEach(x=>document.getElementById(id+'-'+x).value='');
   renderRegs(id); renderDashboard(); updateChart();
 }
 function borrarRegistros(id){ if(!confirm('¿Borrar todos los registros?'))return; save(id+':regs',[]); renderRegs(id); renderDashboard(); updateChart();}
@@ -526,71 +462,46 @@ function renderRegs(id){
   const tbody=document.getElementById(id+'-tabla'); if(!tbody) return;
   const regs=load(id+':regs',[]);
   tbody.innerHTML = regs.map(r=>`<tr>
-    <td>${r.fecha}</td><td>${isNaN(r.ec)?'-':r.ec}</td><td>${isNaN(r.ph)?'-':r.ph}</td>
-    <td>${isNaN(r.t)?'-':r.t}</td><td>${isNaN(r.rh)?'-':r.rh}</td>
+    <td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha}</td>
+    <td style="padding:6px;border-bottom:1px solid var(--line)">${(r.ec??'')}</td>
+    <td style="padding:6px;border-bottom:1px solid var(--line)">${(r.ph??'')}</td>
+    <td style="padding:6px;border-bottom:1px solid var(--line)">${(r.t??'')}</td>
+    <td style="padding:6px;border-bottom:1px solid var(--line)">${(r.hr??'')}</td>
   </tr>`).join('');
 }
 
-/* =================== Fases y riegos =================== */
-function initFaseFor(id){
-  const def = {fase:'vegetativo', inicio: todayISO()};
-  if(!load(id+':fase')) save(id+':fase', def);
-}
-function saveFase(id){
-  const fase = document.getElementById(id+'-fase').value;
-  const inicio = document.getElementById(id+'-fase-inicio').value || todayISO();
-  save(id+':fase', {fase, inicio});
-  renderFase(id);
-  alert('Fase guardada.');
-}
-function renderFase(id){
-  const f = load(id+':fase');
-  const sel = document.getElementById(id+'-fase');
-  const inp = document.getElementById(id+'-fase-inicio');
-  const out = document.getElementById(id+'-dias-fase');
-  if(sel) sel.value = f.fase;
-  if(inp) inp.value = f.inicio;
-  if(out){
-    const d = Math.floor( (Date.now() - new Date(f.inicio+'T00:00:00').getTime()) / 86400000 );
-    out.textContent = d;
-  }
-}
-CULTIVOS.forEach(c=>initFaseFor(c.id));
-
-function registrarRiego(id){
-  const L  = parseFloat(document.getElementById(id+'-rL').value||0);
-  const ec = parseFloat(document.getElementById(id+'-rEC').value||NaN);
-  const ph = parseFloat(document.getElementById(id+'-rPH').value||NaN);
-  const t  = parseFloat(document.getElementById(id+'-rT').value||NaN);
-  const rh = parseFloat(document.getElementById(id+'-rRH').value||NaN);
-  const riegos = load(id+':riegos', []);
-  riegos.unshift({fecha: todayISO(), litros: L});
-  save(id+':riegos', riegos.slice(0,200));
-  const regs=load(id+':regs',[]);
-  regs.unshift({ec,ph,t,rh,fecha:todayISO()});
-  save(id+':regs',regs.slice(0,180));
-  renderRegs(id); updateChart(); renderDashboard();
-  save(id+':lastRiego', {when: Date.now(), L});
-  alertasInteligentes(id, true);
-  ['rL','rEC','rPH','rT','rRH'].forEach(s=>{ const e=document.getElementById(id+'-'+s); if(e) e.value=''; });
-}
-
-/* =================== Dashboard =================== */
+/* ====== Dashboard ====== */
 function renderDashboard(){
+  // Próximas tareas
   const all=CULTIVOS.flatMap(c=>load(c.id+':tasks',[]).map(t=>({...t,cultivo:c.titulo,emoji:c.emoji})));
   const prox=all.filter(t=>!t.done).sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999')).slice(0,8);
   document.getElementById('proxTareas').innerHTML = prox.length
     ? prox.map(t=>`<div class="task"><div><b>${t.text}</b><br><small>${t.emoji} ${t.cultivo} · ${t.date||'Sin fecha'}</small></div></div>`).join('')
     : '<div class="muted">No hay tareas próximas.</div>';
+
+  // Últimos registros
   const ul=CULTIVOS.flatMap(c=> (load(c.id+':regs',[])[0]? [{cultivo:c.titulo, ...load(c.id+':regs',[])[0]}]:[]));
   document.getElementById('ultimosReg').innerHTML = ul.length
-    ? '<table class="table"><thead><tr><th>Cultivo</th><th>Fecha</th><th>EC</th><th>pH</th><th>T</th><th>HR</th></tr></thead><tbody>'
-      + ul.map(r=>`<tr><td>${r.cultivo}</td><td>${r.fecha}</td><td>${isNaN(r.ec)?'-':r.ec}</td><td>${isNaN(r.ph)?'-':r.ph}</td><td>${isNaN(r.t)?'-':r.t}</td><td>${isNaN(r.rh)?'-':r.rh}</td></tr>`).join('')
+    ? '<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Cultivo</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Fecha</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">EC</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">pH</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">T</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">HR</th></tr></thead><tbody>'
+      + ul.map(r=>`<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${r.cultivo}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ec??''}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ph??''}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.t??''}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.hr??''}</td></tr>`).join('')
       + '</tbody></table>'
     : '<div class="muted">Aún no hay registros.</div>';
+
+  // KPIs
+  const loc=load('loc');
+  document.getElementById('locName').textContent = loc.nombre || 'Mi ubicación';
+  const lastWaterDays = (()=> {
+    const t = Math.min(...CULTIVOS.map(c=>load(c.id+':ultRiego',Infinity)));
+    if(!isFinite(t)) return '—';
+    return Math.max(0, Math.floor((Date.now()-t)/86400000));
+  })();
+  document.getElementById('kpiRiego').textContent = lastWaterDays;
+  const nextTask = prox[0]?.date || '—';
+  document.getElementById('kpiTask').textContent = nextTask;
+  document.getElementById('kpiEstado').textContent = 'OK';
 }
 
-/* =================== Tiempo =================== */
+/* ====== Tiempo (Open-Meteo) ====== */
 function WICON(code){
   const sun='☀️', cloud='⛅', rain='🌧️', storm='⛈️', snow='❄️', fog='🌫️';
   if([0].includes(code)) return sun;
@@ -604,10 +515,14 @@ function WICON(code){
 async function loadWeather(){
   const loc=load('loc'); document.getElementById('locName').textContent = loc.nombre || 'Mi ubicación';
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Madrid";
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=${encodeURIComponent(tz)}`;
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&current=temperature_2m&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=${encodeURIComponent(tz)}`;
   try{
-    const res = await fetch(url); const j = await res.json(); const d = j.daily;
-    const days = d.time.map((t,i)=>({date: t, code: d.weathercode[i], tmax: d.temperature_2m_max[i], tmin: d.temperature_2m_min[i], pr: d.precipitation_probability_max[i], mm: d.precipitation_sum[i]}));
+    const res = await fetch(url); const j = await res.json();
+    document.getElementById('kpiTemp').textContent = Math.round(j.current?.temperature_2m ?? '-');
+    const d = j.daily;
+    const days = d.time.map((t,i)=>({
+      date: t, code: d.weathercode[i], tmax: d.temperature_2m_max[i], tmin: d.temperature_2m_min[i], pr: d.precipitation_probability_max[i], mm: d.precipitation_sum[i]
+    }));
     document.getElementById('wgrid').innerHTML = days.map(x=>`
       <div class="wday">
         <div class="d">${new Date(x.date).toLocaleDateString('es-ES',{weekday:'short'})}</div>
@@ -641,10 +556,37 @@ async function loadWeather(){
   }
 }
 
-/* =================== Notificaciones =================== */
+/* ====== Ajustes ====== */
+function saveLocation(){
+  const nombre = document.getElementById('loc-nombre').value || 'Mi ubicación';
+  const lat = parseFloat(document.getElementById('loc-lat').value);
+  const lon = parseFloat(document.getElementById('loc-lon').value);
+  if(isNaN(lat)||isNaN(lon)) return alert('Lat/Lon inválidos');
+  save('loc',{nombre,lat,lon}); loadWeather(); alert('Ubicación guardada. Widget actualizado.');
+}
+function clearImages(){
+  if(!confirm('¿Vaciar TODAS las galerías?')) return;
+  CULTIVOS.forEach(c=> save(c.id+':gal',[]));
+  alert('Galerías vaciadas.');
+}
+function clearAll(){
+  if(!confirm('¿Borrar todos los datos de Cultivo Pro en este dispositivo?')) return;
+  Object.keys(localStorage).filter(k=>k.startsWith('cpV6:')).forEach(k=> localStorage.removeItem(k));
+  location.reload();
+}
+
+/* ====== Notificaciones (local) ====== */
 const notifyState = document.getElementById('notifyState');
-function updateNotifyState(){ const perm = Notification?.permission || 'unsupported'; notifyState.textContent = 'Estado: ' + perm; }
-async function enableNotifications(){ if(!('Notification' in window)) return alert('Notificaciones no soportadas'); const perm = await Notification.requestPermission(); updateNotifyState(); if(perm==='granted'){ new Notification('¡Notificaciones activadas!', {body:'Te avisaré de tareas y lluvia alta.'}); } }
+function updateNotifyState(){
+  const perm = Notification?.permission || 'unsupported';
+  notifyState.textContent = 'Estado: ' + perm;
+}
+async function enableNotifications(){
+  if(!('Notification' in window)) return alert('Notificaciones no soportadas');
+  const perm = await Notification.requestPermission();
+  updateNotifyState();
+  if(perm==='granted'){ new Notification('¡Notificaciones activadas!', {body:'Te avisaré de tareas y lluvia alta.'}); }
+}
 function testNotify(){ if(Notification?.permission==='granted'){ new Notification('Prueba de aviso ✅', {body:'Así verás las notificaciones.'}); } else alert('Activa las notificaciones primero.'); }
 document.getElementById('btn-notify').onclick=enableNotifications;
 document.getElementById('btn-test-notify').onclick=testNotify;
@@ -678,25 +620,40 @@ function checkDueTasksAndNotify(){
 function scheduleDueChecks(){
   checkDueTasksAndNotify();
   clearTimeout(window.__dueTimer);
-  window.__dueTimer = setTimeout(scheduleDueChecks, 60*60*1000);
+  window.__dueTimer = setTimeout(scheduleDueChecks, 60*60*1000); // cada hora
+}
+function maybePhaseHints(){
+  if(Notification?.permission!=='granted') return;
+  for(const c of CULTIVOS){
+    const f = load(c.id+':fase','Vegetativo');
+    if(f==='Floración'){
+      const last = load(c.id+':pkHint',0);
+      if(Date.now()-last>24*3600e3){
+        new Notification(`🔔 ${c.titulo}`, {body:'Estás en Floración. Recuerda PK en semanas 3–6.'});
+        save(c.id+':pkHint',Date.now());
+      }
+    }
+  }
 }
 
-/* =================== Navegación =================== */
+/* ====== Navegación ====== */
 function show(tab){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('v-'+tab).classList.add('active');
   document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
   document.querySelector(`.tabbtn[data-tab="${tab}"]`).classList.add('active');
   if(['gelato','acai','exterior','limoneros'].includes(tab)){
-    renderTasks(tab); renderGal(tab); renderRegs(tab); renderFase(tab);
+    renderTasks(tab); renderGal(tab); renderRegs(tab);
     const ta=document.getElementById(tab+'-notas'); if(ta){ ta.value=load(tab+':notas',''); ta.oninput=()=>save(tab+':notas',ta.value); }
+    document.getElementById(tab+'-reco').textContent=recomendaciones(tab);
+    genQR(tab);
     window.scrollTo({top:0,behavior:'smooth'});
   }
   if(tab==='dashboard'){ renderDashboard(); loadWeather(); updateChart(); }
 }
 document.querySelectorAll('.tabbtn').forEach(b=> b.addEventListener('click', ()=> show(b.dataset.tab)));
 
-/* =================== Imagen: compresión =================== */
+/* ====== Image compression (canvas) ====== */
 function compressImage(file, maxW=1280, quality=0.8){
   return new Promise((resolve, reject)=>{
     const img = new Image();
@@ -710,141 +667,96 @@ function compressImage(file, maxW=1280, quality=0.8){
       canvas.height= Math.round(img.height* scale);
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0,0, canvas.width, canvas.height);
-      try{ const data = canvas.toDataURL('image/jpeg', quality); resolve(data); }
-      catch(err){ resolve(img.src); }
+      try{
+        const data = canvas.toDataURL('image/jpeg', quality);
+        resolve(data);
+      }catch(err){ resolve(img.src); }
     };
     img.onerror = reject;
     reader.readAsDataURL(file);
   });
 }
 
-/* =================== Gráfica EC/pH/T/HR =================== */
+/* ====== Canvas Chart (EC/pH/T/HR) ====== */
 const chartCanvas = document.getElementById('chart');
 const chartCtx = chartCanvas.getContext('2d');
 document.getElementById('chart-cultivo').addEventListener('change', updateChart);
 
 function updateChart(){
   const sel = document.getElementById('chart-cultivo').value;
-  const regs = load(sel+':regs',[]).slice(0,60).reverse();
+  const regs = load(sel+':regs',[]).slice(0,90).reverse(); // cronológico
   drawChart(regs);
 }
 function drawChart(regs){
   const W=chartCanvas.width, H=chartCanvas.height;
-  const m = {l:42, r:42, t:22, b:24};
   chartCtx.clearRect(0,0,W,H);
   chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card').trim();
   chartCtx.fillRect(0,0,W,H);
-
-  const ecVals = regs.map(r=>r.ec).filter(v=>!isNaN(v));
-  const phVals = regs.map(r=>r.ph).filter(v=>!isNaN(v));
-  const tVals  = regs.map(r=>r.t ).filter(v=>!isNaN(v));
-  const hVals  = regs.map(r=>r.rh).filter(v=>!isNaN(v));
-  const xCount = Math.max(2, regs.length);
-  const ecMin = Math.min(0.4, ...(ecVals.length?ecVals:[0.4]));
-  const ecMax = Math.max(2.2, ...(ecVals.length?ecVals:[2.2]));
-  const phMin = 5.5, phMax = 6.8;
-  const tMin  = Math.min(18, ...(tVals.length?tVals:[18])),  tMax  = Math.max(32, ...(tVals.length?tVals:[32]));
-  const hMin  = 30, hMax=80;
-
+  const m = {l:40, r:40, t:24, b:24};
+  // Ejes guías
   chartCtx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--line').trim();
   chartCtx.lineWidth = 1; chartCtx.setLineDash([4,4]);
   for(let i=0;i<=6;i++){
     const y = m.t + (H-m.t-m.b)*i/6;
     chartCtx.beginPath(); chartCtx.moveTo(m.l,y); chartCtx.lineTo(W-m.r,y); chartCtx.stroke();
-    chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
-    chartCtx.font = '12px system-ui';
-    chartCtx.fillText((ecMax - (ecMax-ecMin)*i/6).toFixed(1), 6, y+4);
-    chartCtx.fillText((phMin + (phMax-phMin)*i/6).toFixed(1), W-34, y+4);
   }
   chartCtx.setLineDash([]);
 
+  // Escalas
+  const xCount = Math.max(2, regs.length);
+  const ecVals = regs.map(r=>r.ec).filter(v=>v!=null);
+  const ecMin = Math.min(0.4, Math.min(...ecVals, 9999)); const ecMax = Math.max(2.2, Math.max(...ecVals, 0));
+  const phMin = 5.5, phMax = 6.9;
+  const tMin  = 16, tMax = 32;
+  const hMin  = 30, hMax = 80;
   const x = i => m.l + (W-m.l-m.r) * (i/(xCount-1||1));
   const yEC = v => m.t + (H-m.t-m.b) * (1 - (v-ecMin)/(ecMax-ecMin||1));
   const yPH = v => m.t + (H-m.t-m.b) * (1 - (v-phMin)/(phMax-phMin||1));
-  const yT  = v => m.t + (H-m.t-m.b) * (1 - (v-tMin )/(tMax -tMin ||1));
-  const yH  = v => m.t + (H-m.t-m.b) * (1 - (v-hMin )/(hMax -hMin ||1));
+  const yT  = v => m.t + (H-m.t-m.b) * (1 - (v-tMin)/(tMax-tMin||1));
+  const yH  = v => m.t + (H-m.t-m.b) * (1 - (v-hMin)/(hMax-hMin||1));
 
-  // EC
-  chartCtx.strokeStyle = '#0ea5a4'; chartCtx.lineWidth=2; chartCtx.beginPath();
-  regs.forEach((r,i)=>{ if(isNaN(r.ec)) return; const xx=x(i), yy=yEC(r.ec); chartCtx[i?'lineTo':'moveTo'](xx,yy); }); chartCtx.stroke();
-  // pH
-  chartCtx.setLineDash([6,4]); chartCtx.strokeStyle='#10b981'; chartCtx.beginPath();
-  regs.forEach((r,i)=>{ if(isNaN(r.ph)) return; const xx=x(i), yy=yPH(r.ph); chartCtx[i?'lineTo':'moveTo'](xx,yy); });
-  chartCtx.stroke(); chartCtx.setLineDash([]);
-  // T
-  chartCtx.strokeStyle='#f59e0b'; chartCtx.beginPath();
-  regs.forEach((r,i)=>{ if(isNaN(r.t)) return; const xx=x(i), yy=yT(r.t); chartCtx[i?'lineTo':'moveTo'](xx,yy); }); chartCtx.stroke();
-  // HR
-  chartCtx.strokeStyle='#60a5fa'; chartCtx.beginPath();
-  regs.forEach((r,i)=>{ if(isNaN(r.rh)) return; const xx=x(i), yy=yH(r.rh); chartCtx[i?'lineTo':'moveTo'](xx,yy); }); chartCtx.stroke();
+  // Series
+  function drawLine(vals, yfn, color, dash=[]){
+    chartCtx.strokeStyle = color; chartCtx.lineWidth=2; chartCtx.setLineDash(dash);
+    chartCtx.beginPath();
+    vals.forEach((v,i)=>{ if(v==null)return; const xx=x(i), yy=yfn(v); if(chartCtx.currentPathStarted){ chartCtx.lineTo(xx,yy);}else{chartCtx.moveTo(xx,yy); chartCtx.currentPathStarted=true;} });
+    chartCtx.stroke(); chartCtx.setLineDash([]); chartCtx.currentPathStarted=false;
+    chartCtx.fillStyle=color; vals.forEach((v,i)=>{ if(v==null)return; chartCtx.beginPath(); chartCtx.arc(x(i), yfn(v), 2.5, 0, Math.PI*2); chartCtx.fill(); });
+  }
+  drawLine(regs.map(r=>r.ec??null), yEC, '#10b981'); // EC
+  drawLine(regs.map(r=>r.ph??null), yPH, '#0ea5a4', [6,4]); // pH
+  drawLine(regs.map(r=>r.t ??null), yT , '#f59e0b'); // T
+  drawLine(regs.map(r=>r.hr??null), yH , '#60a5fa'); // HR
 
+  // Fechas
   chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
   chartCtx.font='11px system-ui';
-  regs.forEach((r,i)=>{ if(i%3===0){ chartCtx.fillText((r.fecha||'').slice(5), x(i)-12, H-6); } });
-
-  const Lx = m.l+6, Ly=m.t+10, gap=68;
-  const items=[['EC','#0ea5a4'],['pH','#10b981'],['T','#f59e0b'],['HR','#60a5fa']];
-  items.forEach((it,i)=>{ chartCtx.fillStyle=it[1]; chartCtx.fillRect(Lx+i*gap, Ly, 12, 6); chartCtx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--muted').trim(); chartCtx.fillText(it[0], Lx+16+i*gap, Ly+6); });
+  regs.forEach((r,i)=>{ if(i%3===0){ chartCtx.fillText(r.fecha.slice(5), x(i)-12, H-6); } });
 }
 
-/* =================== QR + Deep Link =================== */
-function mostrarQR(id){
-  let pid = (document.getElementById(id+'-pid').value || '').trim();
-  if(!pid){ pid = id.toUpperCase()+'-'+Math.random().toString(36).slice(2,6).toUpperCase(); document.getElementById(id+'-pid').value = pid; }
-  const url = location.origin + location.pathname + `?cid=${encodeURIComponent(id)}&pid=${encodeURIComponent(pid)}`;
-  const src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(url)}`;
-  const cont = document.getElementById(id+'-qr');
-  cont.innerHTML = `<img src="${src}" alt="QR" style="border:1px solid var(--line);border-radius:12px;background:#fff;padding:6px"><div class="muted" style="margin-top:6px;word-break:break-all">${url}</div>`;
-}
-function handleDeepLink(){
-  const p = new URLSearchParams(location.search);
-  const cid = p.get('cid');
-  if(cid && ['gelato','acai','exterior','limoneros'].includes(cid)){ show(cid); setTimeout(()=>renderFase(cid), 50); }
+/* ====== QR sencillo (usa servicio de imagen) ======
+   Si prefieres offline total, luego te paso una versión canvas sin red. */
+function genQR(id){
+  const el = document.getElementById(id+'-qr');
+  const url = location.href.split('#')[0] + '#'+id; // hash para abrir ficha
+  const img = new Image();
+  img.alt='QR'; img.loading='lazy';
+  img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&data='+encodeURIComponent(url);
+  img.style.maxWidth='100%'; img.style.maxHeight='100%';
+  el.innerHTML=''; el.appendChild(img);
 }
 
-/* =================== Alertas inteligentes =================== */
-function alertasInteligentes(id, showToast=false){
-  const fase = load(id+':fase');
-  const last = load(id+':lastRiego', null);
-  let msgs = [];
-
-  if(last){
-    const horas = (Date.now()-last.when)/3600000;
-    const regs = load(id+':regs',[]);
-    const t = regs.find(r=>!isNaN(r.t))?.t ?? 24;
-    const limite = t>=28 ? 36 : 48;
-    if(horas >= limite) msgs.push('💧 Toca riego (≈ ' + (horas/24).toFixed(1) + ' días)');
-  }
-  if(fase?.fase==='floracion'){
-    const d = Math.floor( (Date.now() - new Date(fase.inicio+'T00:00:00').getTime()) / 86400000 );
-    if(d>=14) msgs.push('🌸 Floración avanzada: considera añadir PK en el próximo riego.');
-  }
-  const w = load('weatherCache', null);
-  if(w?.msg?.includes('lluvia alta')) msgs.push('🌧️ Lluvia alta prevista. Ajusta riegos.');
-
-  if(showToast && msgs.length){
-    if('Notification' in window && Notification.permission==='granted'){
-      new Notification('Avisos — '+id, { body: msgs.join(' · ') });
-    }else{
-      alert(msgs.join('\n'));
-    }
-  }
-  save(id+':alertas', msgs);
-}
-
-/* =================== Tiempo de ejecución =================== */
+/* ====== Inicio ====== */
 window.addEventListener('load', ()=>{
-  applyPalette(load('palette','dark'));
   renderDashboard(); loadWeather(); scheduleDueChecks(); updateChart();
   ['gelato','acai','exterior','limoneros'].forEach(id=>{
-    renderTasks(id); renderGal(id); renderRegs(id); renderFase(id);
-    const ta=document.getElementById(id+'-notas'); if(ta){ ta.value=load(id+':notas',''); ta.oninput=()=>save(id+':notas',ta.value); }
-    alertasInteligentes(id, false);
+    renderTasks(id); renderGal(id); renderRegs(id);
+    const ta=document.getElementById(id+'-notas'); if(ta){ ta.value=load(id+':notas',''); ta.oninput=()=>save(id+':notas',ta.value);}
+    document.getElementById(id+'-reco').textContent=recomendaciones(id);
+    genQR(id);
   });
   if('serviceWorker'in navigator){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
-  handleDeepLink();
 });
 </script>
-
 </body>
 </html>
