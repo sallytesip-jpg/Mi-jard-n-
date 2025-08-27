@@ -8,57 +8,40 @@
 <link rel="manifest" href="manifest.json"/>
 <link rel="icon" href="icons/icon-192.png"/>
 <link rel="apple-touch-icon" href="icons/icon-192.png"/>
-
 <style>
   :root{
     --bg:#0b1220; --card:#0f172a; --ink:#e5e7eb; --muted:#94a3b8; --line:#1f2937;
     --accent:#0ea5a4; --accent2:#10b981; --danger:#ef4444; --warn:#f59e0b;
     --shadow:0 24px 60px -20px rgba(2,6,23,.35);
-    --tabh:88px; /* Altura de la barra inferior */
   }
   [data-theme="light"]{
     --bg:#f6f7fb; --card:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e5e7eb;
     --shadow:0 24px 60px -20px rgba(2,6,23,.15);
   }
-  *{box-sizing:border-box}
-  html, body{min-height:100%; height:auto;}
+  *{box-sizing:border-box} html,body{height:100%}
   body{
-    margin:0;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif;
-    background:var(--bg);
+    margin:0;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif; background:var(--bg);
   }
-  /* ===== Marca de agua ===== */
+  /* Fondo + marca de agua (logo grande centrado y semitransparente) */
   body::before{
-    content:"";
-    position:fixed; inset:0; z-index:-2;
-    background:
-      radial-gradient(1000px 700px at 20% -10%, #0c1a2a 0%, transparent 40%),
-      radial-gradient(900px 600px at 120% -20%, #0c1a2a 0%, transparent 45%);
+    content:""; position:fixed; inset:0; z-index:-2;
+    background:radial-gradient(1200px 800px at 20% -10%, #0c1a2a 0%, var(--bg) 40%, var(--bg) 100%);
   }
   body::after{
-    /* Coloca aquí tu logo transparente (PNG) */
-    content:"";
-    position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.08;
-    background-image:url("icons/watermark.png");
-    background-repeat:no-repeat; background-position:center center; background-size: min(95vmin, 1100px) auto;
-    filter:saturate(1) contrast(1);
+    content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background-image:url('icons/logo-watermark.png'); background-repeat:no-repeat;
+    background-position:center center; background-size:min(70vw,70vh); opacity:.10;
+    filter:grayscale(5%) drop-shadow(0 10px 30px rgba(0,0,0,.25));
   }
 
   header{position:sticky;top:0;background:rgba(11,18,32,.78);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:6}
   [data-theme="light"] header{background:rgba(255,255,255,.85)}
-  .max{max-width:1080px;margin:0 auto;padding:10px 12px}
+  .max{max-width:1024px;margin:0 auto;padding:10px 12px}
   .brand{display:flex;gap:12px;align-items:center}
   .logo{width:38px;height:38px;border-radius:12px;background:var(--accent2);display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:0 10px 30px -12px rgba(16,185,129,.6);overflow:hidden}
   .logo img{width:100%;height:100%;object-fit:cover;border-radius:12px}
   .muted{color:var(--muted)}
-
-  /* ===== Contenido con aire al final para no tapar con la tabbar ===== */
-  .wrap{
-    max-width:1080px;
-    margin:14px auto 0;
-    padding:0 12px;
-    padding-bottom: calc(var(--tabh) + 40px + env(safe-area-inset-bottom, 0px));
-  }
-
+  .wrap{max-width:1024px;margin:10px auto 88px;padding:0 12px}
   .grid{display:grid;gap:12px}
   @media(min-width:780px){.grid{grid-template-columns:1fr 1fr}}
   .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow)}
@@ -79,35 +62,33 @@
   .thumb button{position:absolute;top:6px;right:6px;background:#ef4444;color:#fff;border:0;border-radius:8px;padding:4px 6px;font-size:12px;cursor:pointer}
   .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:50}
   .modal img{max-width:92vw;max-height:84vh;border-radius:12px}
-  .row{display:flex;gap:8px;flex-wrap:wrap}
-
-  /* ===== Tab bar fija con safe-area y altura consistente ===== */
   .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:7}
-  .tabwrap{
-    max-width:1080px;margin:12px auto;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);
-    height: calc(var(--tabh) + env(safe-area-inset-bottom, 0px));
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
+  .tabwrap{max-width:1024px;margin:12px auto;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
   [data-theme="light"] .tabwrap{background:rgba(255,255,255,.92)}
-  .tabgrid{display:grid;grid-template-columns:repeat(7,1fr); height: var(--tabh);}
-  .tabbtn{padding:8px 4px; display:flex; flex-direction:column; gap:2px; align-items:center; justify-content:center; color:var(--muted); font-size:12px; font-weight:700; background:transparent; border:0; height:100%}
+  .tabgrid{display:grid;grid-template-columns:repeat(8,1fr)}
+  .tabbtn{padding:10px 6px;display:flex;flex-direction:column;gap:2px;align-items:center;color:var(--muted);font-size:12px;font-weight:700;background:transparent;border:0}
   .tabbtn.active{color:var(--ink)}
   .view{display:none} .view.active{display:block}
-
-  /* ===== Tiempo ===== */
-  .w-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-  .wday{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center}
-  .wday .ico{font-size:20px}
-  .wday .d{font-weight:700}
-
-  /* ===== Gráfica ===== */
+  .row{display:flex;gap:8px;flex-wrap:wrap}
   .chartwrap{position:relative}
-  canvas.chart{
-    display:block;
-    width:100%; height:260px;
-    border:1px solid var(--line); border-radius:12px; background:var(--card);
-    touch-action: pan-y; /* permite scroll vertical sobre el canvas */
-  }
+  canvas.chart{width:100%; height:220px; border:1px solid var(--line); border-radius:12px; background:var(--card)}
+
+  /* ==== IA Chat ==== */
+  .ia-wrap{display:grid;gap:12px}
+  .chat{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+  .chatlog{max-height:52vh;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
+  .msg{display:flex;gap:10px}
+  .msg .b{max-width:85%;padding:10px 12px;border-radius:14px;border:1px solid var(--line)}
+  .msg.user{justify-content:flex-end}
+  .msg.user .b{background:rgba(14,165,164,.12)}
+  .msg.bot .b{background:rgba(255,255,255,.04)}
+  .msg small{display:block;color:var(--muted);margin-top:6px}
+  .chatform{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line);background:var(--card)}
+  .chatform input[type="text"]{flex:1}
+  .badge{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px;color:var(--muted)}
+  .ia-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .preview{display:flex;gap:8px;flex-wrap:wrap}
+  .preview img{width:72px;height:72px;object-fit:cover;border:1px solid var(--line);border-radius:10px}
 </style>
 </head>
 <body>
@@ -117,7 +98,7 @@
       <div class="logo"><img src="icons/icon-192.png" alt="Cultivo Pro"/></div>
       <div>
         <div style="font-weight:800">Cultivo Pro</div>
-        <div class="muted" style="font-size:12px">PWA v6 PRO+ · Tiempo + Notif + Galería + Gráficas</div>
+        <div class="muted" style="font-size:12px">PWA v6 PRO+ · Tiempo + Notif + Galería + Gráficas + IA + Asistentes</div>
       </div>
       <div style="margin-left:auto" class="row">
         <button id="btn-theme" class="btn sec" title="Tema">Tema: Auto</button>
@@ -156,7 +137,7 @@
         <div class="chartwrap" style="margin-top:8px">
           <canvas id="chart" class="chart" width="960" height="300"></canvas>
         </div>
-        <div class="muted" style="font-size:12px;margin-top:6px">Arriba: EC (izq.), pH (dcha.). Desliza para ver más si hay muchos puntos.</div>
+        <div class="muted" style="font-size:12px;margin-top:6px">Arriba: EC (izqda), pH (dcha).</div>
       </div>
 
       <div class="card">
@@ -167,6 +148,26 @@
       <div class="card">
         <h2>🧪 Últimos EC/pH</h2>
         <div id="ultimosReg"></div>
+      </div>
+
+      <div class="card">
+        <h2>🧮 Calculadoras rápidas</h2>
+        <div class="row">
+          <div><label>Litros</label><br><input id="calcL" type="number" value="10" min="1" style="width:120px"></div>
+          <div class="pill">H₂O₂ 3%: <b id="h2o2">30</b> ml</div>
+          <div class="pill">Micorrizas: <b id="mico">2.5</b> g</div>
+          <div class="pill">Neem: <b id="neem">30</b> ml + Jabón: <b id="jabon">10</b> ml</div>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <div><label>PPFD</label><br><input id="ppfd" type="number" value="800" min="0" style="width:120px"></div>
+          <div><label>Horas</label><br><input id="horas" type="number" value="12" min="1" max="24" style="width:100px"></div>
+          <div class="pill">DLI ≈ <b id="dli">34.6</b> mol/m²/d</div>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <div><label>Temp (°C)</label><br><input id="t" type="number" value="26" step="0.1" style="width:100px"></div>
+          <div><label>HR (%)</label><br><input id="rh" type="number" value="55" step="1" style="width:100px"></div>
+          <div class="pill">VPD ≈ <b id="vpd">1.28</b> kPa</div>
+        </div>
       </div>
     </div>
   </section>
@@ -183,18 +184,54 @@
     </div>
   </section>
 
+  <!-- IA -->
+  <section id="v-ia" class="view">
+    <div class="ia-wrap">
+      <div class="card">
+        <h2>🤖 IA de Cultivo · Asesor instantáneo</h2>
+        <div class="ia-toolbar">
+          <span class="badge" id="ia-mode">Modo: Local (Reglas)</span>
+          <button class="btn sec" id="ia-toggle">Cambiar a API</button>
+          <small class="muted">Describe síntomas y sube fotos. Ej: “minador cítrico”, “fusarium exterior”, “riego Gelato s8”.</small>
+        </div>
+      </div>
+
+      <div class="chat">
+        <div id="chatlog" class="chatlog"></div>
+        <div class="chatform">
+          <label class="btn sec">
+            📷 Adjuntar
+            <input id="ia-file" type="file" accept="image/*" multiple style="display:none">
+          </label>
+          <input id="ia-input" type="text" placeholder="Pregunta aquí…" />
+          <button class="btn" id="ia-send">Enviar</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Adjuntos</h3>
+        <div id="ia-preview" class="preview"></div>
+        <div class="row">
+          <button class="btn sec" id="ia-clear">Limpiar chat</button>
+          <button class="btn sec" id="ia-to-nota">Guardar última respuesta en Notas (cultivo activo)</button>
+          <button class="btn sec" id="ia-to-task">Crear tarea desde última respuesta</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Ajustes -->
   <section id="v-ajustes" class="view">
     <div class="grid">
       <div class="card">
         <h2>🌙 Apariencia</h2>
-        <p class="muted">Modo oscuro/claro o automático.</p>
+        <p class="muted">Modo oscuro <b>automático</b> o manual.</p>
         <div class="row"><button id="btn-theme2" class="btn">Cambiar tema</button></div>
         <p id="themeState" class="muted" style="margin-top:6px">Tema actual: Auto</p>
       </div>
       <div class="card">
         <h2>🔔 Notificaciones</h2>
-        <p class="muted">Avisos de tareas del día y lluvia alta.</p>
+        <p class="muted">Tareas de hoy y lluvia alta (24–48h).</p>
         <div class="row">
           <button id="btn-notify" class="btn">Activar notificaciones</button>
           <button id="btn-test-notify" class="btn sec">Probar aviso</button>
@@ -221,9 +258,6 @@
   </section>
 </main>
 
-<!-- Modal de imagen -->
-<div id="modal" class="modal" onclick="this.style.display='none'"><img id="modalImg" alt="zoom"></div>
-
 <!-- Tab bar -->
 <nav class="tabbar">
   <div class="tabwrap">
@@ -234,10 +268,14 @@
       <button class="tabbtn" data-tab="exterior">☀️<span>Exterior</span></button>
       <button class="tabbtn" data-tab="limoneros">🍋<span>Limoneros</span></button>
       <button class="tabbtn" data-tab="notas">📝<span>Notas</span></button>
+      <button class="tabbtn" data-tab="ia">🤖<span>IA</span></button>
       <button class="tabbtn" data-tab="ajustes">⚙️<span>Ajustes</span></button>
     </div>
   </div>
 </nav>
+
+<!-- Modal de imagen -->
+<div id="modal" class="modal" onclick="this.style.display='none'"><img id="modalImg" alt="zoom"></div>
 
 <script>
 /* ====== Estado y utilidades ====== */
@@ -259,7 +297,7 @@ CULTIVOS.forEach(c=>{
 });
 if(!load('loc')) save('loc',{nombre:'La Bisbal del Penedès', lat:41.29, lon:1.44});
 
-/* ====== Tema ====== */
+/* ====== Tema: Auto / Claro / Oscuro ====== */
 function applyTheme(){
   const pref = load('theme','auto');
   document.getElementById('btn-theme').textContent = 'Tema: ' + (pref==='auto'?'Auto':pref==='light'?'Claro':'Oscuro');
@@ -302,29 +340,257 @@ document.getElementById('restore').addEventListener('change',(e)=>{
   r.readAsText(f);
 });
 
+/* ====== Calculadoras rápidas ====== */
+function recalc(){
+  const L=parseFloat(document.getElementById('calcL').value||0);
+  document.getElementById('h2o2').textContent=(L*3).toFixed(0);
+  document.getElementById('mico').textContent=(L/4).toFixed(2);
+  document.getElementById('neem').textContent=(L*3).toFixed(0);
+  document.getElementById('jabon').textContent=(L*1).toFixed(0);
+  const ppfd=parseFloat(document.getElementById('ppfd').value||0);
+  const horas=parseFloat(document.getElementById('horas').value||0);
+  const dli=(ppfd*3600*horas/1e6); document.getElementById('dli').textContent=dli.toFixed(1);
+  const t=parseFloat(document.getElementById('t').value||0), rh=parseFloat(document.getElementById('rh').value||0);
+  const es=0.6108*Math.exp((17.27*t)/(t+237.3)); const ea=(rh/100)*es; const vpd=Math.max(0, es-ea);
+  document.getElementById('vpd').textContent=vpd.toFixed(2);
+}
+['calcL','ppfd','horas','t','rh'].forEach(id=>document.getElementById(id).addEventListener('input', recalc)); recalc();
+
 /* ====== Notas globales ====== */
 const ng=document.getElementById('notas-global'); ng.value=load('notasGlobal',''); ng.oninput=()=>save('notasGlobal',ng.value);
 
+/* ====== Canvas Chart (EC/pH) ====== */
+const chartCanvas = document.getElementById('chart');
+const chartCtx = chartCanvas.getContext('2d');
+document.getElementById('chart-cultivo').addEventListener('change', updateChart);
+function updateChart(){
+  const sel = document.getElementById('chart-cultivo').value;
+  const regs = load(sel+':regs',[]).slice(0,60).reverse();
+  drawChart(regs);
+}
+function drawChart(regs){
+  const W=chartCanvas.width, H=chartCanvas.height;
+  chartCtx.clearRect(0,0,W,H);
+  chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card').trim();
+  chartCtx.fillRect(0,0,W,H);
+  const m = {l:40, r:40, t:20, b:24};
+  const ecVals = regs.map(r=>r.ec);
+  const xCount = Math.max(2, regs.length);
+  const ecMin = Math.min(0.4, Math.min(...ecVals, 9999)); const ecMax = Math.max(2.2, Math.max(...ecVals, 0));
+  const phMin = 5.5, phMax = 6.8;
+  chartCtx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--line').trim();
+  chartCtx.lineWidth = 1;
+  chartCtx.setLineDash([4,4]);
+  for(let i=0;i<=6;i++){
+    const y = m.t + (H-m.t-m.b)*i/6;
+    chartCtx.beginPath(); chartCtx.moveTo(m.l,y); chartCtx.lineTo(W-m.r,y); chartCtx.stroke();
+    const ecLabel = (ecMax - (ecMax-ecMin)*i/6).toFixed(1);
+    chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
+    chartCtx.font = '12px system-ui';
+    chartCtx.fillText(ecLabel, 6, y+4);
+    const phLabel = (phMin + (phMax-phMin)*i/6).toFixed(1);
+    chartCtx.fillText(phLabel, W-30, y+4);
+  }
+  chartCtx.setLineDash([]);
+  const x = i => m.l + (W-m.l-m.r) * (i/(xCount-1||1));
+  const yEC = v => m.t + (H-m.t-m.b) * (1 - (v-ecMin)/(ecMax-ecMin||1));
+  const yPH = v => m.t + (H-m.t-m.b) * (1 - (v-phMin)/(phMax-phMin||1));
+  chartCtx.strokeStyle = '#0ea5a4'; chartCtx.lineWidth=2;
+  chartCtx.beginPath(); regs.forEach((r,i)=>{ const xx=x(i), yy=yEC(r.ec); i? chartCtx.lineTo(xx,yy):chartCtx.moveTo(xx,yy); }); chartCtx.stroke();
+  chartCtx.strokeStyle = '#10b981'; chartCtx.lineWidth=2; chartCtx.setLineDash([6,4]);
+  chartCtx.beginPath(); regs.forEach((r,i)=>{ const xx=x(i), yy=yPH(r.ph); i? chartCtx.lineTo(xx,yy):chartCtx.moveTo(xx,yy); }); chartCtx.stroke(); chartCtx.setLineDash([]);
+  chartCtx.fillStyle='#0ea5a4'; regs.forEach((r,i)=>{ chartCtx.beginPath(); chartCtx.arc(x(i), yEC(r.ec), 2.5, 0, Math.PI*2); chartCtx.fill(); });
+  chartCtx.fillStyle='#10b981'; regs.forEach((r,i)=>{ chartCtx.beginPath(); chartCtx.arc(x(i), yPH(r.ph), 2.5, 0, Math.PI*2); chartCtx.fill(); });
+  chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
+  chartCtx.font='11px system-ui';
+  regs.forEach((r,i)=>{ if(i%3===0){ chartCtx.fillText(r.fecha? r.fecha.slice(5):'', x(i)-12, H-6); } });
+}
+
+/* ====== Tiempo (Open-Meteo) ====== */
+function WICON(code){
+  const sun='☀️', cloud='⛅', rain='🌧️', storm='⛈️', snow='❄️', fog='🌫️';
+  if([0].includes(code)) return sun;
+  if([1,2,3].includes(code)) return cloud;
+  if([45,48].includes(code)) return fog;
+  if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return rain;
+  if([95,96,99].includes(code)) return storm;
+  if([71,73,75,77,85,86].includes(code)) return snow;
+  return cloud;
+}
+async function loadWeather(){
+  const loc=load('loc'); document.getElementById('locName').textContent = loc.nombre || 'Mi ubicación';
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Madrid";
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=${encodeURIComponent(tz)}`;
+  try{
+    const res = await fetch(url); const j = await res.json(); const d = j.daily;
+    const days = d.time.map((t,i)=>({date: t, code: d.weathercode[i], tmax: d.temperature_2m_max[i], tmin: d.temperature_2m_min[i], pr: d.precipitation_probability_max[i], mm: d.precipitation_sum[i]}));
+    document.getElementById('wgrid').innerHTML = days.map(x=>`
+      <div class="wday" style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center">
+        <div class="d" style="font-weight:700">${new Date(x.date).toLocaleDateString('es-ES',{weekday:'short'})}</div>
+        <div class="ico" style="font-size:20px">${WICON(x.code)}</div>
+        <div>${Math.round(x.tmax)}° / ${Math.round(x.tmin)}°</div>
+        <div class="${x.pr>=60?'danger': x.pr>=30?'warn':''}">${x.pr}%</div>
+        <div class="${x.mm>=5?'danger': x.mm>=1?'warn':''}">${x.mm.toFixed(1)} mm</div>
+      </div>`).join('');
+    let msg = 'Sin lluvia relevante. Mantén tu plan de riego.';
+    const t0 = days[0], t1 = days[1];
+    if((t0.pr>=60||t1.pr>=60) || (t0.mm>=3 || t1.mm>=3)){ msg = 'Prob. lluvia alta (24–48h). ⚠️ Reduce o pospone riego.'; }
+    else if((t0.pr>=30||t1.pr>=30) || (t0.mm>=1 || t1.mm>=1)){ msg = 'Puede llover algo. 🔶 Ajusta riego y vigila drenaje.'; }
+    document.getElementById('rainAdvice').textContent=msg;
+    save('weatherCache', {when:Date.now(), days, msg, loc});
+    maybeNotifyRain(msg);
+  }catch(e){
+    const cache=load('weatherCache'); if(cache){ document.getElementById('rainAdvice').textContent=cache.msg||'Offline'; document.getElementById('wgrid').innerHTML = cache.days.map(x=>`
+      <div class="wday" style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:center">
+        <div class="d" style="font-weight:700">${new Date(x.date).toLocaleDateString('es-ES',{weekday:'short'})}</div>
+        <div class="ico" style="font-size:20px">${WICON(x.code)}</div>
+        <div>${Math.round(x.tmax)}° / ${Math.round(x.tmin)}°</div>
+        <div class="${x.pr>=60?'danger': x.pr>=30?'warn':''}">${x.pr}%</div>
+        <div class="${x.mm>=5?'danger': x.mm>=1?'warn':''}">${x.mm.toFixed(1)} mm</div>
+      </div>`).join(''); }
+    else { document.getElementById('wgrid').innerHTML = '<div class="muted">No se pudo cargar el tiempo.</div>'; document.getElementById('rainAdvice').textContent='Reintenta más tarde'; }
+  }
+}
+
+/* ====== Ajustes ====== */
+function saveLocation(){
+  const nombre = document.getElementById('loc-nombre').value || 'Mi ubicación';
+  const lat = parseFloat(document.getElementById('loc-lat').value);
+  const lon = parseFloat(document.getElementById('loc-lon').value);
+  if(isNaN(lat)||isNaN(lon)) return alert('Lat/Lon inválidos');
+  save('loc',{nombre,lat,lon}); loadWeather(); alert('Ubicación guardada. Widget actualizado.');
+}
+function clearImages(){
+  if(!confirm('¿Vaciar TODAS las galerías?')) return;
+  CULTIVOS.forEach(c=> save(c.id+':gal',[]));
+  alert('Galerías vaciadas.');
+}
+function clearAll(){
+  if(!confirm('¿Borrar todos los datos de Cultivo Pro en este dispositivo?')) return;
+  Object.keys(localStorage).filter(k=>k.startsWith('cpV6:')).forEach(k=> localStorage.removeItem(k));
+  location.reload();
+}
+
+/* ====== Notificaciones (local) ====== */
+const notifyState = document.getElementById('notifyState');
+function updateNotifyState(){
+  const perm = Notification?.permission || 'unsupported';
+  if(notifyState) notifyState.textContent = 'Estado: ' + perm;
+}
+async function enableNotifications(){
+  if(!('Notification' in window)) return alert('Notificaciones no soportadas');
+  const perm = await Notification.requestPermission();
+  updateNotifyState();
+  if(perm==='granted'){ new Notification('¡Notificaciones activadas!', {body:'Te avisaré de tareas y lluvia alta.'}); }
+}
+function testNotify(){ if(Notification?.permission==='granted'){ new Notification('Prueba de aviso ✅', {body:'Así verás las notificaciones.'}); } else alert('Activa las notificaciones primero.'); }
+const btnN=document.getElementById('btn-notify'); if(btnN) btnN.onclick=enableNotifications;
+const btnTN=document.getElementById('btn-test-notify'); if(btnTN) btnTN.onclick=testNotify;
+updateNotifyState();
+function maybeNotifyRain(msg){
+  if(Notification?.permission!=='granted') return;
+  if(msg.includes('lluvia alta')){
+    const last = load('lastRainNotify',0);
+    if(Date.now()-last > 6*3600e3){ new Notification('⚠️ Lluvia alta prevista', {body: msg}); save('lastRainNotify', Date.now()); }
+  }
+}
+function checkDueTasksAndNotify(){
+  if(Notification?.permission!=='granted') return;
+  const notified = load('notifiedTasks',{});
+  for(const c of CULTIVOS){
+    const tasks = load(c.id+':tasks',[]);
+    tasks.forEach(t=>{
+      if(t.done) return;
+      if(t.date===todayISO()){
+        const key = t.id || (t.text+'@'+t.date);
+        if(!notified[key]){
+          new Notification('📅 Tarea para HOY', { body: `${c.titulo}: ${t.text}` });
+          notified[key]=true;
+        }
+      }
+    });
+  }
+  save('notifiedTasks', notified);
+}
+function scheduleDueChecks(){
+  checkDueTasksAndNotify();
+  clearTimeout(window.__dueTimer);
+  window.__dueTimer = setTimeout(scheduleDueChecks, 60*60*1000);
+}
+
 /* ====== Secciones de cultivo ====== */
 function cultivoSection(c){
+  const extraGelato = (typeof GELATO_PLAN!=='undefined' && c.id==='gelato') ? `
+    <div class="card">
+      <h2>🍨 Gelato · Asistente por semanas</h2>
+      <div class="row">
+        <div><label>Semana</label><br>
+          <select id="g-semana" onchange="gelatoRender()" style="min-width:220px">
+            ${GELATO_PLAN.semanas.map(s=>`<option value="${s.id}">${s.nombre}</option>`).join('')}
+          </select>
+        </div>
+        <div><label>Litros (cubo)</label><br>
+          <input id="g-litros" type="number" value="12" min="1" oninput="gelatoRender()" style="width:120px">
+        </div>
+        <div style="align-self:flex-end"><button class="btn" onclick="gelatoAddTask()">Añadir como tarea</button></div>
+      </div>
+      <div id="g-obj" class="row" style="margin-top:8px"></div>
+      <div class="muted" style="font-size:12px;margin:6px 0">Orden: <b>Agua → Dutch Pro A → B → Explode → Top Candy → Top Bud → Barrier (final)</b>. Ajusta EC al objetivo y pH 6.2–6.4.</div>
+      <table style="width:100%;border-collapse:collapse;margin-top:8px">
+        <thead><tr><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Producto</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Dosis (por L)</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Para <span id="g-litros-head">12</span> L</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Notas</th></tr></thead>
+        <tbody id="g-tabla"></tbody>
+      </table>
+      <div class="row" style="margin-top:8px"><span class="pill" id="g-sum">—</span></div>
+      <script>(function(){const L=document.getElementById('g-litros'),H=document.getElementById('g-litros-head');const sync=()=>H.textContent=(parseFloat(L.value||0)||0);L.addEventListener('input',sync);sync();gelatoRender();})();</script>
+    </div>` : '';
+
+  const extraAcai = (typeof ACAI_PLAN!=='undefined' && c.id==='acai') ? `
+    <div class="card">
+      <h2>🍇 Açaí · Asistente por semanas</h2>
+      <div class="row">
+        <div><label>Semana</label><br>
+          <select id="a-semana" onchange="acaiRender()" style="min-width:220px">
+            ${ACAI_PLAN.semanas.map(s=>`<option value="${s.id}">${s.nombre}</option>`).join('')}
+          </select>
+        </div>
+        <div><label>Litros (cubo)</label><br>
+          <input id="a-litros" type="number" value="12" min="1" oninput="acaiRender()" style="width:120px">
+        </div>
+        <div style="align-self:flex-end"><button class="btn" onclick="acaiAddTask()">Añadir como tarea</button></div>
+      </div>
+      <div id="a-obj" class="row" style="margin-top:8px"></div>
+      <div class="muted" style="font-size:12px;margin:6px 0">Orden: <b>Agua → Dutch Pro A → B → Explode → Top Candy → Top Bud → Barrier (final)</b>. Ajusta EC al objetivo y pH 6.2–6.4.</div>
+      <table style="width:100%;border-collapse:collapse;margin-top:8px">
+        <thead><tr><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Producto</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Dosis (por L)</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Para <span id="a-litros-head">12</span> L</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Notas</th></tr></thead>
+        <tbody id="a-tabla"></tbody>
+      </table>
+      <div class="row" style="margin-top:8px"><span class="pill" id="a-sum">—</span></div>
+      <script>(function(){const L=document.getElementById('a-litros'),H=document.getElementById('a-litros-head');const sync=()=>H.textContent=(parseFloat(L.value||0)||0);L.addEventListener('input',sync);sync();acaiRender();})();</script>
+    </div>` : '';
+
   return `
   <section id="v-${c.id}" class="view">
     <div class="grid">
       <div class="card">
         <h2>${c.emoji} ${c.titulo} · Tareas</h2>
         <div class="row">
-          <input id="${c.id}-task-text" placeholder="Ej: Micorrizas 1 g/4 L, pH 6.4">
+          <input id="${c.id}-task-text" placeholder="Ej: Riego 12 L, EC 1.9, pH 6.3">
           <input id="${c.id}-task-date" type="date">
           <button class="btn" onclick="addTask('${c.id}')">Añadir</button>
         </div>
         <div id="${c.id}-tasks" class="list" style="margin-top:8px"></div>
       </div>
+
+      ${extraGelato}
+      ${extraAcai}
+
       <div class="card">
         <h2>📷 Galería</h2>
         <input type="file" accept="image/*" multiple onchange="addImages(event,'${c.id}')">
         <div id="${c.id}-gal" class="gallery" style="margin-top:8px"></div>
         <p class="muted" style="font-size:12px;margin-top:6px">Se comprimen al subir para ahorrar espacio.</p>
       </div>
+
       <div class="card">
         <h2>🧪 Registros EC / pH</h2>
         <div class="row">
@@ -338,6 +604,7 @@ function cultivoSection(c){
           <tbody id="${c.id}-tabla"></tbody>
         </table>
       </div>
+
       <div class="card">
         <h2>🗒️ Notas</h2>
         <textarea id="${c.id}-notas" placeholder="Observaciones, dosis, problemas…"></textarea>
@@ -347,7 +614,7 @@ function cultivoSection(c){
 }
 document.getElementById('cultivos').innerHTML = CULTIVOS.map(cultivoSection).join('');
 
-/* ====== Tareas / Galería / Registros ====== */
+/* ====== CRUD Tareas / Galería / Registros ====== */
 function addTask(id){
   const text=document.getElementById(id+'-task-text').value.trim();
   const date=document.getElementById(id+'-task-date').value;
@@ -398,7 +665,6 @@ function renderGal(id){
     </div>`).join('') : '<div class="muted">Sin fotos aún.</div>';
 }
 function zoom(id,idx){ const gal=load(id+':gal',[]); const m=document.getElementById('modal'); const i=document.getElementById('modalImg'); i.src=gal[idx]; m.style.display='flex'; }
-
 function addRegistro(id){
   const ec=parseFloat(document.getElementById(id+'-ec').value);
   const ph=parseFloat(document.getElementById(id+'-ph').value);
@@ -412,7 +678,7 @@ function borrarRegistros(id){ if(!confirm('¿Borrar todos los registros?'))retur
 function renderRegs(id){
   const tbody=document.getElementById(id+'-tabla'); if(!tbody) return;
   const regs=load(id+':regs',[]);
-  tbody.innerHTML = regs.map(r=>`<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ec}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ph}</td></tr>`).join('');
+  tbody.innerHTML = regs.map(r=>`<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha||''}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ec}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ph}</td></tr>`).join('');
 }
 
 /* ====== Dashboard ====== */
@@ -425,93 +691,84 @@ function renderDashboard(){
   const ul=CULTIVOS.flatMap(c=> (load(c.id+':regs',[])[0]? [{cultivo:c.titulo, ...load(c.id+':regs',[])[0]}]:[]));
   document.getElementById('ultimosReg').innerHTML = ul.length
     ? '<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Cultivo</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Fecha</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">EC</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">pH</th></tr></thead><tbody>'
-      + ul.map(r=>`<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${r.cultivo}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ec}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ph}</td></tr>`).join('')
+      + ul.map(r=>`<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${r.cultivo}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha||''}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ec}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ph}</td></tr>`).join('')
       + '</tbody></table>'
     : '<div class="muted">Aún no hay registros.</div>';
 }
 
-/* ====== Tiempo (Open-Meteo) ====== */
-function WICON(code){
-  const sun='☀️', cloud='⛅', rain='🌧️', storm='⛈️', snow='❄️', fog='🌫️';
-  if([0].includes(code)) return sun;
-  if([1,2,3].includes(code)) return cloud;
-  if([45,48].includes(code)) return fog;
-  if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return rain;
-  if([95,96,99].includes(code)) return storm;
-  if([71,73,75,77,85,86].includes(code)) return snow;
-  return cloud;
-}
-async function loadWeather(){
-  const loc=load('loc'); document.getElementById('locName').textContent = loc.nombre || 'Mi ubicación';
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Madrid";
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=${encodeURIComponent(tz)}`;
-  try{
-    const res = await fetch(url); const j = await res.json(); const d = j.daily;
-    const days = d.time.map((t,i)=>({
-      date: t, code: d.weathercode[i], tmax: d.temperature_2m_max[i], tmin: d.temperature_2m_min[i], pr: d.precipitation_probability_max[i], mm: d.precipitation_sum[i]
-    }));
-    document.getElementById('wgrid').innerHTML = days.map(x=>`
-      <div class="wday">
-        <div class="d">${new Date(x.date).toLocaleDateString('es-ES',{weekday:'short'})}</div>
-        <div class="ico">${WICON(x.code)}</div>
-        <div>${Math.round(x.tmax)}° / ${Math.round(x.tmin)}°</div>
-        <div class="${x.pr>=60?'danger': x.pr>=30?'warn':''}">${x.pr}%</div>
-        <div class="${x.mm>=5?'danger': x.mm>=1?'warn':''}">${x.mm.toFixed(1)} mm</div>
-      </div>`).join('');
-    let msg = 'Sin lluvia relevante. Mantén tu plan de riego.';
-    const t0 = days[0], t1 = days[1];
-    if((t0.pr>=60||t1.pr>=60) || (t0.mm>=3 || t1.mm>=3)){ msg = 'Prob. lluvia alta (24–48h). ⚠️ Reduce o pospone riego.'; }
-    else if((t0.pr>=30||t1.pr>=30) || (t0.mm>=1 || t1.mm>=1)){ msg = 'Puede llover algo. 🔶 Ajusta riego y vigila drenaje.'; }
-    document.getElementById('rainAdvice').textContent=msg;
-    save('weatherCache', {when:Date.now(), days, msg, loc});
-  }catch(e){
-    const cache=load('weatherCache'); if(cache){ document.getElementById('rainAdvice').textContent=cache.msg||'Offline'; document.getElementById('wgrid').innerHTML = cache.days.map(x=>`
-      <div class="wday">
-        <div class="d">${new Date(x.date).toLocaleDateString('es-ES',{weekday:'short'})}</div>
-        <div class="ico">${WICON(x.code)}</div>
-        <div>${Math.round(x.tmax)}° / ${Math.round(x.tmin)}°</div>
-        <div class="${x.pr>=60?'danger': x.pr>=30?'warn':''}">${x.pr}%</div>
-        <div class="${x.mm>=5?'danger': x.mm>=1?'warn':''}">${x.mm.toFixed(1)} mm</div>
-      </div>`).join(''); }
-    else { document.getElementById('wgrid').innerHTML = '<div class="muted">No se pudo cargar el tiempo.</div>'; document.getElementById('rainAdvice').textContent='Reintenta más tarde'; }
+/* ====== IA de Cultivo (local + hook) ====== */
+const IAKEY = (k)=>`cpV6:ia:${k}`;
+const iaLoad=(k,def)=>{try{const v=localStorage.getItem(IAKEY(k));return v?JSON.parse(v):def}catch{return def}};
+const iaSave=(k,v)=>localStorage.setItem(IAKEY(k),JSON.stringify(v));
+let IA_MODE = iaLoad('mode','local'); // 'local' | 'api'
+let iaFiles = [];
+const chatEl = document.getElementById('chatlog');
+const inEl   = document.getElementById('ia-input');
+const fileEl = document.getElementById('ia-file');
+const prevEl = document.getElementById('ia-preview');
+const modeEl = document.getElementById('ia-mode');
+const toggleEl = document.getElementById('ia-toggle');
+function iaSetMode(m){ IA_MODE=m; iaSave('mode',m); if(modeEl){modeEl.textContent='Modo: '+(m==='local'?'Local (Reglas)':'API (Modelo)')} if(toggleEl){toggleEl.textContent=(m==='local'?'Cambiar a API':'Cambiar a Local')} }
+iaSetMode(IA_MODE);
+toggleEl && (toggleEl.onclick = ()=> iaSetMode(IA_MODE==='local'?'api':'local'));
+function chatAdd(role, html){ const row=document.createElement('div'); row.className='msg '+(role==='user'?'user':'bot'); row.innerHTML=`<div class="b">${html}</div>`; chatEl.appendChild(row); chatEl.scrollTop=chatEl.scrollHeight; }
+function renderPreview(){ if(!prevEl) return; prevEl.innerHTML = iaFiles.map(src=>`<img src="${src}" alt="adjunto">`).join(''); }
+fileEl && fileEl.addEventListener('change', async (e)=>{ const files=Array.from(e.target.files||[]); for(const f of files){ const url=await new Promise((res,rej)=>{const R=new FileReader();R.onload=()=>res(R.result);R.onerror=rej;R.readAsDataURL(f);}); iaFiles.push(url);} renderPreview(); e.target.value=''; });
+document.getElementById('ia-clear')?.addEventListener('click', ()=>{ chatEl.innerHTML=''; iaFiles=[]; renderPreview(); });
+document.getElementById('ia-send')?.addEventListener('click', async ()=>{
+  const text=(inEl.value||'').trim(); if(!text && iaFiles.length===0) return;
+  chatAdd('user', escapeHtml(text) + (iaFiles.length? `<br><small>${iaFiles.length} imagen(es)</small>` : '')); inEl.value='';
+  let reply=''; if(IA_MODE==='local'){ reply=await iaReplyLocal(text, iaFiles); } else { reply=await iaReplyAPI(text, iaFiles); }
+  chatAdd('bot', reply);
+});
+document.getElementById('ia-to-nota')?.addEventListener('click', ()=>{
+  const last=chatEl.querySelector('.msg.bot:last-child .b'); if(!last) return alert('No hay respuesta.');
+  const active=document.querySelector('.tabbtn.active')?.dataset?.tab||'gelato';
+  const key=active+':notas'; const cur=load(key,''); const txt=stripHtml(last.innerHTML);
+  save(key,(cur?cur+'\n\n':'')+'IA:\n'+txt); alert('Guardado en Notas de '+active);
+});
+document.getElementById('ia-to-task')?.addEventListener('click', ()=>{
+  const last=chatEl.querySelector('.msg.bot:last-child .b'); if(!last) return alert('No hay respuesta.');
+  const active=document.querySelector('.tabbtn.active')?.dataset?.tab||'gelato';
+  const list=load(active+':tasks',[]); const txt=stripHtml(last.innerHTML).slice(0,160)+'…';
+  list.push({id:Date.now()+Math.random().toString(16).slice(2), text:'IA: '+txt, date:todayISO(), done:false, ts:Date.now()});
+  save(active+':tasks',list); renderTasks(active); renderDashboard();
+});
+async function iaReplyLocal(text, images){
+  const t=(text||'').toLowerCase();
+  if(/minador|galer[ií]as|c[íi]trico|limonero/.test(t)){
+    return bullets(['🪲 <b>Minador en cítricos</b>.','Tratamiento: <b>neem + jabón potásico</b> (tarde, 2-3 veces cada 7–10 días).','Retira hojas muy afectadas y repite tras lluvia.']);
   }
+  if(/fusarium|hong[oa] raíz|marchitez|tallo oscuro/.test(t)){
+    return bullets(['⚠️ <b>Hongo radicular</b> (Fusarium/Pythium).','Día 1 H₂O₂ 3% (3 ml/L) · Día 3 <b>Great White</b> (3 g/5 L + espolvoreo) · Día 7 refuerzo.','Baja riego, mejora drenaje, pH 6.2–6.5.']);
+  }
+  if(/ara[nñ]a roja|telitas|puntos blancos/.test(t)){
+    return bullets(['🕷️ <b>Araña roja</b>.','Baja HR 45–55%, brisa, mojado de envés.','Rotación: jabón → neem → azadiractina. Repite cada 3–4 días.']);
+  }
+  if(/trips|plateado|manchas plateadas|punteado negro/.test(t)){
+    return bullets(['🐛 <b>Trips</b>.','Trampas azules, jabón potásico, neem.','Aplicar al atardecer · repetir 7–10 días.']);
+  }
+  if(/gelato|semana\s*7|semana\s*8|pk|olor bajo|terpenos/.test(t)){
+    return bullets(['🍨 <b>Gelato (sem 7–8)</b>.','EC 1.9–2.0 · pH 6.2–6.4.','Riego 12 L: Explode 6 ml · Top Candy 24 ml · Top Bud 12 ml · Barrier 1.2 ml · A+B hasta EC.']);
+  }
+  if(/acai|aça[ií]|semana\s*7|semana\s*8|engorde|maduraci[oó]n/.test(t)){
+    return bullets(['🍇 <b>Açaí (sem 7–8)</b>.','EC 1.9–2.1 · pH 6.2–6.4.','Riego 12 L: Explode 6 ml · Top Candy 24 ml · Top Bud 9–12 ml · Barrier 1.2 ml · A+B hasta EC.']);
+  }
+  if(/exterior|top crop|tabla|fase/.test(t)){
+    return bullets(['☀️ <b>Exterior Top Crop</b>.','Elige fase en la app (Preflora/Flora/Engorde/Maduración).','Calcula dosis por litros y añade como tarea. pH 6.3–6.6.']);
+  }
+  return bullets(['Dime <b>cultivo + semana + síntoma</b>.','Atajos: minador · fusarium · araña roja · trips · gelato s7/8 · açaí s7/8 · exterior top crop.']);
 }
-
-/* ====== Ajustes ====== */
-function saveLocation(){
-  const nombre = document.getElementById('loc-nombre').value || 'Mi ubicación';
-  const lat = parseFloat(document.getElementById('loc-lat').value);
-  const lon = parseFloat(document.getElementById('loc-lon').value);
-  if(isNaN(lat)||isNaN(lon)) return alert('Lat/Lon inválidos');
-  save('loc',{nombre,lat,lon}); loadWeather(); alert('Ubicación guardada. Widget actualizado.');
+async function iaReplyAPI(text, images){
+  try{
+    const res = await fetch('YOUR_ENDPOINT', {method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer YOUR_TOKEN'}, body: JSON.stringify({message:text||'', images:images||[]})});
+    const j = await res.json();
+    return j.reply || 'La API no respondió contenido.';
+  }catch(e){ iaSetMode('local'); return '⚠️ No pude contactar con la API. Vuelvo a <b>Modo Local</b>.'; }
 }
-function clearImages(){
-  if(!confirm('¿Vaciar TODAS las galerías?')) return;
-  CULTIVOS.forEach(c=> save(c.id+':gal',[]));
-  alert('Galerías vaciadas.');
-}
-function clearAll(){
-  if(!confirm('¿Borrar todos los datos de Cultivo Pro en este dispositivo?')) return;
-  Object.keys(localStorage).filter(k=>k.startsWith('cpV6:')).forEach(k=> localStorage.removeItem(k));
-  location.reload();
-}
-
-/* ====== Notificaciones (local) ====== */
-const notifyState = document.getElementById('notifyState');
-function updateNotifyState(){
-  const perm = Notification?.permission || 'unsupported';
-  notifyState.textContent = 'Estado: ' + perm;
-}
-async function enableNotifications(){
-  if(!('Notification' in window)) return alert('Notificaciones no soportadas');
-  const perm = await Notification.requestPermission();
-  updateNotifyState();
-  if(perm==='granted'){ new Notification('¡Notificaciones activadas!', {body:'Te avisaré de tareas y lluvia alta.'}); }
-}
-function testNotify(){ if(Notification?.permission==='granted'){ new Notification('Prueba de aviso ✅', {body:'Así verás las notificaciones.'}); } else alert('Activa las notificaciones primero.'); }
-document.getElementById('btn-notify').onclick=enableNotifications;
-document.getElementById('btn-test-notify').onclick=testNotify;
-updateNotifyState();
+function bullets(lines){ return '<ul style="margin:0;padding-left:18px">' + lines.map(l=>`<li>${l}</li>`).join('') + '</ul>'; }
+function escapeHtml(s){ return (s||'').replace(/[&<>\"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
+function stripHtml(s){ const d=document.createElement('div'); d.innerHTML=s; return d.textContent||d.innerText||''; }
 
 /* ====== Navegación ====== */
 function show(tab){
@@ -542,142 +799,114 @@ function compressImage(file, maxW=1280, quality=0.8){
       canvas.height= Math.round(img.height* scale);
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0,0, canvas.width, canvas.height);
-      try{
-        const data = canvas.toDataURL('image/jpeg', quality);
-        resolve(data);
-      }catch(err){ resolve(img.src); }
+      try{ const data = canvas.toDataURL('image/jpeg', quality); resolve(data); }
+      catch(err){ resolve(img.src); }
     };
     img.onerror = reject;
     reader.readAsDataURL(file);
   });
 }
 
-/* ====== Tareas / Registros / Dashboard / Chart ====== */
-function addRegistro(id){
-  const ec=parseFloat(document.getElementById(id+'-ec').value);
-  const ph=parseFloat(document.getElementById(id+'-ph').value);
-  if(isNaN(ec)||isNaN(ph)) return alert('Completa EC y pH');
-  const regs=load(id+':regs',[]); regs.unshift({ec,ph,fecha:todayISO()});
-  save(id+':regs',regs.slice(0,180));
-  document.getElementById(id+'-ec').value=''; document.getElementById(id+'-ph').value='';
-  renderRegs(id); renderDashboard(); updateChart();
-}
-function borrarRegistros(id){ if(!confirm('¿Borrar todos los registros?'))return; save(id+':regs',[]); renderRegs(id); renderDashboard(); updateChart();}
-function renderRegs(id){
-  const tbody=document.getElementById(id+'-tabla'); if(!tbody) return;
-  const regs=load(id+':regs',[]);
-  tbody.innerHTML = regs.map(r=>`<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ec}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ph}</td></tr>`).join('');
-}
-function renderDashboard(){
-  const all=CULTIVOS.flatMap(c=>load(c.id+':tasks',[]).map(t=>({...t,cultivo:c.titulo,emoji:c.emoji})));
-  const prox=all.filter(t=>!t.done).sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999')).slice(0,8);
-  document.getElementById('proxTareas').innerHTML = prox.length
-    ? prox.map(t=>`<div class="task"><div><b>${t.text}</b><br><small>${t.emoji} ${t.cultivo} · ${t.date||'Sin fecha'}</small></div></div>`).join('')
-    : '<div class="muted">No hay tareas próximas.</div>';
-  const ul=CULTIVOS.flatMap(c=> (load(c.id+':regs',[])[0]? [{cultivo:c.titulo, ...load(c.id+':regs',[])[0]}]:[]));
-  document.getElementById('ultimosReg').innerHTML = ul.length
-    ? '<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Cultivo</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">Fecha</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">EC</th><th style="text-align:left;border-bottom:1px solid var(--line);padding:6px">pH</th></tr></thead><tbody>'
-      + ul.map(r=>`<tr><td style="padding:6px;border-bottom:1px solid var(--line)">${r.cultivo}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.fecha}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ec}</td><td style="padding:6px;border-bottom:1px solid var(--line)">${r.ph}</td></tr>`).join('')
-      + '</tbody></table>'
-    : '<div class="muted">Aún no hay registros.</div>';
-}
-
-/* ====== Selector cultivo + Gráfica ====== */
-const chartCanvas = document.getElementById('chart');
-const chartCtx = chartCanvas.getContext('2d');
-document.getElementById('chart-cultivo').addEventListener('change', updateChart);
-
-function updateChart(){
-  const sel = document.getElementById('chart-cultivo').value;
-  const regs = load(sel+':regs',[]).slice(0,60).reverse(); // últimos 60, cronológico
-  drawChart(regs);
-}
-function drawChart(regs){
-  const W=chartCanvas.width, H=chartCanvas.height;
-  chartCtx.clearRect(0,0,W,H);
-  chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card').trim();
-  chartCtx.fillRect(0,0,W,H);
-  const m = {l:40, r:40, t:20, b:24};
-  const ecVals = regs.map(r=>r.ec);
-  const phVals = regs.map(r=>r.ph);
-  const xCount = Math.max(2, regs.length||2);
-  const ecMin = Math.min(0.4, Math.min(...ecVals, 9999)); const ecMax = Math.max(2.2, Math.max(...ecVals, 0));
-  const phMin = 5.5, phMax = 6.8;
-
-  chartCtx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--line').trim();
-  chartCtx.lineWidth = 1; chartCtx.setLineDash([4,4]);
-  for(let i=0;i<=6;i++){
-    const y = m.t + (H-m.t-m.b)*i/6;
-    chartCtx.beginPath(); chartCtx.moveTo(m.l,y); chartCtx.lineTo(W-m.r,y); chartCtx.stroke();
-    const ecLabel = (ecMax - (ecMax-ecMin)*i/6).toFixed(1);
-    chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
-    chartCtx.font = '12px system-ui';
-    chartCtx.fillText(ecLabel, 6, y+4);
-    const phLabel = (phMin + (phMax-phMin)*i/6).toFixed(1);
-    chartCtx.fillText(phLabel, W-30, y+4);
-  }
-  chartCtx.setLineDash([]);
-
-  const x = i => m.l + (W-m.l-m.r) * (i/(xCount-1||1));
-  const yEC = v => m.t + (H-m.t-m.b) * (1 - (v-ecMin)/(ecMax-ecMin||1));
-  const yPH = v => m.t + (H-m.t-m.b) * (1 - (v-phMin)/(phMax-phMin||1));
-
-  chartCtx.strokeStyle = '#0ea5a4'; chartCtx.lineWidth=2;
-  chartCtx.beginPath();
-  regs.forEach((r,i)=>{ const xx=x(i), yy=yEC(r.ec); i? chartCtx.lineTo(xx,yy):chartCtx.moveTo(xx,yy); });
-  chartCtx.stroke();
-
-  chartCtx.strokeStyle = '#10b981'; chartCtx.lineWidth=2; chartCtx.setLineDash([6,4]);
-  chartCtx.beginPath();
-  regs.forEach((r,i)=>{ const xx=x(i), yy=yPH(r.ph); i? chartCtx.lineTo(xx,yy):chartCtx.moveTo(xx,yy); });
-  chartCtx.stroke(); chartCtx.setLineDash([]);
-
-  chartCtx.fillStyle='#0ea5a4'; regs.forEach((r,i)=>{ chartCtx.beginPath(); chartCtx.arc(x(i), yEC(r.ec), 2.5, 0, Math.PI*2); chartCtx.fill(); });
-  chartCtx.fillStyle='#10b981'; regs.forEach((r,i)=>{ chartCtx.beginPath(); chartCtx.arc(x(i), yPH(r.ph), 2.5, 0, Math.PI*2); chartCtx.fill(); });
-
-  chartCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
-  chartCtx.font='11px system-ui';
-  regs.forEach((r,i)=>{ if(i%3===0){ chartCtx.fillText(r.fecha.slice(5), x(i)-12, H-6); } });
-}
-
 /* ====== Inicio ====== */
-function renderDashboard(){ /* ya definida arriba */ }
 window.addEventListener('load', ()=>{
-  renderDashboard(); loadWeather(); updateChart();
-  ['gelato','acai','exterior','limoneros'].forEach(id=>{
-    renderTasks(id); renderGal(id); renderRegs(id);
-    const ta=document.getElementById(id+'-notas'); if(ta){ ta.value=load(id+':notas',''); ta.oninput=()=>save(id+':notas',ta.value); }
-  });
+  renderDashboard(); loadWeather(); scheduleDueChecks(); updateChart();
+  ['gelato','acai','exterior','limoneros'].forEach(id=>{ renderTasks(id); renderGal(id); renderRegs(id); const ta=document.getElementById(id+'-notas'); if(ta){ ta.value=load(id+':notas',''); ta.oninput=()=>save(id+':notas',ta.value);} });
   if('serviceWorker'in navigator){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
-  // revisa tareas cada hora para posibles notificaciones
-  scheduleDueChecks();
 });
 
-/* ====== Notificaciones de tareas ====== */
-function scheduleDueChecks(){
-  if(!('Notification' in window)) return;
-  checkDueTasksAndNotify();
-  clearTimeout(window.__dueTimer);
-  window.__dueTimer = setTimeout(scheduleDueChecks, 60*60*1000);
-}
-function checkDueTasksAndNotify(){
-  if(Notification?.permission!=='granted') return;
-  const notified = load('notifiedTasks',{});
-  for(const c of CULTIVOS){
-    const tasks = load(c.id+':tasks',[]);
-    tasks.forEach(t=>{
-      if(t.done) return;
-      if(t.date===todayISO()){
-        const key = t.id || (t.text+'@'+t.date);
-        if(!notified[key]){
-          new Notification('📅 Tarea para HOY', { body: `${c.titulo}: ${t.text}` });
-          notified[key]=true;
-        }
-      }
-    });
+/* ====== PLANES DE ASISTENTE: GELATO & AÇAÍ ====== */
+const GELATO_PLAN = {
+  semanas:[{id:'7',nombre:'Semana 7 · Engorde'},{id:'8',nombre:'Semana 8 · Maduración'},{id:'flush',nombre:'Flushing / Lavado'}],
+  objetivos:{'7':{ec:'1.8–2.0',ph:'6.2–6.4'},'8':{ec:'1.9–2.0',ph:'6.2–6.4'},'flush':{ec:'—',ph:'6.2–6.4'}},
+  recetaPorL:{
+    '7':{base:{nombre:'Dutch Pro A+B',unidad:'ml',min:0,max:0,nota:'Hasta EC objetivo'},explode:{nombre:'Explode',unidad:'ml',val:0.5,nota:'Resina/engorde'},candy:{nombre:'Top Candy',unidad:'ml',val:2.0,nota:'Azúcares/terpenos'},topbud:{nombre:'Top Bud',unidad:'ml',val:1.0,nota:'PK fuerte'},barrier:{nombre:'Barrier (Si)',unidad:'ml',val:0.1,nota:'Al final'}},
+    '8':{base:{nombre:'Dutch Pro A+B',unidad:'ml',min:0,max:0,nota:'Hasta EC objetivo'},explode:{nombre:'Explode',unidad:'ml',val:0.5,nota:'Mantener'},candy:{nombre:'Top Candy',unidad:'ml',val:2.0,nota:'Aroma/sabor'},topbud:{nombre:'Top Bud',unidad:'ml',val:1.0,nota:'PK fuerte'},barrier:{nombre:'Barrier (Si)',unidad:'ml',val:0.1,nota:'Al final'}},
+    'flush':{agua:{nombre:'Agua sola',unidad:'L',val:1.0,nota:'Hasta drenaje claro'},micro:{nombre:'MicroVita (opcional)',unidad:'g',val:0.02,nota:'0.25 g/12L'}}
   }
-  save('notifiedTasks', notified);
+};
+function gFmt(n,u){ if(n===undefined||n===null) return ''; const v=(u==='g')?Number(n).toFixed(2):Number(n).toFixed(1); return `${v} ${u}`; }
+function gelatoRender(){
+  const semana=document.getElementById('g-semana').value;
+  const litros=parseFloat(document.getElementById('g-litros').value||12);
+  const tabla=document.getElementById('g-tabla');
+  const sum=document.getElementById('g-sum');
+  const obj=GELATO_PLAN.objetivos[semana]||GELATO_PLAN.objetivos['7'];
+  document.getElementById('g-obj').innerHTML=`<span class="pill">EC: <b>${obj.ec}</b></span><span class="pill">pH: <b>${obj.ph}</b></span>`;
+  const receta=GELATO_PLAN.recetaPorL[semana]; let rows=[],ml=0,g=0;
+  for(const k of Object.keys(receta)){
+    const p=receta[k]; let total=0; if(p.val){ total=p.val*litros; }
+    const d=p.val?`${p.val} ${p.unidad}/L`:(p.min!==undefined?'Hasta EC objetivo':'—');
+    const t=p.val?`<b>${gFmt(total,p.unidad)}</b>`:(p.min!==undefined?'<b>—</b>':'');
+    rows.push(`<tr><td style="padding:8px;border-bottom:1px solid var(--line)">${p.nombre}</td><td style="padding:8px;border-bottom:1px solid var(--line)">${d}</td><td style="padding:8px;border-bottom:1px solid var(--line)">${t}</td><td style="padding:8px;border-bottom:1px solid var(--line)"><small class="muted">${p.nota||''}</small></td></tr>`);
+    if(p.val){ if(p.unidad==='ml') ml+=total; if(p.unidad==='g') g+=total; }
+  }
+  tabla.innerHTML=rows.join(''); const arr=[]; if(ml) arr.push(`${ml.toFixed(1)} ml`); if(g) arr.push(`${g.toFixed(2)} g`); sum.textContent=arr.length?`Total aditivos: ${arr.join(' + ')}`:'—';
 }
+function gelatoAddTask(){
+  const semana=document.getElementById('g-semana').value;
+  const litros=parseFloat(document.getElementById('g-litros').value||12);
+  const nombre=GELATO_PLAN.semanas.find(s=>s.id===semana)?.nombre||`Semana ${semana}`;
+  const hoy=todayISO(); const list=load('gelato:tasks',[]);
+  list.push({id:Date.now()+Math.random().toString(16).slice(2), text:`Gelato · ${nombre} · ${litros} L`, date:hoy, done:false, ts:Date.now()});
+  save('gelato:tasks',list); renderTasks('gelato'); renderDashboard(); alert('Tarea añadida en Gelato.');
+}
+
+const ACAI_PLAN = {
+  semanas:[{id:'7',nombre:'Semana 7 · Engorde'},{id:'8',nombre:'Semana 8 · Maduración'},{id:'flush',nombre:'Flushing / Lavado'}],
+  objetivos:{'7':{ec:'1.8–2.0',ph:'6.2–6.4'},'8':{ec:'1.9–2.1',ph:'6.2–6.4'},'flush':{ec:'—',ph:'6.2–6.4'}},
+  recetaPorL:{
+    '7':{base:{nombre:'Dutch Pro A+B',unidad:'ml',min:0,max:0,nota:'Hasta EC objetivo'},explode:{nombre:'Explode',unidad:'ml',val:0.5,nota:'Resina/engorde'},candy:{nombre:'Top Candy',unidad:'ml',val:2.0,nota:'Azúcares/terpenos'},topbud:{nombre:'Top Bud',unidad:'ml',val:0.8,nota:'PK progresivo'},barrier:{nombre:'Barrier (Si)',unidad:'ml',val:0.1,nota:'Al final'}},
+    '8':{base:{nombre:'Dutch Pro A+B',unidad:'ml',min:0,max:0,nota:'Hasta EC objetivo'},explode:{nombre:'Explode',unidad:'ml',val:0.5,nota:'Mantener'},candy:{nombre:'Top Candy',unidad:'ml',val:2.0,nota:'Aroma/sabor'},topbud:{nombre:'Top Bud',unidad:'ml',val:1.0,nota:'PK fuerte (vigila EC)'},barrier:{nombre:'Barrier (Si)',unidad:'ml',val:0.1,nota:'Al final'}},
+    'flush':{agua:{nombre:'Agua sola',unidad:'L',val:1.0,nota:'Hasta drenaje claro'},micro:{nombre:'MicroVita (opcional)',unidad:'g',val:0.02,nota:'0.25 g/12L'}}
+  }
+};
+function aFmt(n,u){ if(n===undefined||n===null) return ''; const v=(u==='g')?Number(n).toFixed(2):Number(n).toFixed(1); return `${v} ${u}`; }
+function acaiRender(){
+  const semana=document.getElementById('a-semana').value;
+  const litros=parseFloat(document.getElementById('a-litros').value||12);
+  const tabla=document.getElementById('a-tabla');
+  const sum=document.getElementById('a-sum');
+  const obj=ACAI_PLAN.objetivos[semana]||ACAI_PLAN.objetivos['7'];
+  document.getElementById('a-obj').innerHTML=`<span class="pill">EC: <b>${obj.ec}</b></span><span class="pill">pH: <b>${obj.ph}</b></span>`;
+  const receta=ACAI_PLAN.recetaPorL[semana]; let rows=[],ml=0,g=0;
+  for(const k of Object.keys(receta)){
+    const p=receta[k]; let total=0; if(p.val){ total=p.val*litros; }
+    const d=p.val?`${p.val} ${p.unidad}/L`:(p.min!==undefined?'Hasta EC objetivo':'—');
+    const t=p.val?`<b>${aFmt(total,p.unidad)}</b>`:(p.min!==undefined?'<b>—</b>':'');
+    rows.push(`<tr><td style="padding:8px;border-bottom:1px solid var(--line)">${p.nombre}</td><td style="padding:8px;border-bottom:1px solid var(--line)">${d}</td><td style="padding:8px;border-bottom:1px solid var(--line)">${t}</td><td style="padding:8px;border-bottom:1px solid var(--line)"><small class="muted">${p.nota||''}</small></td></tr>`);
+    if(p.val){ if(p.unidad==='ml') ml+=total; if(p.unidad==='g') g+=total; }
+  }
+  tabla.innerHTML=rows.join(''); const arr=[]; if(ml) arr.push(`${ml.toFixed(1)} ml`); if(g) arr.push(`${g.toFixed(2)} g`); sum.textContent=arr.length?`Total aditivos: ${arr.join(' + ')}`:'—';
+}
+function acaiAddTask(){
+  const semana=document.getElementById('a-semana').value;
+  const litros=parseFloat(document.getElementById('a-litros').value||12);
+  const nombre=ACAI_PLAN.semanas.find(s=>s.id===semana)?.nombre||`Semana ${semana}`;
+  const hoy=todayISO(); const list=load('acai:tasks',[]);
+  list.push({id:Date.now()+Math.random().toString(16).slice(2), text:`Açaí · ${nombre} · ${litros} L`, date:hoy, done:false, ts:Date.now()});
+  save('acai:tasks',list); renderTasks('acai'); renderDashboard(); alert('Tarea añadida en Açaí.');
+}
+
+/* ====== Render inicial ====== */
+function renderTasks(id){/* arriba */}  // (ya definida arriba)
+function renderGal(id){/* arriba */}    // (ya definida arriba)
+function renderRegs(id){/* arriba */}   // (ya definida arriba)
+document.getElementById('cultivos').innerHTML = CULTIVOS.map(cultivoSection).join('');
+
+/* ====== Navegación ====== */
+function show(tab){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('v-'+tab).classList.add('active');
+  document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.tabbtn[data-tab="${tab}"]`).classList.add('active');
+  if(['gelato','acai','exterior','limoneros'].includes(tab)){
+    renderTasks(tab); renderGal(tab); renderRegs(tab);
+    const ta=document.getElementById(tab+'-notas'); if(ta){ ta.value=load(tab+':notas',''); ta.oninput=()=>save(tab+':notas',ta.value); }
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  if(tab==='dashboard'){ renderDashboard(); loadWeather(); updateChart(); }
+}
+document.querySelectorAll('.tabbtn').forEach(b=> b.addEventListener('click', ()=> show(b.dataset.tab)));
 </script>
 </body>
 </html>
